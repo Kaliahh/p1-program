@@ -2,8 +2,8 @@
 
 int main(void) {
 
-  printf("Hello World!\nNørd!!\n");
-  printf("Hej Ane :) ");
+  printf("Hello World!\n");
+
   
   return 0;
 }
