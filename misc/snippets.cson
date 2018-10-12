@@ -1,0 +1,62 @@
+# Your snippets
+#
+# Atom snippets allow you to enter a simple prefix in the editor and hit tab to
+# expand the prefix into a larger code block with templated values.
+#
+# You can create a new snippet in this file by typing "snip" and then hitting
+# tab.
+#
+# An example CoffeeScript snippet to expand log to console.log:
+#
+# '.source.coffee':
+#   'Console log':
+#     'prefix': 'log'
+#     'body': 'console.log $1'
+#
+# Each scope (e.g. '.source.coffee' above) can only be declared once.
+#
+# This file uses CoffeeScript Object Notation (CSON).
+# If you are unfamiliar with CSON, you can read more about it in the
+# Atom Flight Manual:
+# http://flight-manual.atom.io/using-atom/sections/basic-customization/#_cson
+
+
+'.source.c':
+
+  # Det her burde være standard
+  'Start template':
+    'prefix': 'start'
+    'body': """
+    /* Navn: Ane Søgaard Jørgensen
+     * Dato: $1/$2-$3
+     * Beskrivelse: $4
+     */
+
+    # include <stdio.h>
+    # include <stdlib.h>
+    # include <unistd.h>
+    # include <string.h>
+
+    int main(void) {
+      $5
+      return 0;
+    }
+    """
+
+  # Det her kan være rart
+  'For loop':
+    'prefix': 'forloop'
+    'body': """
+    for ($1;$2;$3) {
+      $4
+    }
+      """
+
+  # Nu bliver jeg bare doven...
+  'printf':
+    'prefix': 'printf'
+    'body': 'printf("$1"$2);$3'
+
+  'scanf':
+    'prefix': 'scanf'
+    'body': 'scanf("$1");'
