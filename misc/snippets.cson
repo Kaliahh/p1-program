@@ -27,7 +27,7 @@
   'Start template':
     'prefix': 'start'
     'body': """
-    /* Navn: Ane Søgaard Jørgensen
+    /* Navn: ????????????
      * Dato: $1/$2-$3
      * Beskrivelse: $4
      */
