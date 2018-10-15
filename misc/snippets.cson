@@ -36,6 +36,7 @@
     # include <stdlib.h>
     # include <unistd.h>
     # include <string.h>
+    # include <math.h>
 
     int main(void) {
       $5
@@ -59,4 +60,4 @@
 
   'scanf':
     'prefix': 'scanf'
-    'body': 'scanf("$1");'
+    'body': 'scanf(" $1");'
