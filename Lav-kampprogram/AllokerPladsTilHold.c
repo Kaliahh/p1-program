@@ -1,0 +1,1 @@
+/* Allokerer plads til et array af structs med hold */

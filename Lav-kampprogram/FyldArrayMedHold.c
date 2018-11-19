@@ -1,0 +1,1 @@
+/* Fyld et array med hold fra en fil */

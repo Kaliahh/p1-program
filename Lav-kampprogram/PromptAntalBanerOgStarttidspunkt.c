@@ -1,0 +1,1 @@
+/* Prompt brugeren for antal baner og starttidspunkt */

@@ -1,0 +1,1 @@
+/* Scan en fil for antallet af hold */
