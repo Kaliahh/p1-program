@@ -32,13 +32,14 @@ int main(void) {
   return 0;
 }*/
 
-
+/* Bruger qsort til at sortere arrayet af hold efter niveau */
 void SortArrayByLevel(team *all_teams, int number_of_teams){
 
   qsort(all_teams, number_of_teams, sizeof(team), comp);
 
 }
 
+/* Sammenligningsfunktion til qsort. Sammenligner to holds niveauer */
 int comp (const void *a, const void*b){
   team *team_a = (team*) a;
   team *team_b = (team*) b;
