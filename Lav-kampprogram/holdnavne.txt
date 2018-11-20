@@ -1,0 +1,7 @@
+Team noget, A
+Vi er de bedste, N
+De andre er dårlige, B
+Floorball 1, A
+Floorball 2, C
+Floorball 4, B
+Floorball 3, C
