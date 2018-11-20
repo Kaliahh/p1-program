@@ -17,22 +17,23 @@ int main(void) {
 }
 */
 
-/* Find and return the number of lines with content from a given file.
-   Returns -1 if an error is encounterd */
+/* Find og returner antallet af linjer med indhold i en fil.
+   Returner -1 Hvis der sker en fejl. */
 int getNumberOfTeams(FILE *fp) {
   char tmp[MAX_NAME_LEN];
   int number_of_teams = 0, sentinel = 0;
 
-  /* Check that file is not NULL */
-  if(fp == NULL) {
+  if(fp == NULL) { /* Check at filen ikke er NULL */
     printf("An error occured when opening the file\n");
     return(-1);
   }
 
-  /* Go through every character and find the number of newlines. */
+  /* Gennemgå hver linje i en fil.
+     Returner antallet af linjer der indeholder andet end whitespace.
+     Det antages at disse indeholder et holdnavn */
   while(sentinel == 0) {
     if(fgets(tmp, MAX_NAME_LEN, fp) != NULL) {
-      for(int i = 0; i < strlen(tmp); i++) { /* Check if the string is empty. (Only whitespace) */
+      for(int i = 0; i < strlen(tmp); i++) { /* Check om linjen er tom. (Kun whitespace) */
         if(!isspace(tmp[i])) {
           ++number_of_teams;
           break;
