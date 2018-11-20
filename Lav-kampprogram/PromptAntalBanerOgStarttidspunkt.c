@@ -20,7 +20,7 @@ void promptNumberOfFieldsAndStartingTime(int *number_of_fields, int *starting_ti
   printf("Indtast antal baner: ");
   scanf(" %d", number_of_fields);
 
-  printf("Indtast starttidspunkt (skrevet som 00:00): ");
+  printf("Indtast starttidspunkt (skrevet som tt:mm): ");
   scanf(" %d:%d", &timer, &minutter);
 
   *starting_time = timer * 60 + minutter;
