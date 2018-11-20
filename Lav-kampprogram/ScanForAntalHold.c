@@ -23,6 +23,9 @@ int getNumberOfTeams(FILE *fp) {
   char tmp[MAX_NAME_LEN];
   int number_of_teams = 0, sentinel = 0;
 
+  /* Saetter fil position til starten af filen */
+  rewind(fp);
+
   if(fp == NULL) { /* Check at filen ikke er NULL */
     printf("An error occured when opening the file\n");
     return(-1);
