@@ -3,9 +3,10 @@
 # include <unistd.h>
 # include <string.h>
 # include <math.h>
+# include "main.h"
 
 int main(void) {
 
-  printf("Hello World!\n");
+  printf("%d!\n", EMPTY);
   return 0;
 }
