@@ -19,6 +19,7 @@ int main(void) {
   return 0;
 }*/
 
+/* Prompter brugere for et filnavn */
 char *PromptForFileName(void){
   char *file_name;
 
