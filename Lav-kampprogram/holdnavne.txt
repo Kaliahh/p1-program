@@ -1,4 +1,4 @@
-Team noget, A
+﻿Team noget, A
 Vi er de bedste, N
 De andre er dårlige, B
 Floorball 1, A
