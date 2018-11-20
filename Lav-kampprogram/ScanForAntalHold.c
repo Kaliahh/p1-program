@@ -6,7 +6,7 @@
 
 /* Prototypes */
 int getNumberOfTeams(FILE *team_names);
-
+/*
 int main(void) {
   FILE *fp;
 
@@ -15,6 +15,8 @@ int main(void) {
 
   return 0;
 }
+*/
+
 /* Find and return the number of lines with content from a given file.
    Returns -1 if an error is encounterd */
 int getNumberOfTeams(FILE *fp) {
