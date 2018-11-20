@@ -1,6 +1,6 @@
 # define MAX_NAME_LEN 30
 
-typedef struct team {
+typedef struct {
   char team[MAX_NAME_LEN];
   int games;
   int level;
