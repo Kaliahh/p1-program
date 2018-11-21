@@ -23,11 +23,14 @@ int fillArray (team *all_teams, const char *file_name, int num_of_teams) {
   FILE * fP;
   char dump = ' ', level = ' ';
 
-  /* Fylder alle teams med nul-tegn, og sætter alle niveauer til EMPTY */
-  for (int i = 0; i < num_of_teams; i++) {
-    all_teams[i].level = EMPTY;
+  /* Fylder alle teams med nul-tegn,
+     sætter alle niveauer til EMPTY
+     og antallet af spillede kampe til 0 */
+  for (int k = 0; k < num_of_teams; k++) {
+    all_teams[k].level = EMPTY;
+    all_teams[k].games = 0;
     for (int j = 0; j < MAX_NAME_LEN; j++) {
-      all_teams[i].team[j] = '\0';
+      all_teams[k].team[j] = '\0';
     }
   }
 
@@ -49,19 +52,15 @@ int fillArray (team *all_teams, const char *file_name, int num_of_teams) {
       break;
     }
 
-    /* Test af output */
-    printf("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\n");
-
     fscanf(fP, " %[abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ0123456789 ]" " %c" " %c", all_teams[i].team, &dump, &level);
+
+    /* Sætter niveauet til stort */
+    level = toupper(level);
 
     all_teams[i].level = (level == 'N') ? N :
                          (level == 'A') ? A :
                          (level == 'B') ? B :
                          (level == 'C') ? C : EMPTY;
-
-    /* Test af output */
-    printf("Team : %s\n", all_teams[i].team);
-    printf("Level: %d\n", all_teams[i].level);
   }
 
   fclose(fP);
