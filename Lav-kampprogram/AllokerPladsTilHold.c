@@ -10,17 +10,7 @@ int main (void) {
   int number_of_teams = 20;
   team *all_teams = allocateSpaceForTeam(number_of_teams);
 
-  printf("%d\n", sizeof(team));
-
-  strcpy(all_teams[19].team, "hold 1");
-  all_teams[19].games = 6;
-  all_teams[19].level = 2;
-  printf("%s, %d, %d\n", all_teams[19].team, all_teams[19].games, all_teams[19].level);
-  printf("%s, %d, %d\n", all_teams[20].team, all_teams[20].games, all_teams[20].level);
-
-  &all_teams + 30;
   free(all_teams);
-
   return 0;
 }
 
