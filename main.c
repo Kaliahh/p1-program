@@ -38,7 +38,7 @@ int getNumberOfTeams(FILE *fp) {
   rewind(fp);
 
   if (fp == NULL) { /* Check at filen ikke er NULL */
-    printf("An error occured when opening the file\n");
+    perror("Error opening file");
     return(-1);
   }
 
