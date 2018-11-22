@@ -38,7 +38,7 @@ int getNumberOfTeams(FILE *fp) {
     if(fgets(tmp, MAX_NAME_LEN, fp) != NULL) {
       has_content = 0;
       for(int i = 0; i < strlen(tmp); i++) { /* Check om linjen er tom. (Kun whitespace) */
-        if(!isspace(tmp[i])) {
+        if(!isspace(tmp[i]) && !has_content) {
           has_content = 1;
         }
       }
