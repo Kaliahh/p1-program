@@ -6,7 +6,7 @@
 
 /* Prototypes */
 int getNumberOfTeams(FILE *team_names);
-/*
+
 int main(void) {
   FILE *fp;
 
@@ -15,13 +15,13 @@ int main(void) {
 
   return 0;
 }
-*/
+
 
 /* Find og returner antallet af linjer med indhold i en fil.
    Returner -1 Hvis der sker en fejl. */
 int getNumberOfTeams(FILE *fp) {
   char tmp[MAX_NAME_LEN];
-  int number_of_teams = 0, sentinel = 0;
+  int number_of_teams = 0, has_content = 0, SENTINEL = 0;
 
   /* Saetter fil position til starten af filen */
   rewind(fp);
@@ -34,18 +34,21 @@ int getNumberOfTeams(FILE *fp) {
   /* Gennemgå hver linje i en fil.
      Returner antallet af linjer der indeholder andet end whitespace.
      Det antages at disse indeholder et holdnavn */
-  while(sentinel == 0) {
+  while(SENTINEL == 0) {
     if(fgets(tmp, MAX_NAME_LEN, fp) != NULL) {
+      has_content = 0;
       for(int i = 0; i < strlen(tmp); i++) { /* Check om linjen er tom. (Kun whitespace) */
         if(!isspace(tmp[i])) {
-          ++number_of_teams;
-          break;
+          has_content = 1;
         }
+      }
+      if(has_content) { /* Forstør antallet hvis der er indhold på linjen */
+        number_of_teams++;
       }
     }
     else {
-      sentinel = 1;
+      SENTINEL = 1;
     }
   }
-  return number_of_teams;
+  return number_of_teams - 1;
 }
