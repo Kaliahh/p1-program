@@ -120,11 +120,11 @@ match *createMatches (team *all_teams, match *all_matches, int number_of_teams) 
 
 int createMatchesByLevel (team *all_teams, match *all_matches, int level_counter, int match_count) {
 
-  int skip = 0, team_a = 0, team_b = 0, round_count = GAMES_PR_TEAM / 2;
+  int skip = 1, team_a = 0, team_b = 0, round_count = GAMES_PR_TEAM / 2;
 
-  for (skip = 0; skip < round_count; skip++){
+  for (skip = 1; skip <= round_count; skip++){
     for (team_a = 0; team_a < level_counter; team_a++){
-      if (skip == level_counter){
+      if ((skip % level_counter) == 0){
         team_b = (team_a + skip + 1) % level_counter;
       }
       else {
