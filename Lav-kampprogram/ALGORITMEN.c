@@ -80,6 +80,7 @@ match *createMatches (team *all_teams, match *all_matches, int number_of_teams) 
   int i = 0, match_count = 0, N_counter = 0, A_counter = 0, B_counter = 0, C_counter = 0;
   int team_pointer = 0;
 
+  /* Tæl antallet af hold i hver niveau */
   for (i = 0; i < number_of_teams; i++) {
     if (all_teams[i].level == 0) {
       N_counter++;
@@ -95,6 +96,7 @@ match *createMatches (team *all_teams, match *all_matches, int number_of_teams) 
     }
   }
 
+  /* Laver kampe for niveauerne, og tæller antallet af kampe */
   if (N_counter > 0){
     match_count = createMatchesByLevel(all_teams + team_pointer, all_matches, N_counter, match_count);
     team_pointer += N_counter;
@@ -120,11 +122,11 @@ int createMatchesByLevel (team *all_teams, match *all_matches, int level_counter
 
   int skip = 0, team_a = 0, team_b = 0, round_count = GAMES_PR_TEAM / 2;
 
-  for (skip = 0; skip < round_count; skip++){
-    for (team_a = 0; team_a < level_counter; team_a++){
+  for (skip = 0; skip < round_count; skip++){   /* Gå igennem hver runde */
+    for (team_a = 0; team_a < level_counter; team_a++){   /* Gå igennem hvert niveau */
       team_b = (team_a + skip) % level_counter;
 
-      if (team_a != team_b){
+      if (team_a != team_b){  /* Check at det er forskellige hold */
         strcpy(all_matches[match_count].team_a, all_teams[team_a].team);
         strcpy(all_matches[match_count].team_b, all_teams[team_b].team);
         all_matches[match_count].level = all_teams[team_a].level;
@@ -133,13 +135,12 @@ int createMatchesByLevel (team *all_teams, match *all_matches, int level_counter
         all_teams[team_b].games++;
         match_count++;
       }
-      else {
+      else {  /* Gå videre til næste runde */
         round_count++;
         break;
       }
     }
   }
-
 
   return match_count;
 
