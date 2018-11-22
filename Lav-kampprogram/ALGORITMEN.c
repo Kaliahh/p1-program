@@ -118,22 +118,23 @@ match *createMatches (team *all_teams, match *all_matches, int number_of_teams) 
 
 int createMatchesByLevel (team *all_teams, match *all_matches, int level_counter, int match_count) {
 
-  int skip = 0, j = 0, round_count = GAMES_PR_TEAM / 2;
+  int skip = 0, team_a = 0, team_b = 0, round_count = GAMES_PR_TEAM / 2;
 
   for (skip = 0; skip < round_count; skip++){
-    for (j = 0; j < level_counter; j++){
-      if (all_teams[j].team != all_teams[(j + skip) % level_counter].team){
-        strcpy(all_matches[match_count].team_a, all_teams[j].team);
-        strcpy(all_matches[match_count].team_b, all_teams[(j + skip) % level_counter].team);
-        all_matches[match_count].level = all_teams[j].level;
+    for (team_a = 0; team_a < level_counter; team_a++){
+      team_b = (team_a + skip) % level_counter;
 
-        all_teams[j].games++;
-        all_teams[(j + skip) % level_counter].games++;
+      if (team_a != team_b){
+        strcpy(all_matches[match_count].team_a, all_teams[team_a].team);
+        strcpy(all_matches[match_count].team_b, all_teams[team_b].team);
+        all_matches[match_count].level = all_teams[team_a].level;
+
+        all_teams[team_a].games++;
+        all_teams[team_b].games++;
         match_count++;
       }
       else {
         round_count++;
-        printf("runder: %d\n", round_count);
         break;
       }
     }
