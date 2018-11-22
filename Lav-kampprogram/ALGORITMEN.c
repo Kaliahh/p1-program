@@ -7,6 +7,7 @@
 # include <math.h>
 # include "../main.h"
 # define MAX 30
+# define GAMES_PR_TEAM 6
 
 
 typedef struct{
@@ -16,6 +17,7 @@ typedef struct{
 } match;
 
 match *createMatches (team *all_teams, match *all_matches, int number_of_teams);
+int createMatchesByLevel (team *team_pointer, match *all_matches, int level_counter, int match_counter);
 
 
 int main(void) {
@@ -23,17 +25,17 @@ int main(void) {
   team all_teams[11];
   match *all_matches;
 
-  all_teams[0].level = 1;
-  all_teams[1].level = 1;
-  all_teams[2].level = 1;
-  all_teams[3].level = 0;
-  all_teams[4].level = 0;
-  all_teams[5].level = 0;
-  all_teams[6].level = 0;
-  all_teams[7].level = 0;
-  all_teams[8].level = 0;
-  all_teams[9].level = 0;
-  all_teams[10].level = 0;
+  all_teams[0].level = 0;
+  all_teams[1].level = 0;
+  all_teams[2].level = 0;
+  all_teams[3].level = 1;
+  all_teams[4].level = 1;
+  all_teams[5].level = 1;
+  all_teams[6].level = 1;
+  all_teams[7].level = 2;
+  all_teams[8].level = 2;
+  all_teams[9].level = 2;
+  all_teams[10].level = 2;
 
   all_teams[0].games = 0;
   all_teams[1].games = 0;
@@ -74,16 +76,81 @@ int main(void) {
 }
 
 
-match *createMatches (team *all_teams, match *all_matches, int number_of_teams){
-  int i = 0, j = 0, match_count = 0;
-  int number_of_matches = (6 * number_of_teams) / 2 - 1;
+match *createMatches (team *all_teams, match *all_matches, int number_of_teams) {
+  int i = 0, match_count = 0, N_counter = 0, A_counter = 0, B_counter = 0, C_counter = 0;
+  int team_pointer = 0;
 
-  for (i = 0; i < number_of_teams; i++){
-    //number_of_matches = (6 * (number_of_teams - i)) / 2;
-    for (j = 0; all_teams[i].games < 6 && match_count < number_of_matches; j = ((j + 1) % number_of_teams)){
-      printf("i = %d   j = %d\n", i, j);
+  for (i = 0; i < number_of_teams; i++) {
+    if (all_teams[i].level == 0) {
+      N_counter++;
+    }
+    else if (all_teams[i].level == 1) {
+      A_counter++;
+    }
+    else if (all_teams[i].level == 2) {
+      B_counter++;
+    }
+    else {
+      C_counter++;
+    }
+  }
 
-      if (all_teams[i].level == all_teams[j].level && all_teams[i].team != all_teams[j].team && all_teams[j].games < 6){
+  if (N_counter > 0){
+    match_count = createMatchesByLevel(all_teams + team_pointer, all_matches, N_counter, match_count);
+    team_pointer += N_counter;
+  }
+  if (A_counter > 0){
+    match_count = createMatchesByLevel(all_teams + team_pointer, all_matches, A_counter, match_count);
+    team_pointer += A_counter;
+  }
+  if (B_counter > 0){
+    match_count = createMatchesByLevel(all_teams + team_pointer, all_matches, B_counter, match_count);
+    team_pointer += B_counter;
+  }
+  if (C_counter > 0){
+    match_count = createMatchesByLevel(all_teams + team_pointer, all_matches, C_counter, match_count);
+  }
+
+  return all_matches;
+
+}
+
+
+int createMatchesByLevel (team *all_teams, match *all_matches, int level_counter, int match_count) {
+
+  int skip = 0, j = 0, round_count = GAMES_PR_TEAM / 2;
+
+  for (skip = 0; skip < round_count; skip++){
+    for (j = 0; j < level_counter; j++){
+      if (all_teams[j].team != all_teams[(j + skip) % level_counter].team){
+        strcpy(all_matches[match_count].team_a, all_teams[j].team);
+        strcpy(all_matches[match_count].team_b, all_teams[(j + skip) % level_counter].team);
+        all_matches[match_count].level = all_teams[j].level;
+
+        all_teams[j].games++;
+        all_teams[(j + skip) % level_counter].games++;
+        match_count++;
+      }
+      else {
+        round_count++;
+        printf("runder: %d\n", round_count);
+        break;
+      }
+    }
+  }
+
+
+  return match_count;
+
+
+
+  /*int i = 0, j = 0;
+  int original_match_count = match_count + (6 * level_counter / 2) - 1;
+
+  for (i = 0; i < level_counter; i++){
+    for (j = (i + 1) % level_counter; all_teams[i].games < 6 && match_count < original_match_count; j = (j + 1) % level_counter){
+      printf("%s vs %s\n", all_teams[i].team, all_teams[i].team);
+      if (all_teams[i].team != all_teams[j].team && all_teams[j].games < 6){
 
         strcpy(all_matches[match_count].team_a, all_teams[i].team);
         strcpy(all_matches[match_count].team_b, all_teams[j].team);
@@ -96,15 +163,5 @@ match *createMatches (team *all_teams, match *all_matches, int number_of_teams){
     }
   }
 
-  return all_matches;
-
+  return match_count;*/
 }
-
-
-/*  (antal kampe pr hold) * (antal hold) / 2   */
-
-
-
-
-/* Udregn number_of_teams (linie 78) med sizeof(all_teams). Virker ikke */
-/* Hvis der er et ulige antal hold kan ikke alle spille 6 kampe. Loopet (linie 81) bliver uendelig fordi der ikke er nogen hold at spille med til det sidste hold. Tror jeg*/
