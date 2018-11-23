@@ -6,19 +6,9 @@
 # include <string.h>
 # include <math.h>
 # include "../main.h"
-# define MAX 30
-# define GAMES_PR_TEAM 6
 
-
-typedef struct{
-  char team_a[MAX];
-  char team_b[MAX];
-  int level;
-} match;
-
-void createMatches (team *all_teams, match *all_matches, int number_of_teams);
-int createMatchesByLevel (team *team_pointer, match *all_matches, int level_counter, int match_counter);
-
+void createMatches (team *, match *, int );
+int createMatchesByLevel (team *, match *, int , int );
 
 int main(void) {
   int i = 0, number_of_teams = 11;
@@ -78,7 +68,8 @@ int main(void) {
 
 
 void createMatches (team *all_teams, match *all_matches, int number_of_teams) {
-  int i = 0, match_count = 0, N_counter = 0, A_counter = 0, B_counter = 0, C_counter = 0;
+  int i = 0, match_count = 0;
+  int N_counter = 0, A_counter = 0, B_counter = 0, C_counter = 0;
   int team_pointer = 0;
 
   /* Tæl antallet af hold i hver niveau */
@@ -98,20 +89,20 @@ void createMatches (team *all_teams, match *all_matches, int number_of_teams) {
   }
 
   /* Laver kampe for niveauerne, og tæller antallet af kampe */
-  if (number_of_teams > 0){
-    if (N_counter > 0){
+  if (number_of_teams > 0) {
+    if (N_counter > 0) {
       match_count = createMatchesByLevel(all_teams + team_pointer, all_matches, N_counter, match_count);
       team_pointer += N_counter;
     }
-    if (A_counter > 0){
+    if (A_counter > 0) {
       match_count = createMatchesByLevel(all_teams + team_pointer, all_matches, A_counter, match_count);
       team_pointer += A_counter;
     }
-    if (B_counter > 0){
+    if (B_counter > 0) {
       match_count = createMatchesByLevel(all_teams + team_pointer, all_matches, B_counter, match_count);
       team_pointer += B_counter;
     }
-    if (C_counter > 0){
+    if (C_counter > 0) {
       match_count = createMatchesByLevel(all_teams + team_pointer, all_matches, C_counter, match_count);
     }
   }
@@ -123,11 +114,12 @@ void createMatches (team *all_teams, match *all_matches, int number_of_teams) {
 
 int createMatchesByLevel (team *all_teams, match *all_matches, int level_counter, int match_count) {
 
-  int skip = 1, team_a = 0, team_b = 0, round_count = GAMES_PR_TEAM / 2;
+  int skip = 1, team_a = 0, team_b = 0;
+  int round_count = GAMES_PR_TEAM / 2;      /* Skal have sin egen kommentar */
 
-  for (skip = 1; skip <= round_count; skip++){
-    for (team_a = 0; team_a < level_counter; team_a++){
-      if ((skip % level_counter) == 0){
+  for (skip = 1; skip <= round_count; skip++) {
+    for (team_a = 0; team_a < level_counter; team_a++) {
+      if ((skip % level_counter) == 0) {
         team_b = (team_a + skip + 1) % level_counter;
       }
       else {
@@ -145,27 +137,4 @@ int createMatchesByLevel (team *all_teams, match *all_matches, int level_counter
   }
 
   return match_count;
-
-
-
-  /*int i = 0, j = 0;
-  int original_match_count = match_count + (6 * level_counter / 2) - 1;
-
-  for (i = 0; i < level_counter; i++){
-    for (j = (i + 1) % level_counter; all_teams[i].games < 6 && match_count < original_match_count; j = (j + 1) % level_counter){
-      printf("%s vs %s\n", all_teams[i].team, all_teams[i].team);
-      if (all_teams[i].team != all_teams[j].team && all_teams[j].games < 6){
-
-        strcpy(all_matches[match_count].team_a, all_teams[i].team);
-        strcpy(all_matches[match_count].team_b, all_teams[j].team);
-        all_matches[match_count].level = all_teams[i].level;
-
-        all_teams[i].games++;
-        all_teams[j].games++;
-        match_count++;
-      }
-    }
-  }
-
-  return match_count;*/
 }
