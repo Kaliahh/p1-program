@@ -159,6 +159,15 @@ int createMatchesByLevel (team *all_teams, match *all_matches, int level_counter
   return match_count;
 }
 
+/* Hvis der ikke kan findes en kamp der passer ind med de nuværende regler:
+  Gå til den sidste runde, på samme bane som vi er på nu, tag hold A, og find en kamp hvor det er hold B og kampen ikke er blevet spillet.
+  Hvis det ikke virker, tag hold B og find en kamp hvor det er hold B og kampen ikke er blevet spillet.
+  Hvis det ikke virker, tag hold A og find en kamp hvor det er hold A og kampen ikke er blevet spillet.
+  Hvis det ikke virker, tag hold B og find en kamp hvor det er hold A og kampen ikke er blevet spillet.
+  Sæt den ind her, gå videre. */
+
+  /* Tjek lige hvor vi mange regler vi har med */
+
 void createTournament (match *tournament, match *all_matches, const int number_of_matches, const int number_of_fields) {
 
   int j = 1;
@@ -166,6 +175,7 @@ void createTournament (match *tournament, match *all_matches, const int number_o
   int k = 0;
   int h = 0;
   int f = 0;
+  int i = 0;
 
   for (f = 0; f < number_of_matches; f++){
     all_matches[f].field = -1;
@@ -174,7 +184,7 @@ void createTournament (match *tournament, match *all_matches, const int number_o
   tournament[0] = all_matches[0];
   all_matches[0].field = 0;
 
-  for (int i = 0; j < number_of_matches; i = (i + 1) % number_of_matches) {
+  for (i = 0; j < number_of_matches; i = (i + 1) % number_of_matches) {
     n = j - ((j % number_of_fields) + number_of_fields);
     h = j % number_of_fields;
 
