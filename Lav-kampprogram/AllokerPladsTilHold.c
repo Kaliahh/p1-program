@@ -26,3 +26,14 @@ team* allocateSpaceForTeam (int n) {
     return all_teams;
   }
 }
+
+match* allocateSpaceForMatch (int n) {
+  match * all_matches = calloc(n * sizeof(match)); /* Allokerer plads */
+  if(all_matches != NULL) { /* Returner pointer, hvis der kunne allokeres plads */
+    return all_matches;
+  }
+  else { /* Fejlhåndtering, hvis der ikke kunne allokeres plads */
+    printf("Der skete en fejl under pladsallokeringen \n");
+    return all_matches;
+  }
+}
