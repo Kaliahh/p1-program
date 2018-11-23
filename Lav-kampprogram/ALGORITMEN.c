@@ -7,28 +7,31 @@
 # include <math.h>
 # include "../main.h"
 
-void createMatches (team *, match *, int );
-int createMatchesByLevel (team *, match *, int , int );
+int createMatches (team *, match *, int);
+int createMatchesByLevel (team *, match *, int, int);
+void createTournament (match *tournament, match *all_matches, const int number_of_matches, const int number_of_fields);
+int compareMatches (const match match_a, const match match_b);
 
 int main(void) {
   int i = 0, number_of_teams = 11;
-  int number_of_rounds = 11;   /* Skal udregnes */
-  int number_of_fields = 3;
+  //int number_of_rounds = 11;   /* Skal udregnes */
+  int number_of_fields = 2;
+  int number_of_matches = (6 * number_of_teams) / 2;
   team all_teams[11];
   match *all_matches;
-  match tournament[11][3];  /* antal runder = antal kampe / antal baner */
+  match *tournament;  /* antal runder = antal kampe / antal baner */
 
   all_teams[0].level = 0;
   all_teams[1].level = 0;
   all_teams[2].level = 0;
-  all_teams[3].level = 1;
-  all_teams[4].level = 1;
+  all_teams[3].level = 0;
+  all_teams[4].level = 0;
   all_teams[5].level = 1;
   all_teams[6].level = 1;
-  all_teams[7].level = 2;
-  all_teams[8].level = 2;
-  all_teams[9].level = 3;
-  all_teams[10].level = 3;
+  all_teams[7].level = 1;
+  all_teams[8].level = 1;
+  all_teams[9].level = 1;
+  all_teams[10].level = 1;
 
   all_teams[0].games = 0;
   all_teams[1].games = 0;
@@ -54,26 +57,35 @@ int main(void) {
   strcpy(all_teams[9].team, "Hold 10");
   strcpy(all_teams[10].team, "Hold 11");
 
-  all_matches = (match*) calloc(100, sizeof(match));
+  all_matches = malloc(number_of_matches * sizeof(match));
 
   createMatches(all_teams, all_matches, number_of_teams);
 
-  for (i = 0; i < (3 * number_of_teams); i++){
+  for (i = 0; i < (3 * number_of_teams); i++) {
     printf("%s vs %s\n", all_matches[i].team_a, all_matches[i].team_b);
   }
-  printf("____________________________\n");
+
+  printf("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\n");
+
   for (i = 0; i < 11; i++){
     printf("Hold %d: %d kampe\n", i+1, all_teams[i].games);
   }
 
+  tournament = malloc(number_of_matches * sizeof(match));
 
+  createTournament(tournament, all_matches, number_of_matches, number_of_fields);
 
+  printf("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\n");
+
+  for (i = 0; i < (3 * number_of_teams); i++) {
+    printf("%s vs %s\n", tournament[i].team_a, tournament[i].team_b);
+  }
 
   return 0;
 }
 
 
-void createMatches (team *all_teams, match *all_matches, int number_of_teams) {
+int createMatches (team *all_teams, match *all_matches, int number_of_teams) {
   int i = 0, match_count = 0;
   int N_counter = 0, A_counter = 0, B_counter = 0, C_counter = 0;
   int team_pointer = 0;
@@ -115,6 +127,8 @@ void createMatches (team *all_teams, match *all_matches, int number_of_teams) {
   else {
     printf("Ingen hold fundet\n");
   }
+
+  return match_count;
 }
 
 
@@ -136,8 +150,8 @@ int createMatchesByLevel (team *all_teams, match *all_matches, int level_counter
       strcpy(all_matches[match_count].team_b, all_teams[team_b].team);
       all_matches[match_count].level = all_teams[team_a].level;
 
-      /*all_teams[team_a].games++;
-      all_teams[team_b].games++;*/
+      all_teams[team_a].games++;
+      all_teams[team_b].games++;
       match_count++;
     }
   }
@@ -145,59 +159,66 @@ int createMatchesByLevel (team *all_teams, match *all_matches, int level_counter
   return match_count;
 }
 
-void createTournament (match *tournament, match *all_matches, const int number_of_matches, const int number_of_rounds, const int number_of_fields){
-  int i = 0;
-  int round_counter = 0;
+void createTournament (match *tournament, match *all_matches, const int number_of_matches, const int number_of_fields) {
 
-  for (i = 0; i < number_of_rounds; i++){
-    for (j = 0; j < number_of_fields; j++){
-      if (compareMatches (all_matches[i], all_matches[j])){
+  int j = 1;
+  int n = 0;
+  int k = 0;
+  int h = 0;
+  int f = 0;
 
-      }
-    }
-
+  for (f = 0; f < number_of_matches; f++){
+    all_matches[f].field = -1;
   }
 
-  for (round_counter = 0; round_counter < number_of_rounds; round_counter++){
-    if (round_counter == 0){
-      for (field = 1; field <= number_of_fields; field++){
-        if (field == 1){
-          for (k = 0; k < number_of_matches; k++){
-            if (all_matches[k].field == 0){
-              all_matches[k]. field = field;
-              tournament[i][field] = all_matches[k];
-              break;
-            }
-          }
-        }
-        else {
-          for (k = 0; k < number_of_matches; k++){
-            if (all_matches[k].field == 0 && hasPlayedInRound(all_matches, tournament, field, round_counter)){
-              all_matches[k]. field = field;
-              tournament[i][field] = all_matches[k];
-              break;
-            }
-          }
+  tournament[0] = all_matches[0];
+  all_matches[0].field = 0;
+
+  for (int i = 0; j < number_of_matches; i = (i + 1) % number_of_matches) {
+    n = j - ((j % number_of_fields) + number_of_fields);
+    h = j % number_of_fields;
+
+    printf("n = %d\n", n);
+
+    /* Checker for det specialtilfælde, at vi er i den første runde */
+    if (j < number_of_fields) {
+      //printf("Hey!\n");
+
+      for (k = 0; k < j; k++) {
+        if (compareMatches(tournament[k], all_matches[i]) == 0) {
+          break;
         }
       }
+
+      if (k == j && all_matches[i].field == -1) {
+        tournament[j] = all_matches[i];
+        tournament[j].field = h;
+        all_matches[i].field = h;
+        j++;
+      }
     }
+
     else {
-      for (field = 1; field <= number_of_fields; field++){
-        for (k = 0; k < number_of_matches; k++){
-          if (all_matches[k].field == 0 && ){
-            all_matches[k]. field = field;
-            tournament[i][field] = all_matches[k];
-            break;
-          }
+      /* Går fra første kamp i runden før, til den nuværende kamp */
+      for (k = n; k < j; k++) {
+
+        if (compareMatches(tournament[k], all_matches[i]) == 0) {
+          break;
         }
+      }
+
+      if (k == j && all_matches[i].field == -1) {
+        tournament[j] = all_matches[i];
+        tournament[j].field = h;
+        all_matches[i].field = h;
+        j++;
       }
     }
   }
-
-
 }
 
-int compareMatches (const match match_a, const match match_b){
+
+int compareMatches (const match match_a, const match match_b) {
 
   if (strcmp(match_a.team_a, match_b.team_a) == 0 || strcmp(match_a.team_a, match_b.team_b) == 0 ||
       strcmp(match_a.team_b, match_b.team_a) == 0 || strcmp(match_a.team_b, match_b.team_b) == 0) {
@@ -205,18 +226,5 @@ int compareMatches (const match match_a, const match match_b){
   }
   else {
     return 1;
-  }
-}
-
-int hasPlayedInRound (match *all_matches, match *tournament[], int field, int round){
-  int k = 0;
-
-  for (k = field; k > 0; k--){
-    if (compareMatches(all_matches[field], tournament[round][k]) == 0){
-      return 0;
-    }
-    else {
-      return 1;
-    }
   }
 }
