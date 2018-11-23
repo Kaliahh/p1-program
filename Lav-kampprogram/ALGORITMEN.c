@@ -16,7 +16,7 @@ typedef struct{
   int level;
 } match;
 
-match *createMatches (team *all_teams, match *all_matches, int number_of_teams);
+void createMatches (team *all_teams, match *all_matches, int number_of_teams);
 int createMatchesByLevel (team *team_pointer, match *all_matches, int level_counter, int match_counter);
 
 
@@ -34,8 +34,8 @@ int main(void) {
   all_teams[6].level = 1;
   all_teams[7].level = 2;
   all_teams[8].level = 2;
-  all_teams[9].level = 2;
-  all_teams[10].level = 2;
+  all_teams[9].level = 3;
+  all_teams[10].level = 3;
 
   all_teams[0].games = 0;
   all_teams[1].games = 0;
@@ -63,11 +63,12 @@ int main(void) {
 
   all_matches = (match*) calloc(100, sizeof(match));
 
-  all_matches = createMatches(all_teams, all_matches, number_of_teams);
+  createMatches(all_teams, all_matches, number_of_teams);
 
-  for (i = 0; i <= 65; i++){
+  for (i = 0; i < (3 * number_of_teams); i++){
     printf("%s vs %s\n", all_matches[i].team_a, all_matches[i].team_b);
   }
+  printf("____________________________\n");
   for (i = 0; i < 11; i++){
     printf("Hold %d: %d kampe\n", i+1, all_teams[i].games);
   }
@@ -76,7 +77,7 @@ int main(void) {
 }
 
 
-match *createMatches (team *all_teams, match *all_matches, int number_of_teams) {
+void createMatches (team *all_teams, match *all_matches, int number_of_teams) {
   int i = 0, match_count = 0, N_counter = 0, A_counter = 0, B_counter = 0, C_counter = 0;
   int team_pointer = 0;
 
@@ -97,24 +98,26 @@ match *createMatches (team *all_teams, match *all_matches, int number_of_teams) 
   }
 
   /* Laver kampe for niveauerne, og tæller antallet af kampe */
-  if (N_counter > 0){
-    match_count = createMatchesByLevel(all_teams + team_pointer, all_matches, N_counter, match_count);
-    team_pointer += N_counter;
+  if (number_of_teams > 0){
+    if (N_counter > 0){
+      match_count = createMatchesByLevel(all_teams + team_pointer, all_matches, N_counter, match_count);
+      team_pointer += N_counter;
+    }
+    if (A_counter > 0){
+      match_count = createMatchesByLevel(all_teams + team_pointer, all_matches, A_counter, match_count);
+      team_pointer += A_counter;
+    }
+    if (B_counter > 0){
+      match_count = createMatchesByLevel(all_teams + team_pointer, all_matches, B_counter, match_count);
+      team_pointer += B_counter;
+    }
+    if (C_counter > 0){
+      match_count = createMatchesByLevel(all_teams + team_pointer, all_matches, C_counter, match_count);
+    }
   }
-  if (A_counter > 0){
-    match_count = createMatchesByLevel(all_teams + team_pointer, all_matches, A_counter, match_count);
-    team_pointer += A_counter;
+  else {
+    printf("Ingen hold fundet\n");
   }
-  if (B_counter > 0){
-    match_count = createMatchesByLevel(all_teams + team_pointer, all_matches, B_counter, match_count);
-    team_pointer += B_counter;
-  }
-  if (C_counter > 0){
-    match_count = createMatchesByLevel(all_teams + team_pointer, all_matches, C_counter, match_count);
-  }
-
-  return all_matches;
-
 }
 
 
@@ -135,8 +138,8 @@ int createMatchesByLevel (team *all_teams, match *all_matches, int level_counter
       strcpy(all_matches[match_count].team_b, all_teams[team_b].team);
       all_matches[match_count].level = all_teams[team_a].level;
 
-      all_teams[team_a].games++;
-      all_teams[team_b].games++;
+      /*all_teams[team_a].games++;
+      all_teams[team_b].games++;*/
       match_count++;
     }
   }
