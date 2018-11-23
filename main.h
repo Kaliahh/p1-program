@@ -13,6 +13,7 @@ typedef struct{
   char team_a[MAX_NAME_LEN];
   char team_b[MAX_NAME_LEN];
   int level;
+  int field;
 } match;
 
 /* Enumeration for niveauer */
