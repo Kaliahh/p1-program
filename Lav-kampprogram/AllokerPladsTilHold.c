@@ -4,11 +4,14 @@
 #include <string.h>
 #include "../main.h"
 
-team* allocateSpaceForTeam(int n);
+/* Prototyper */
+team* allocateSpaceForTeam(int);
+match* allocateSpaceForMatch (int);
 
 int main (void) {
   int number_of_teams = 20;
   team *all_teams = allocateSpaceForTeam(number_of_teams);
+  match *all_matches = allocateSpaceForMatch(number_of_teams);
 
   free(all_teams);
   return 0;
@@ -27,8 +30,10 @@ team* allocateSpaceForTeam (int n) {
   }
 }
 
+/* Allokerer plads til et array af structs med kampe.
+   Returnerer pointer til arrayet */
 match* allocateSpaceForMatch (int n) {
-  match * all_matches = calloc(n * sizeof(match)); /* Allokerer plads */
+  match * all_matches = malloc(n * sizeof(match)); /* Allokerer plads */
   if(all_matches != NULL) { /* Returner pointer, hvis der kunne allokeres plads */
     return all_matches;
   }
