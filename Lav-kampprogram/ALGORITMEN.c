@@ -194,10 +194,9 @@ void createTournament (match *tournament, match *all_matches, const int number_o
     if (j < number_of_fields) {
       //printf("Hey!\n");
 
-      for (k = 0; k < j; k++) {
-        if (compareMatches(tournament[k], all_matches[i]) == 0) {
-          break;
-        }
+      k = 0;
+      while(compareMatches(tournament[k], all_matches[i]) != 0 && k < j) {
+        k++;
       }
 
       if (k == j && all_matches[i].field == -1) {
@@ -207,14 +206,11 @@ void createTournament (match *tournament, match *all_matches, const int number_o
         j++;
       }
     }
-
     else {
       /* Går fra første kamp i runden før, til den nuværende kamp */
-      for (k = n; k < j; k++) {
-
-        if (compareMatches(tournament[k], all_matches[i]) == 0) {
-          break;
-        }
+      k = n;
+      while(compareMatches(tournament[k], all_matches[i]) != 0 && k < j) {
+        k++;
       }
 
       if (k == j && all_matches[i].field == -1) {
