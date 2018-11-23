@@ -10,6 +10,7 @@ void printToTerminal(match *tournament, int starting_time, int number_of_rounds,
 void printProgram(match *tournament, int starting_time, int number_of_rounds, int number_of_fields);
 char translateToChar(int level);
 
+/*
 int main(void) {
   int number_of_fields = 2, number_of_rounds = 6, starting_time = 570;
   match tournament[12];
@@ -72,7 +73,9 @@ int main(void) {
 
   return 0;
 }
+*/
 
+/* Spørger brugeren om hvad der ønskes at gøre med turneringsplanen */
 void printProgram(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
   int n = 0;
 
@@ -98,20 +101,24 @@ void printProgram(match *tournament, int starting_time, int number_of_rounds, in
   }
 }
 
-
-void printToFile(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {                       
+/* Printer turneringsplanen til en fil */
+void printToFile (match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {                       
   int i = 0, j = 0, time = starting_time;
   int hour = 0, minute = 0;
   FILE *fp = fopen("tournamentPlan.txt", "w");
 
-  for(i = 0; i < number_of_rounds * number_of_fields; i += number_of_fields) {
+  for (i = 0; i < number_of_rounds * number_of_fields; i += number_of_fields) {
+    /* oversætter tiden fra minutter til timer og minutter */
     hour = time / 60;
     minute = time % 60;
 
-    fprintf(fp, "Runde %d:\n%.2d:%.2d\n", (i / number_of_fields) + 1, hour, minute);
+    /* printer runde nummer og tidspunktet for hvornår der skal spilles */
+    fprintf (fp, "Runde %d:\n%.2d:%.2d\n", (i / number_of_fields) + 1, hour, minute);
 
-    for(j = 0; j < number_of_fields; j++) {
-      fprintf(fp, "Bane %d | %c | %s vs %s\n", tournament[i + j].field, translateToChar(tournament[i + j].level), tournament[i + j].team_a, tournament[i + j].team_b);
+    /* printer bane nummer, niveau, og de to hold, som skal spille mod hinanden */
+    for (j = 0; j < number_of_fields; j++) {
+      fprintf(fp, "Bane %d | %c | %s vs %s\n", tournament[i + j].field + 1, translateToChar(tournament[i + j].level), 
+                                               tournament[i + j].team_a, tournament[i + j].team_b);
     }
 
     fprintf(fp, "\n");
@@ -120,18 +127,23 @@ void printToFile(match *tournament, int starting_time, int number_of_rounds, int
   }
 }
 
-void printToTerminal(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {                       
+/* Printer turneringsplanen til terminalen */
+void printToTerminal (match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {                       
   int i = 0, j = 0, time = starting_time;
   int hour = 0, minute = 0;
 
-  for(i = 0; i < number_of_rounds * number_of_fields; i += number_of_fields) {
+  for (i = 0; i < number_of_rounds * number_of_fields; i += number_of_fields) {
+    /* oversætter tiden fra minutter til timer og minutter */
     hour = time / 60;
     minute = time % 60;
 
+    /* printer runde nummer og tidspunktet for hvornår der skal spilles */
     printf("Runde %d:\n%.2d:%.2d\n", (i / number_of_fields) + 1, hour, minute);
 
-    for(j = 0; j < number_of_fields; j++) {
-      printf("Bane %d | %c | %s vs %s\n", tournament[i + j].field, translateToChar(tournament[i + j].level), tournament[i + j].team_a, tournament[i + j].team_b);
+    /* printer bane, niveau, og de to hold, som skal spille mod hinanden */
+    for (j = 0; j < number_of_fields; j++) {
+      printf("Bane %d | %c | %s vs %s\n", tournament[i + j].field + 1, translateToChar(tournament[i + j].level), 
+                                          tournament[i + j].team_a, tournament[i + j].team_b);
     }
 
     printf("\n");
@@ -140,7 +152,7 @@ void printToTerminal(match *tournament, int starting_time, int number_of_rounds,
   }
 }
 
-
+/* Oversætter level fra tal til bogstaver */
 char translateToChar(int level) {
   switch(level) {
     case 0: 
