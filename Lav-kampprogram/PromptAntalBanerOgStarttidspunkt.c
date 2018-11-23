@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include "../main.h"
 
-int promptForFields();
-int promptForTime();
+int promptForFields(void);
+int promptForTime(void);
 
 int main(void) {
   int number_of_fields = 0, starting_time = 0;
@@ -18,7 +18,7 @@ int main(void) {
 
 /* Prompter brugeren for antallet af baner,
    Returnerer antallet af baner */
-int promptForFields() {
+int promptForFields(void) {
   int antal_baner = 0;
   printf("Indtast antal baner: ");
   scanf(" %d", number_of_fields);
@@ -27,7 +27,7 @@ int promptForFields() {
 
 /* Prompter brugeren for starttidspunkt,
    Returnerer starttidspunktet i minutter, fra midnat */
-int promptForTime() {
+int promptForTime(void) {
   int minutter = 0, timer = 0;
   printf("Indtast starttidspunkt (skrevet som tt:mm): ");
   scanf(" %d:%d", &timer, &minutter);
