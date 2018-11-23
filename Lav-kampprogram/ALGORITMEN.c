@@ -12,8 +12,11 @@ int createMatchesByLevel (team *, match *, int , int );
 
 int main(void) {
   int i = 0, number_of_teams = 11;
+  int number_of_rounds = 11;   /* Skal udregnes */
+  int number_of_fields = 3;
   team all_teams[11];
   match *all_matches;
+  match tournament[11][3];  /* antal runder = antal kampe / antal baner */
 
   all_teams[0].level = 0;
   all_teams[1].level = 0;
@@ -62,6 +65,9 @@ int main(void) {
   for (i = 0; i < 11; i++){
     printf("Hold %d: %d kampe\n", i+1, all_teams[i].games);
   }
+
+
+
 
   return 0;
 }
@@ -137,4 +143,80 @@ int createMatchesByLevel (team *all_teams, match *all_matches, int level_counter
   }
 
   return match_count;
+}
+
+void createTournament (match *tournament, match *all_matches, const int number_of_matches, const int number_of_rounds, const int number_of_fields){
+  int i = 0;
+  int round_counter = 0;
+
+  for (i = 0; i < number_of_rounds; i++){
+    for (j = 0; j < number_of_fields; j++){
+      if (compareMatches (all_matches[i], all_matches[j])){
+
+      }
+    }
+
+  }
+
+  for (round_counter = 0; round_counter < number_of_rounds; round_counter++){
+    if (round_counter == 0){
+      for (field = 1; field <= number_of_fields; field++){
+        if (field == 1){
+          for (k = 0; k < number_of_matches; k++){
+            if (all_matches[k].field == 0){
+              all_matches[k]. field = field;
+              tournament[i][field] = all_matches[k];
+              break;
+            }
+          }
+        }
+        else {
+          for (k = 0; k < number_of_matches; k++){
+            if (all_matches[k].field == 0 && hasPlayedInRound(all_matches, tournament, field, round_counter)){
+              all_matches[k]. field = field;
+              tournament[i][field] = all_matches[k];
+              break;
+            }
+          }
+        }
+      }
+    }
+    else {
+      for (field = 1; field <= number_of_fields; field++){
+        for (k = 0; k < number_of_matches; k++){
+          if (all_matches[k].field == 0 && ){
+            all_matches[k]. field = field;
+            tournament[i][field] = all_matches[k];
+            break;
+          }
+        }
+      }
+    }
+  }
+
+
+}
+
+int compareMatches (const match match_a, const match match_b){
+
+  if (strcmp(match_a.team_a, match_b.team_a) == 0 || strcmp(match_a.team_a, match_b.team_b) == 0 ||
+      strcmp(match_a.team_b, match_b.team_a) == 0 || strcmp(match_a.team_b, match_b.team_b) == 0) {
+    return 0;
+  }
+  else {
+    return 1;
+  }
+}
+
+int hasPlayedInRound (match *all_matches, match *tournament[], int field, int round){
+  int k = 0;
+
+  for (k = field; k > 0; k--){
+    if (compareMatches(all_matches[field], tournament[round][k]) == 0){
+      return 0;
+    }
+    else {
+      return 1;
+    }
+  }
 }
