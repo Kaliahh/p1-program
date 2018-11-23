@@ -15,7 +15,7 @@ int compareMatches (const match match_a, const match match_b);
 int main(void) {
   int i = 0, number_of_teams = 11;
   //int number_of_rounds = 11;   /* Skal udregnes */
-  int number_of_fields = 3;
+  int number_of_fields = 2;
   int number_of_matches = (6 * number_of_teams) / 2;
   team all_teams[11];
   match *all_matches;
@@ -26,12 +26,12 @@ int main(void) {
   all_teams[2].level = 0;
   all_teams[3].level = 0;
   all_teams[4].level = 0;
-  all_teams[5].level = 0;
-  all_teams[6].level = 0;
-  all_teams[7].level = 0;
-  all_teams[8].level = 0;
-  all_teams[9].level = 0;
-  all_teams[10].level = 0;
+  all_teams[5].level = 1;
+  all_teams[6].level = 1;
+  all_teams[7].level = 1;
+  all_teams[8].level = 1;
+  all_teams[9].level = 1;
+  all_teams[10].level = 1;
 
   all_teams[0].games = 0;
   all_teams[1].games = 0;
@@ -165,26 +165,35 @@ void createTournament (match *tournament, match *all_matches, const int number_o
   int n = 0;
   int k = 0;
   int h = 0;
+  int f = 0;
+
+  for (f = 0; f < number_of_matches; f++){
+    all_matches[f].field = -1;
+  }
 
   tournament[0] = all_matches[0];
+  all_matches[0].field = 0;
 
   for (int i = 0; j < number_of_matches; i = (i + 1) % number_of_matches) {
     n = j - ((j % number_of_fields) + number_of_fields);
     h = j % number_of_fields;
 
+    printf("n = %d\n", n);
+
     /* Checker for det specialtilfælde, at vi er i den første runde */
-    if (n < number_of_fields) {
+    if (j < number_of_fields) {
       //printf("Hey!\n");
 
-      for (k = h; k < j; k++) {
+      for (k = 0; k < j; k++) {
         if (compareMatches(tournament[k], all_matches[i]) == 0) {
           break;
         }
       }
 
-      if (k == j && tournament[j].field == 0) {
+      if (k == j && all_matches[i].field == -1) {
         tournament[j] = all_matches[i];
         tournament[j].field = h;
+        all_matches[i].field = h;
         j++;
       }
     }
@@ -198,9 +207,10 @@ void createTournament (match *tournament, match *all_matches, const int number_o
         }
       }
 
-      if (k == j && tournament[j].field == 0) {
+      if (k == j && all_matches[i].field == -1) {
         tournament[j] = all_matches[i];
         tournament[j].field = h;
+        all_matches[i].field = h;
         j++;
       }
     }
