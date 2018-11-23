@@ -16,6 +16,8 @@ int main(void) {
 
 }
 
+/* Prompter brugeren for antallet af baner,
+   Returnerer antallet af baner */
 int promptForFields() {
   int antal_baner = 0;
   printf("Indtast antal baner: ");
@@ -23,10 +25,11 @@ int promptForFields() {
   return antal_baner;
 }
 
+/* Prompter brugeren for starttidspunkt,
+   Returnerer starttidspunktet i minutter, fra midnat */
 int promptForTime() {
   int minutter = 0, timer = 0;
   printf("Indtast starttidspunkt (skrevet som tt:mm): ");
   scanf(" %d:%d", &timer, &minutter);
-
   return timer * 60 + minutter;
 }
