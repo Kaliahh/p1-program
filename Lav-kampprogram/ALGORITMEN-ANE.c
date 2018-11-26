@@ -10,8 +10,13 @@
 int createMatches (team *, match *, int);
 int createMatchesByLevel (team *, match *, int, int);
 void createTournament (match *tournament, match *all_matches, const int number_of_matches, const int number_of_fields);
-int findMatch(match *tourn_match, match *all_matches, match *, const int);
+int findMatch(const int, match *all_matches, match *, const int, const int, const int, const int, int*, int*);
 int compareMatches (const match match_a, const match match_b);
+int isInRound (int comp_function(const match, const match), match *tournament, match *all_matches, int check_i, int match_i, int *tournament_i, int *fail_i, int field_i);
+int compareMatches1 (const match match_a, const match match_b);
+int compareMatches2 (const match match_a, const match match_b);
+int compareMatches3 (const match match_a, const match match_b);
+int compareMatches4 (const match match_a, const match match_b);
 
 int main(void) {
   int i = 0, number_of_teams = 17;
@@ -195,7 +200,7 @@ int createMatchesByLevel (team *all_teams, match *all_matches, int level_counter
 
 void createTournament (match *tournament, match *all_matches, const int number_of_matches, const int number_of_fields) {
 
-  int tournament_i = 1;
+  int tournament_i = 1;  /* kommentar: hvorfor 1? */
   int check_num = 0;
   int check_i = 0;
   int field_i = 0;
@@ -221,75 +226,58 @@ void createTournament (match *tournament, match *all_matches, const int number_o
     field_i = tournament_i % number_of_fields;
 
     if (fail_i > number_of_matches * 2) {
-      check_i = check_num;
-      while (check_i < tournament_i) {
-        if (tournament[check_i].field == field_i) {
-          result = findMatch(&tournament[check_i], all_matches, tournament, number_of_matches);
-          if (result == 1) {
-            tournament_i++;
-          }
-          else {
-            printf("Kunne ikke lave turneringen\n");
-            fail_i += 10;
-            break;
-          }
-        }
-        else {
-          check_i++;
-        }
+      check_i = tournament_i - number_of_fields;
+      result = findMatch(check_i, all_matches, tournament, number_of_matches, field_i, number_of_fields, match_i, &tournament_i, &fail_i);
+      if (result == 1) {
+        tournament_i++;
+        fail_i = 0;
+      }
+      else {
+        printf("Kunne ikke lave turneringen\n");    /* gå videre til næste kriterie eller noget */
+        break;
       }
     }
+
 
     /* Checker for det specialtilfælde, at vi er i den første runde */
     else if (tournament_i < number_of_fields) {
       check_i = 0;
-      while(compareMatches(tournament[check_i], all_matches[match_i]) != 0 && check_i < tournament_i) {
-        check_i++;
-      }
-      /* Hvis holdene i kampen ikke har spillet i sidste runde eller den nuværende,
-         og kampen endnu ikke er blevet spillet, kopieres kampen over i turneringen */
-      if (check_i == tournament_i && all_matches[match_i].field == -1) {
-        all_matches[match_i].field = field_i;
-        tournament[tournament_i] = all_matches[match_i];
-        tournament_i++;
-        fail_i = 0;
-      }
-
-      else {
-        fail_i++;
-      }
+      isInRound(compareMatches, tournament, all_matches, check_i, match_i, &tournament_i, &fail_i, field_i);
     }
 
     else {
        /* Gennemgår turneringen for at se om holdene i kampen der bliver sammenlignet med,
        allerede har spillet i den foregående runde eller den nuværende runde */
       check_i = check_num;
-      while(compareMatches(tournament[check_i], all_matches[match_i]) != 0 && check_i < tournament_i) {
-        check_i++;
-      }
-      if (check_i == tournament_i && all_matches[match_i].field == -1) {
-        all_matches[match_i].field = field_i;
-        tournament[tournament_i] = all_matches[match_i];
-        tournament_i++;
-        fail_i = 0;
-      }
-
-      else {
-        fail_i++;
-      }
+      isInRound(compareMatches, tournament, all_matches, check_i, match_i, &tournament_i, &fail_i, field_i);
     }
   }
 }
 
-int findMatch(match *tourn_match, match *all_matches, match *tournament, const int number_of_matches) {
+int findMatch(const int check_i, match *all_matches, match *tournament, const int number_of_matches, const int field_i, const int number_of_fields, const int match_i, int *tournament_i, int *fail_i) {
+  int i;
 
-  for (int i = 0; i < number_of_matches; i++) {
-    if (strcmp(tourn_match->team_a, all_matches[i].team_b) == 0 && all_matches[i].field == -1) {
-      *tourn_match = all_matches[i];
+  for (i = 0; i < number_of_matches; i++) {
+    printf("i = %d\n", i);
+    if (strcmp(tournament[check_i].team_a, all_matches[i].team_b) == 0 && all_matches[i].field == -1 && strcmp(tournament[check_i].team_b, all_matches[i].team_a) != 0 && isInRound(compareMatches1, tournament, all_matches, check_i, match_i, tournament_i, fail_i, field_i)) {
+      all_matches[i].field = field_i;
+      tournament[check_i + number_of_fields] = all_matches[i];     /* flyt ud af funktionen */
       return 1;
     }
-    else {
-      return 0;
+    else if (strcmp(tournament[check_i].team_b, all_matches[i].team_b) == 0 && all_matches[i].field == -1 && strcmp(tournament[check_i].team_b, all_matches[i].team_a) != 0 && isInRound(compareMatches2, tournament, all_matches, check_i, match_i, tournament_i, fail_i, field_i)) {
+      all_matches[i].field = field_i;
+      tournament[check_i + number_of_fields] = all_matches[i];     /* flyt ud af funktionen */
+      return 1;
+    }
+    else if (strcmp(tournament[check_i].team_a, all_matches[i].team_a) == 0 && all_matches[i].field == -1 && strcmp(tournament[check_i].team_b, all_matches[i].team_a) != 0 && isInRound(compareMatches3, tournament, all_matches, check_i, match_i, tournament_i, fail_i, field_i)) {
+      all_matches[i].field = field_i;
+      tournament[check_i + number_of_fields] = all_matches[i];     /* flyt ud af funktionen */
+      return 1;
+    }
+    else if (strcmp(tournament[check_i].team_b, all_matches[i].team_a) == 0 && all_matches[i].field == -1 && strcmp(tournament[check_i].team_b, all_matches[i].team_a) != 0 && isInRound(compareMatches4, tournament, all_matches, check_i, match_i, tournament_i, fail_i, field_i)) {
+      all_matches[i].field = field_i;
+      tournament[check_i + number_of_fields] = all_matches[i];     /* flyt ud af funktionen */
+      return 1;
     }
   }
   return 0;
@@ -300,6 +288,74 @@ int compareMatches (const match match_a, const match match_b) {
 
   if (strcmp(match_a.team_a, match_b.team_a) == 0 || strcmp(match_a.team_a, match_b.team_b) == 0 ||
       strcmp(match_a.team_b, match_b.team_a) == 0 || strcmp(match_a.team_b, match_b.team_b) == 0) {
+    return 0;
+  }
+  else {
+    return 1;
+  }
+}
+
+int isInRound (int comp_function(const match, const match), match *tournament, match *all_matches, int check_i, int match_i, int *tournament_i, int *fail_i, int field_i){
+  while(comp_function(tournament[check_i], all_matches[match_i]) != 0 && check_i < *tournament_i) {
+    check_i++;
+    printf("turneringsindekset, %d\n", check_i);
+  }
+  /* Hvis holdene i kampen ikke har spillet i sidste runde eller den nuværende,
+     og kampen endnu ikke er blevet spillet, kopieres kampen over i turneringen */
+  if (check_i == *tournament_i && all_matches[match_i].field == -1) {
+    all_matches[match_i].field = field_i;
+    tournament[*tournament_i] = all_matches[match_i];
+    tournament_i++;
+    fail_i = 0;
+    return 1;
+  }
+
+  else {
+    fail_i++;
+  }
+  return 0;
+}
+
+int compareMatches1 (const match match_a, const match match_b) {
+
+  if (strcmp(match_a.team_a, match_b.team_a) == 0 ||
+      strcmp(match_a.team_b, match_b.team_a) == 0 || strcmp(match_a.team_b, match_b.team_b) == 0) {
+    return 0;
+  }
+  else {
+    return 1;
+  }
+}
+
+
+int compareMatches2 (const match match_a, const match match_b) {
+
+  if (strcmp(match_a.team_a, match_b.team_a) == 0 || strcmp(match_a.team_a, match_b.team_b) == 0 ||
+      strcmp(match_a.team_b, match_b.team_a) == 0) {
+    return 0;
+  }
+  else {
+    return 1;
+  }
+}
+
+
+int compareMatches3 (const match match_a, const match match_b) {
+
+  if (strcmp(match_a.team_a, match_b.team_b) == 0 ||
+      strcmp(match_a.team_b, match_b.team_a) == 0 || strcmp(match_a.team_b, match_b.team_b) == 0) {
+    return 0;
+  }
+  else {
+    return 1;
+  }
+}
+
+
+int compareMatches4 (const match match_a, const match match_b) {
+
+  if (strcmp(match_a.team_a, match_b.team_a) == 0 || strcmp(match_a.team_a, match_b.team_b) == 0 ||
+      strcmp(match_a.team_b, match_b.team_b) == 0) {
     return 0;
   }
   else {
