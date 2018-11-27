@@ -1,10 +1,12 @@
+/* Scanner en fil for antallet af linjer, og derfor antallet af hold */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include "../main.h"
 
-/* Prototypes */
+/* Prototyper */
 int getNumberOfTeams(FILE *team_names);
 
 int main(void) {

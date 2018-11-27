@@ -1,4 +1,6 @@
-/*# include <stdio.h>
+/* Prompter brugeren for filnavnet på holdlisten */
+
+# include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <string.h>
@@ -6,6 +8,7 @@
 
 char *PromptForFileName(void);
 
+/* Bruges til test */
 int main(void) {
 
   char *file_name;
@@ -17,7 +20,7 @@ int main(void) {
   printf("fil navn: %s\n", file_name);
 
   return 0;
-}*/
+}
 
 /* Prompter brugere for et filnavn */
 char *PromptForFileName(void){

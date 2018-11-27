@@ -1,4 +1,5 @@
 /* Allokerer plads til et array af structs med hold */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,6 +9,7 @@
 team* allocateSpaceForTeam(int);
 match* allocateSpaceForMatch (int);
 
+/* Bruges til test */
 int main (void) {
   int number_of_teams = 20;
   team *all_teams = allocateSpaceForTeam(number_of_teams);

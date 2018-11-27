@@ -1,4 +1,5 @@
-/* Printer sjovt nok kampprogrammet */
+/* Printer kampprogrammet */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,7 +11,7 @@ void printToTerminal(match *tournament, int starting_time, int number_of_rounds,
 void printProgram(match *tournament, int starting_time, int number_of_rounds, int number_of_fields);
 char translateToChar(int level);
 
-/*
+/* Bruges til test */
 int main(void) {
   int number_of_fields = 2, number_of_rounds = 6, starting_time = 570;
   match tournament[12];
@@ -73,7 +74,7 @@ int main(void) {
 
   return 0;
 }
-*/
+
 
 /* Spørger brugeren om hvad der ønskes at gøre med turneringsplanen */
 void printProgram(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
@@ -102,7 +103,7 @@ void printProgram(match *tournament, int starting_time, int number_of_rounds, in
 }
 
 /* Printer turneringsplanen til en fil */
-void printToFile (match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {                       
+void printToFile (match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
   int i = 0, j = 0, time = starting_time;
   int hour = 0, minute = 0;
   FILE *fp = fopen("tournamentPlan.txt", "w");
@@ -117,7 +118,7 @@ void printToFile (match *tournament, int starting_time, int number_of_rounds, in
 
     /* printer bane nummer, niveau, og de to hold, som skal spille mod hinanden */
     for (j = 0; j < number_of_fields; j++) {
-      fprintf(fp, "Bane %d | %c | %s vs %s\n", tournament[i + j].field + 1, translateToChar(tournament[i + j].level), 
+      fprintf(fp, "Bane %d | %c | %s vs %s\n", tournament[i + j].field + 1, translateToChar(tournament[i + j].level),
                                                tournament[i + j].team_a, tournament[i + j].team_b);
     }
 
@@ -128,7 +129,7 @@ void printToFile (match *tournament, int starting_time, int number_of_rounds, in
 }
 
 /* Printer turneringsplanen til terminalen */
-void printToTerminal (match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {                       
+void printToTerminal (match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
   int i = 0, j = 0, time = starting_time;
   int hour = 0, minute = 0;
 
@@ -142,7 +143,7 @@ void printToTerminal (match *tournament, int starting_time, int number_of_rounds
 
     /* printer bane, niveau, og de to hold, som skal spille mod hinanden */
     for (j = 0; j < number_of_fields; j++) {
-      printf("Bane %d | %c | %s vs %s\n", tournament[i + j].field + 1, translateToChar(tournament[i + j].level), 
+      printf("Bane %d | %c | %s vs %s\n", tournament[i + j].field + 1, translateToChar(tournament[i + j].level),
                                           tournament[i + j].team_a, tournament[i + j].team_b);
     }
 
@@ -155,11 +156,11 @@ void printToTerminal (match *tournament, int starting_time, int number_of_rounds
 /* Oversætter level fra tal til bogstaver */
 char translateToChar(int level) {
   switch(level) {
-    case 0: 
+    case 0:
       return 'N';
     case 1:
       return 'A';
-    case 2: 
+    case 2:
       return 'B';
     case 3:
       return 'C';

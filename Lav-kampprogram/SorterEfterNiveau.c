@@ -1,6 +1,6 @@
 /* Sorter et array af hold efter niveau */
 
-/*# include <stdio.h>
+# include <stdio.h>
 # include <stdlib.h>
 #include <string.h>
 # include "../main.h"
@@ -8,6 +8,7 @@
 void SortArrayByLevel(team *all_teams, int number_of_teams);
 int comp (const void *a, const void*b);
 
+/* Bruges til test */
 int main(void) {
   int number_of_teams = 5;
   team all_teams[5];
@@ -30,7 +31,7 @@ int main(void) {
     printf("team %s: level %d\n", all_teams[i].team, all_teams[i].level);
   }
   return 0;
-}*/
+}
 
 /* Bruger qsort til at sortere arrayet af hold efter niveau */
 void SortArrayByLevel(team *all_teams, int number_of_teams){

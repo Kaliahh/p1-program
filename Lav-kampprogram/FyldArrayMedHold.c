@@ -7,6 +7,7 @@
 
 int fillArray(team *, const char *, int);
 
+/* Bruges til test */
 int main(void) {
 
   team all_teams[40];

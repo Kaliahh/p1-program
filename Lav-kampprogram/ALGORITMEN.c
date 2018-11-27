@@ -14,7 +14,6 @@ int compareMatches (const match match_a, const match match_b);
 
 int main(void) {
   int i = 0, number_of_teams = 11;
-  //int number_of_rounds = 11;   /* Skal udregnes */
   int number_of_fields = 2;
   int number_of_matches = (6 * number_of_teams) / 2;
   team all_teams[11];

@@ -1,4 +1,5 @@
 /* Prompt brugeren for antal baner og starttidspunkt */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "../main.h"
@@ -6,6 +7,7 @@
 int promptForFields(void);
 int promptForTime(void);
 
+/* Bruges til test */
 int main(void) {
   int number_of_fields = 0, starting_time = 0;
 
