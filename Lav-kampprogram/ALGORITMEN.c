@@ -165,8 +165,6 @@ int createMatchesByLevel (team *all_teams, match *all_matches, int level_counter
   Hvis det ikke virker, tag hold B og find en kamp hvor det er hold A og kampen ikke er blevet spillet.
   Sæt den ind her, gå videre. */
 
-  /* Tjek lige hvor vi mange regler vi har med */
-
 void createTournament (match *tournament, match *all_matches, const int number_of_matches, const int number_of_fields) {
 
   int j = 1;
