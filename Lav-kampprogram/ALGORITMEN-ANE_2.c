@@ -293,13 +293,16 @@ int evaluateTournament(match *tournament, const int number_of_matches, const int
     for (int match1 = round_start; match1 < round_start + number_of_fields; match1++) {
       for (int match2 = round_start; match2 < round_start + number_of_fields; match2++) {
         /* Giv bedre karakter hvis hold ikke spiller flere gange i samme runde */
-        if (match1 != match2 && compareMatches(tournament[match1], tournament[match2]) == 1) {
-          grade++;
+        if (match1 != match2 && compareMatches(tournament[match1], tournament[match2]) == 0) {
+          grade--;
         }
         /* Giv bedre karakter hvis ingen af holdene spillede i forrige runde
            ikke sikker på om det er en god måde at gøre det på */
-        if (compareMatches(tournament[match1], tournament[match2 - number_of_fields]) == 1) {
-          grade++;
+        if (compareMatches(tournament[match1], tournament[match2 - number_of_fields]) == 0) {
+          grade -= 2;
+          if(tournament[match1].field == tournament[match2 - number_of_fields].field) {
+            grade++;
+          }
         }
       }
     }
