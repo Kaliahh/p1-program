@@ -10,19 +10,25 @@
 
 int createMatches (team *, match *, int);
 int createMatchesByLevel (team *, match *, int, int);
-void createTournament (match *tournament, match *all_matches, const int number_of_matches, const int number_of_fields);
 int compareMatches (const match match_a, const match match_b);
 match* createRandomTournament(match *, int, const int);
 void removeElement(match *, const int, const int);
-int getRound(match *, const int, const int, const int);
+int evaluateTournament(match *, const int, const int);
+
+void createTournament(const match *, const int, const int, match *);
+void copyMatches(const match *, const int, match *);
+void resetFields(const int, match *);
 
 int main(void) {
   int i = 0, number_of_teams = 11;
   int number_of_fields = 2;
   int number_of_matches = (6 * number_of_teams) / 2;
+  int grade = 0;
+  int temp_grade = 0;
   team all_teams[11];
   match *all_matches;
   match *tournament;  /* antal runder = antal kampe / antal baner */
+  match *temp_tournament;
 
   time_t t;
   /* initialiserer rand */
@@ -65,8 +71,7 @@ int main(void) {
   strcpy(all_teams[10].team, "Hold 11");
 
   all_matches = malloc(number_of_matches * sizeof(match));
-  getRound()
-/*
+
   createMatches(all_teams, all_matches, number_of_teams);
 
   for (i = 0; i < (3 * number_of_teams); i++) {
@@ -80,16 +85,42 @@ int main(void) {
   }
 
   tournament = malloc(number_of_matches * sizeof(match));
+  temp_tournament = malloc(number_of_matches * sizeof(match));
 
-  createTournament(tournament, all_matches, number_of_matches, number_of_fields);
+  resetFields(number_of_matches, all_matches);
+
+  for (int noget = 0; noget < 1000000; noget++) {
+    createTournament(all_matches, number_of_matches, number_of_fields, temp_tournament);
+
+    temp_grade = evaluateTournament(temp_tournament, number_of_matches, number_of_fields);
+
+    if (temp_grade > grade) {
+      copyMatches(temp_tournament, number_of_matches, tournament);
+      grade = temp_grade;
+    }
+
+  }
+
+
+
+
+
 
   printf("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\n");
 
-  for (i = 0; i < (3 * number_of_teams); i++) {
-    printf("%s vs %s\n", tournament[i].team_a, tournament[i].team_b);
+  for (i = 0; i < number_of_matches; i++) {
+    if (i % number_of_fields == 0 && i != 0) {
+      printf("- - - - - - - - - - - - - - - - - - - - - - - - -\n");
+      printf("%2d | %8s vs %-10s\n", i + 1, tournament[i].team_a, tournament[i].team_b);
+    }
+
+    else {
+      printf("%2d | %8s vs %-10s\n", i + 1, tournament[i].team_a, tournament[i].team_b);
+    }
   }
 
-*/
+  printf("%d\n", grade);
+
   return 0;
 }
 
@@ -140,7 +171,6 @@ int createMatches (team *all_teams, match *all_matches, int number_of_teams) {
   return match_count;
 }
 
-
 int createMatchesByLevel (team *all_teams, match *all_matches, int level_counter, int match_count) {
 
   int skip = 1, team_a = 0, team_b = 0;
@@ -168,70 +198,8 @@ int createMatchesByLevel (team *all_teams, match *all_matches, int level_counter
   return match_count;
 }
 
-/* Hvis der ikke kan findes en kamp der passer ind med de nuværende regler:
-  Gå til den sidste runde, på samme bane som vi er på nu, tag hold A, og find en kamp hvor det er hold B og kampen ikke er blevet spillet.
-  Hvis det ikke virker, tag hold B og find en kamp hvor det er hold B og kampen ikke er blevet spillet.
-  Hvis det ikke virker, tag hold A og find en kamp hvor det er hold A og kampen ikke er blevet spillet.
-  Hvis det ikke virker, tag hold B og find en kamp hvor det er hold A og kampen ikke er blevet spillet.
-  Sæt den ind her, gå videre. */
-
-void createTournament (match *tournament, match *all_matches, const int number_of_matches, const int number_of_fields) {
-
-  int j = 1;
-  int n = 0;
-  int k = 0;
-  int h = 0;
-  int f = 0;
-  int i = 0;
-
-  for (f = 0; f < number_of_matches; f++){
-    all_matches[f].field = -1;
-  }
-
-  tournament[0] = all_matches[0];
-  all_matches[0].field = 0;
-
-  for (i = 0; j < number_of_matches; i = (i + 1) % number_of_matches) {
-    n = j - ((j % number_of_fields) + number_of_fields);
-    h = j % number_of_fields;
-
-    printf("n = %d\n", n);
-
-    /* Checker for det specialtilfælde, at vi er i den første runde */
-    if (j < number_of_fields) {
-      //printf("Hey!\n");
-
-      k = 0;
-      while(compareMatches(tournament[k], all_matches[i]) != 0 && k < j) {
-        k++;
-      }
-
-      if (k == j && all_matches[i].field == -1) {
-        tournament[j] = all_matches[i];
-        tournament[j].field = h;
-        all_matches[i].field = h;
-        j++;
-      }
-    }
-    else {
-      /* Går fra første kamp i runden før, til den nuværende kamp */
-      k = n;
-      while(compareMatches(tournament[k], all_matches[i]) != 0 && k < j) {
-        k++;
-      }
-
-      if (k == j && all_matches[i].field == -1) {
-        tournament[j] = all_matches[i];
-        tournament[j].field = h;
-        all_matches[i].field = h;
-        j++;
-      }
-    }
-  }
-}
-
-/* Afgør om et eller begge hold spiller i begge af to givne kampe */
 int compareMatches (const match match_a, const match match_b) {
+
   if (strcmp(match_a.team_a, match_b.team_a) == 0 || strcmp(match_a.team_a, match_b.team_b) == 0 ||
       strcmp(match_a.team_b, match_b.team_a) == 0 || strcmp(match_a.team_b, match_b.team_b) == 0) {
     return 0;
@@ -241,8 +209,10 @@ int compareMatches (const match match_a, const match match_b) {
   }
 }
 
+
+
 /* Laver en tilfældig tournering af tvivlsom kvalitet */
-match* createRandomTournament(match *all_matches, int number_of_matches, const int number_of_fields) {
+match *createRandomTournament(match *all_matches, int number_of_matches, const int number_of_fields) {
   match *tournament = malloc(number_of_matches * sizeof(match));
   match *copy_matches = all_matches;
   int remaning_matches = number_of_matches;
@@ -250,55 +220,97 @@ match* createRandomTournament(match *all_matches, int number_of_matches, const i
   int field = 0, picked;
   for(int match = 0; match < number_of_matches; match++) {
     picked = rand() % remaning_matches;
-    field = (field + 1) % 3; /* Usikker på beregningen */
-    tournament[match] = all_matches[picked]; /* sæt en tilfældig kamp på */
-    tournament[match].field = field; /* Fastlæg bane */
-    removeElement(copy_matches, remaning_matches, picked); /* Fjern kampen, så den ikke kan sættes ind flere gange */
+    field = (field + 1) % 3;                                 /* Usikker på beregningen */
+    tournament[match] = all_matches[picked];                 /* sæt en tilfældig kamp på */
+    tournament[match].field = field;                         /* Fastlæg bane */
+    removeElement(copy_matches, remaning_matches, picked);   /* Fjern kampen, så den ikke kan sættes ind flere gange */
     remaning_matches--;
     field++;
   }
   return tournament;
 }
 
+
+
+void createTournament(const match *all_matches, const int number_of_matches, const int number_of_fields, match *tournament) {
+  match *copy_of_matches;
+  int tournament_index = 0;
+  int match_index = 0;
+  int SENTINEL = 0;
+
+  copy_of_matches = malloc(number_of_matches * sizeof(match));
+
+  copyMatches(all_matches, number_of_matches, copy_of_matches);
+
+  while (SENTINEL == 0) {
+    match_index = rand() % number_of_matches;
+
+    if (copy_of_matches[match_index].field == -1) {
+      copy_of_matches[match_index].field = match_index % number_of_fields;
+      tournament[tournament_index] = copy_of_matches[match_index];
+      tournament_index++;
+    }
+
+    else if (tournament_index >= number_of_matches) {
+      SENTINEL = 1;
+    }
+  }
+}
+
+void resetFields(const int number_of_matches, match *copy_of_matches) {
+  int match_index = 0;
+
+  for (match_index = 0; match_index < number_of_matches; match_index++) {
+    copy_of_matches[match_index].field = -1;
+  }
+}
+
+void copyMatches(const match *all_matches, const int number_of_matches, match *copy_of_matches) {
+  int match_index = 0;
+
+  for (match_index = 0; match_index < number_of_matches; match_index++) {
+    copy_of_matches[match_index] = all_matches[match_index];
+  }
+}
+
 /* Bedømmer om en tournering overholder reglerne */
 int evaluateTournament(match *tournament, const int number_of_matches, const int number_of_fields) {
   int grade = 0;
-  for(int match = 1; match < number_of_matches; match++) { /* Starter ved 1, da der ikke er stor risiko for at holdene i første kamp spillede i kampen før */
+  int round_start = 0; /* Usikker på beregningen */
+  int round_index = 0;
+
+  for (round_index = 0; round_index < number_of_matches / number_of_fields; round_index++) {
+
+    round_start = round_index * number_of_fields;
+    /* int current_round = match / number_of_fields; */
+    /* int prev_round = round_start - number_of_fields; */
+
+    /* Starter ved 1, da der ikke er stor risiko for at holdene i første kamp spillede i kampen før */
     /* Kunne gavne med et member af match structen, der sagde hviken runde den foregik i. Måske?*/
     /* Check om nogle af holdene spillede i kampen før. Bør sammenligne med hele runden før. */
-    if(compareMatches(tournament[match], tournament[match-1]) == 0)
-      grade--;
-    int current_round = match / number_of_fields;
-    int round_start = (match % number_of_fields == 0) ? match : match + match % number_of_fields;/* Usikker på beregningen */
-    int prev_round = round_start - number_of_fields;
 
     /* Gennemgår og sammenligner to runder */
-    for(int match1 = round_start; match1 < round_start + number_of_fields; match1++) {
-      for(int match2 = round_start; match2 < round_start + number_of_fields; match2++) {
+    for (int match1 = round_start; match1 < round_start + number_of_fields; match1++) {
+      for (int match2 = round_start; match2 < round_start + number_of_fields; match2++) {
         /* Giv bedre karakter hvis hold ikke spiller flere gange i samme runde */
-        if(match1 != match2 && compareMatches(tournament[match1], tournament[match2]) == 1) {
+        if (match1 != match2 && compareMatches(tournament[match1], tournament[match2]) == 1) {
           grade++;
         }
         /* Giv bedre karakter hvis ingen af holdene spillede i forrige runde
            ikke sikker på om det er en god måde at gøre det på */
-        if(compareMatches(tournament[match1], tournament[match2 - number_of_fields]) == 1) {
+        if (compareMatches(tournament[match1], tournament[match2 - number_of_fields]) == 1) {
           grade++;
         }
       }
     }
   }
+
   return grade;
 }
 
 /* Fjern element fra array */
 void removeElement(match *matches, const int size, const int element) {
-  int index;
-  if(element < size && element >= 0) { /* Check at index er gyldig */
-    for(index = element; index <= size; index++) {
-      matches[index] = matches[index+1];
-    }
-  }
-  else { /* Print en fejl til stdout */
-    printf("ERROR: Kan ikke fjerne element. Index ikke gyldig\n");
+  for(int i = element; i <= size; i++) {
+    matches[i] = matches[i+1];
   }
 }
