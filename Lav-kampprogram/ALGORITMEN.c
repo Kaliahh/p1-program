@@ -227,9 +227,8 @@ void createTournament (match *tournament, match *all_matches, const int number_o
   }
 }
 
-
+/* Afgør om et eller begge hold spiller i begge af to givne kampe */
 int compareMatches (const match match_a, const match match_b) {
-
   if (strcmp(match_a.team_a, match_b.team_a) == 0 || strcmp(match_a.team_a, match_b.team_b) == 0 ||
       strcmp(match_a.team_b, match_b.team_a) == 0 || strcmp(match_a.team_b, match_b.team_b) == 0) {
     return 0;
@@ -274,7 +273,12 @@ int evaluateTournament(match *tournament, const int number_of_matches, const int
 
 /* Fjern element fra array */
 void removeElement(match *matches, const int size, const int element) {
-  for(int i = element; i <= size; i++) {
-    matches[i] = matches[i+1];
+  if(element < size && element >= 0) { /* Check at index er gyldig */
+    for(i = element; i <= size; i++) {
+      matches[i] = matches[i+1];
+    }
+  }
+  else { /* Print en fejl til stdout */
+    printf("ERROR: Cannot remove element. Not a valid index");
   }
 }
