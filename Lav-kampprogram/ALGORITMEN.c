@@ -14,6 +14,7 @@ void createTournament (match *tournament, match *all_matches, const int number_o
 int compareMatches (const match match_a, const match match_b);
 match* createRandomTournament(match *, int, const int);
 void removeElement(match *, const int, const int);
+int getRound(match *, const int, const int, const int);
 
 int main(void) {
   int i = 0, number_of_teams = 11;
@@ -64,7 +65,8 @@ int main(void) {
   strcpy(all_teams[10].team, "Hold 11");
 
   all_matches = malloc(number_of_matches * sizeof(match));
-
+  getRound()
+/*
   createMatches(all_teams, all_matches, number_of_teams);
 
   for (i = 0; i < (3 * number_of_teams); i++) {
@@ -87,6 +89,7 @@ int main(void) {
     printf("%s vs %s\n", tournament[i].team_a, tournament[i].team_b);
   }
 
+*/
   return 0;
 }
 
@@ -265,20 +268,42 @@ int evaluateTournament(match *tournament, const int number_of_matches, const int
     /* Check om nogle af holdene spillede i kampen før. Bør sammenligne med hele runden før. */
     if(compareMatches(tournament[match], tournament[match-1]) == 1)
       grade--;
+    int current_round = match / number_of_fields;
+    int round_start = (match % number_of_fields == 0) ? match : match + match % number_of_fields;/* Usikker på beregningen */
+    int prev_round = round_start - number_of_fields;
+
+    /* Gennemgår og sammenligner to runder */
+    for(int match1 = round_start; match1 < round_start + number_of_fields; match1++) {
+      for(int match2 = round_start; match2 < round_start + number_of_fields; match2++) {
+        /* Giv bedre karakter hvis hold ikke spiller flere gange i samme runde */
+        if(match1 != match2 && compareMatches(tournament[match1], tournament[match2]) == 0) {
+          grade++;
+        }
+        /* Giv bedre karakter hvis ingen af holdene spillede i forrige runde
+           ikke sikker på om det er en god måde at gøre det på */
+        if(compareMatches(tournament[match1], tournament[match2 - number_of_fields]) == 0) {
+          grade++;
+        }
+      }
+    }
   }
-  /* Check om et hold har spiller flere gange i en runde */
-  /* Check om et hold har spillet i runden før */
   return grade;
 }
 
 /* Fjern element fra array */
 void removeElement(match *matches, const int size, const int element) {
+  int index;
   if(element < size && element >= 0) { /* Check at index er gyldig */
-    for(i = element; i <= size; i++) {
-      matches[i] = matches[i+1];
+    for(index = element; index <= size; index++) {
+      matches[index] = matches[index+1];
     }
   }
   else { /* Print en fejl til stdout */
-    printf("ERROR: Cannot remove element. Not a valid index");
+    printf("ERROR: Kan ikke fjerne element. Index ikke gyldig\n");
   }
+}
+
+/* Finder og returnerer hvilken runde, en given kamp spilles i. */
+int getRound(match *tournament, const int number_of_matches, const int number_of_fields, const int index) {
+  return index / number_of_fields;
 }
