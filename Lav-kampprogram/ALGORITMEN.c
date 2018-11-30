@@ -5,12 +5,15 @@
 # include <unistd.h>
 # include <string.h>
 # include <math.h>
+# include <time.h>
 # include "../main.h"
 
 int createMatches (team *, match *, int);
 int createMatchesByLevel (team *, match *, int, int);
 void createTournament (match *tournament, match *all_matches, const int number_of_matches, const int number_of_fields);
 int compareMatches (const match match_a, const match match_b);
+match* createRandomTournament(match *, int, const int);
+void removeElement(match *, const int, const int);
 
 int main(void) {
   int i = 0, number_of_teams = 11;
@@ -19,6 +22,10 @@ int main(void) {
   team all_teams[11];
   match *all_matches;
   match *tournament;  /* antal runder = antal kampe / antal baner */
+
+  time_t t;
+  /* initialiserer rand */
+  srand(time(&t));
 
   all_teams[0].level = 0;
   all_teams[1].level = 0;
@@ -229,5 +236,42 @@ int compareMatches (const match match_a, const match match_b) {
   }
   else {
     return 1;
+  }
+}
+
+/* Laver en tilfældig tournering af tvivlsom kvalitet */
+match* createRandomTournament(match *all_matches, int number_of_matches, const int number_of_fields) {
+  match *tournament = malloc(number_of_matches * sizeof(match));
+  match *copy_matches = all_matches;
+  int remaning_matches = number_of_matches;
+
+  int field = 0, picked;
+  for(int match = 0; match < number_of_matches; match++) {
+    picked = rand() % remaning_matches--;
+    field = (field + 1) % 3; /* Usikker på beregningen */
+    tournament[match] = all_matches[picked]; /* sæt en tilfældig kamp på */
+    tournament[match].field = field; /* Fastlæg bane */
+    removeElement(copy_matches, remaning_matches, picked); /* Fjern kampen */
+    field++;
+  }
+  return tournament;
+}
+
+/* Bedømmer om en tournering overholder reglerne */
+int evaluateTournament(match *tournament, const int number_of_matches, const int number_of_fields) {
+  int grade = 0;
+  for(int match = 1; match < number_of_matches; match++) { /* Starter ved 1, da der ikke er stor risiko for at holdene i første kamp spillede i kampen før */
+    /* Kunne gavne med et member af match structen, der sagde hviken runde den foregik i. Måske?*/
+    /* Check om nogle af holdene spillede i kampen før. Bør sammenligne med hele runden før. */
+    if(compareMatches(tournament[match], tournament[match-1]) == 1)
+      grade--;
+  }
+  return grade;
+}
+
+/* Fjern element fra array */
+void removeElement(match *matches, const int size, const int element) {
+  for(int i = element; i <= size; i++) {
+    matches[i] = matches[i+1];
   }
 }
