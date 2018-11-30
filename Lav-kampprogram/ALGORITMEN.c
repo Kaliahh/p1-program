@@ -247,11 +247,12 @@ match* createRandomTournament(match *all_matches, int number_of_matches, const i
 
   int field = 0, picked;
   for(int match = 0; match < number_of_matches; match++) {
-    picked = rand() % remaning_matches--;
+    picked = rand() % remaning_matches;
     field = (field + 1) % 3; /* Usikker på beregningen */
     tournament[match] = all_matches[picked]; /* sæt en tilfældig kamp på */
     tournament[match].field = field; /* Fastlæg bane */
-    removeElement(copy_matches, remaning_matches, picked); /* Fjern kampen */
+    removeElement(copy_matches, remaning_matches, picked); /* Fjern kampen, så den ikke kan sættes ind flere gange */
+    remaning_matches--;
     field++;
   }
   return tournament;
@@ -266,6 +267,8 @@ int evaluateTournament(match *tournament, const int number_of_matches, const int
     if(compareMatches(tournament[match], tournament[match-1]) == 1)
       grade--;
   }
+  /* Check om et hold har spiller flere gange i en runde */
+  /* Check om et hold har spillet i runden før */
   return grade;
 }
 
