@@ -302,8 +302,3 @@ void removeElement(match *matches, const int size, const int element) {
     printf("ERROR: Kan ikke fjerne element. Index ikke gyldig\n");
   }
 }
-
-/* Finder og returnerer hvilken runde, en given kamp spilles i. */
-int getRound(match *tournament, const int number_of_matches, const int number_of_fields, const int index) {
-  return index / number_of_fields;
-}
