@@ -1,5 +1,5 @@
-# include "main.h"
-# include "matches.h"
+# include "../p1-program/h-files/main.h"
+# include "../p1-program/h-files/matches.h"
 
 void createMatches(team *all_teams, match *all_matches, int number_of_teams) {
   int i = 0, match_count = 0;

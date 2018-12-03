@@ -1,5 +1,5 @@
-# include "main.h"
-# include "printPrompt.h"
+# include "../p1-program/h-files/main.h"
+# include "../p1-program/h-files/printPrompt.h"
 
 /* Spørger brugeren om hvad der ønskes at gøre med turneringsplanen */
 void printProgram(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
