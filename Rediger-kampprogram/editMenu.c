@@ -2,24 +2,24 @@
 #include <stdlib.h>
 #include "../main.h"
 
-void editMenu (void);
+void editMenu(team *, team *);
 
 int main(void) {
+  team *new_teams;
+  team *removed_teams;
 
-  editMenu();
+  editMenu(new_teams, removed_teams);
 
   return 0;
 }
 
-void editMenu (void) {
+void editMenu(team *new_teams, team *removed_teams) {
   int i = 0;
   int n = 0;
   int number_of_added_teams = 0;
   int number_of_removed_teams = 0;
   char level = ' ';
   char team[MAX_NAME_LEN];
-  team *new_teams;
-  team *removed_teams;
 
   printf("Hvad vil du gerne aendre?\n");
   printf("[1] Tilføj nyt hold\n"
@@ -33,7 +33,7 @@ void editMenu (void) {
     printf("Antal hold der oenskes at tilfoeje:\n");
     scanf(" %d", &number_of_added_teams);
 
-    new_teams = (team *) calloc (number_of_added_teams, sizeof(team));
+    new_teams = malloc(number_of_added_teams * sizeof(team));
 
     for (i = 0; i < number_of_added_teams; i++) {
       printf("Indtast det %d. holdnavn:\n", i + 1);
@@ -64,7 +64,7 @@ void editMenu (void) {
     printf("Antal hold der oenskes at fjernes:\n");
     scanf(" %d", &number_of_removed_teams);
 
-    removed_teams = (team *) calloc (number_of_removed_teams, sizeof(team));
+    removed_teams = malloc(number_of_removed_teams * sizeof(team));
 
     for (i = 0; i < number_of_removed_teams; i++) {
       printf("Indtast det %d. holdnavn:\n", i + 1);
@@ -90,6 +90,6 @@ void editMenu (void) {
   }
   else {
     printf("Ugyldigt svar. Proev igen.\n");
-    editMenu();
+    editMenu(new_teams, removed_teams);
   }
 }
