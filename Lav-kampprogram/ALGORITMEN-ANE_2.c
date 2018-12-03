@@ -15,17 +15,19 @@ match* createRandomTournament(match *, int, const int);
 void removeElement(match *, const int, const int);
 int evaluateTournament(match *, const int, const int);
 
+void switchMatches(match *tournament, const int number_of_matches, const int number_of_fields);
+
 void createTournament(const match *, const int, const int, match *);
 void copyMatches(const match *, const int, match *);
 void resetFields(const int, match *);
 
 int main(void) {
-  int i = 0, number_of_teams = 11;
+  int i = 0, number_of_teams = 21;
   int number_of_fields = 2;
   int number_of_matches = (6 * number_of_teams) / 2;
   int grade = 0;
   int temp_grade = 0;
-  team all_teams[11];
+  team all_teams[21];
   match *all_matches;
   match *tournament;  /* antal runder = antal kampe / antal baner */
   match *temp_tournament;
@@ -39,12 +41,22 @@ int main(void) {
   all_teams[2].level = 0;
   all_teams[3].level = 0;
   all_teams[4].level = 0;
-  all_teams[5].level = 1;
-  all_teams[6].level = 1;
-  all_teams[7].level = 1;
-  all_teams[8].level = 1;
-  all_teams[9].level = 1;
+  all_teams[5].level = 0;
+  all_teams[6].level = 0;
+  all_teams[7].level = 0;
+  all_teams[8].level = 0;
+  all_teams[9].level = 0;
   all_teams[10].level = 1;
+  all_teams[11].level = 1;
+  all_teams[12].level = 1;
+  all_teams[13].level = 1;
+  all_teams[14].level = 1;
+  all_teams[15].level = 1;
+  all_teams[16].level = 1;
+  all_teams[17].level = 1;
+  all_teams[18].level = 1;
+  all_teams[19].level = 1;
+  all_teams[20].level = 1;
 
   all_teams[0].games = 0;
   all_teams[1].games = 0;
@@ -57,6 +69,16 @@ int main(void) {
   all_teams[8].games = 0;
   all_teams[9].games = 0;
   all_teams[10].games = 0;
+  all_teams[11].games = 0;
+  all_teams[12].games = 0;
+  all_teams[13].games = 0;
+  all_teams[14].games = 0;
+  all_teams[15].games = 0;
+  all_teams[16].games = 0;
+  all_teams[17].games = 0;
+  all_teams[18].games = 0;
+  all_teams[19].games = 0;
+  all_teams[20].games = 0;
 
   strcpy(all_teams[0].team, "Hold 1");
   strcpy(all_teams[1].team, "Hold 2");
@@ -69,6 +91,16 @@ int main(void) {
   strcpy(all_teams[8].team, "Hold 9");
   strcpy(all_teams[9].team, "Hold 10");
   strcpy(all_teams[10].team, "Hold 11");
+  strcpy(all_teams[11].team, "Hold 12");
+  strcpy(all_teams[12].team, "Hold 13");
+  strcpy(all_teams[13].team, "Hold 14");
+  strcpy(all_teams[14].team, "Hold 15");
+  strcpy(all_teams[15].team, "Hold 16");
+  strcpy(all_teams[16].team, "Hold 17");
+  strcpy(all_teams[17].team, "Hold 18");
+  strcpy(all_teams[18].team, "Hold 19");
+  strcpy(all_teams[19].team, "Hold 20");
+  strcpy(all_teams[20].team, "Hold 21");
 
   all_matches = malloc(number_of_matches * sizeof(match));
 
@@ -80,7 +112,7 @@ int main(void) {
 
   printf("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\n");
 
-  for (i = 0; i < 11; i++){
+  for (i = 0; i < 21; i++){
     printf("Hold %d: %d kampe\n", i+1, all_teams[i].games);
   }
 
@@ -101,6 +133,19 @@ int main(void) {
 
   }
 
+  copyMatches(tournament, number_of_matches, temp_tournament);
+
+  for(i = 0; i < 10; i++){
+    switchMatches(temp_tournament, number_of_matches, number_of_fields);
+  }
+  temp_grade = evaluateTournament(temp_tournament, number_of_matches, number_of_fields);
+  if(temp_grade > grade){
+    printf("Ja vi gjorder det\n");
+  }
+  else{
+    printf("no\n");
+  }
+
   printf("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\n");
 
   for (i = 0; i < number_of_matches; i++) {
@@ -115,6 +160,21 @@ int main(void) {
   }
 
   printf("Grade: %d\n", grade);
+
+  printf("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\n");
+
+  for (i = 0; i < number_of_matches; i++) {
+    if (i % number_of_fields == 0 && i != 0) {
+      printf("- - - - - - - - - - - - - - - - - - - - - - - - -\n");
+      printf("%2d | %8s vs %-10s\n", i + 1, temp_tournament[i].team_a, temp_tournament[i].team_b);
+    }
+
+    else {
+      printf("%2d | %8s vs %-10s\n", i + 1, temp_tournament[i].team_a, temp_tournament[i].team_b);
+    }
+  }
+
+  printf("Grade: %d\n", temp_grade);
 
   return 0;
 }
@@ -295,7 +355,7 @@ int evaluateTournament(match *tournament, const int number_of_matches, const int
           return -1;
         }
         else {
-          grade++;
+          grade ++;
         }
         /* Giv bedre karakter hvis ingen af holdene spillede i forrige runde
            ikke sikker på om det er en god måde at gøre det på */
@@ -305,10 +365,38 @@ int evaluateTournament(match *tournament, const int number_of_matches, const int
         else if(tournament[match1].field == tournament[match2 - number_of_fields].field) {
           grade++;
         }
+        else if(tournament[match1].field != tournament[match2 - number_of_fields].field){
+          grade -= 10;
+        }
       }
     }
   }
   return grade;
+}
+
+void switchMatches(match *tournament, const int number_of_matches, const int number_of_fields){
+  int number_of_rounds;
+  int round_index;
+  int round_start;
+  match temp;
+
+  number_of_rounds = number_of_matches / number_of_fields;
+
+  for (round_index = 0; round_index < number_of_rounds; round_index++) {
+    round_start = round_index * number_of_fields;
+    for (int match1 = round_start; match1 < round_start + number_of_fields; match1++) {
+      for (int match2 = round_start; match2 < round_start + number_of_fields; match2++) {
+        if (compareMatches(tournament[match1], tournament[match2 - number_of_fields]) == 0) {
+          /*Der er noget glat måske herfra, swicther dem ikke ordentligt*/
+          if(tournament[match1].field != tournament[match2 - number_of_fields].field){
+            temp = tournament[match1];
+            tournament[match1] = tournament[match2];
+            tournament[match2] = temp;
+          }
+        }
+      }
+    }
+  }
 }
 
 /* Fjern element fra array */
