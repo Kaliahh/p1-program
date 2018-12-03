@@ -18,7 +18,7 @@ void createTournament(const match *all_matches, const int number_of_matches, con
     /* printf("%d\n", copy_of_matches[match_index].field); */
 
     if (copy_of_matches[match_index].field == -1) {
-      copy_of_matches[match_index].field = match_index % number_of_fields;
+      copy_of_matches[match_index].field = tournament_index % number_of_fields;
       tournament[tournament_index] = copy_of_matches[match_index];
       tournament_index++;
     }

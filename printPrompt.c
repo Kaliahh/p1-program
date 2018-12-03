@@ -43,16 +43,16 @@ void printToFile(match *tournament, int starting_time, int number_of_rounds, int
   FILE *fp = fopen("turneringsplan.txt", "w");
 
   for (i = 0; i < number_of_rounds * number_of_fields; i += number_of_fields) {
-    /* oversætter tiden fra minutter til timer og minutter */
+    /* Oversætter tiden fra minutter til timer og minutter */
     hour = time / 60;
     minute = time % 60;
 
-    /* printer runde nummer og tidspunktet for hvornår der skal spilles */
+    /* Printer runde nummer og tidspunktet for hvornår der skal spilles */
     fprintf (fp, "Runde %d:\n%.2d:%.2d\n", (i / number_of_fields) + 1, hour, minute);
 
-    /* printer bane nummer, niveau, og de to hold, som skal spille mod hinanden */
+    /* Printer banenummer, niveau og de to hold, som skal spille mod hinanden */
     for (j = 0; j < number_of_fields; j++) {
-      fprintf(fp, "Bane %d | %c | %s vs %s\n", tournament[i + j].field + 1, translateToChar(tournament[i + j].level),
+      fprintf(fp, "Bane %2d | %c | %s vs %s\n", tournament[i + j].field + 1, translateToChar(tournament[i + j].level),
                                                tournament[i + j].team_a, tournament[i + j].team_b);
     }
 
@@ -64,26 +64,54 @@ void printToFile(match *tournament, int starting_time, int number_of_rounds, int
 
 /* Printer turneringsplanen til terminalen */
 void printToTerminal(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
-  int i = 0, j = 0, time = starting_time;
-  int hour = 0, minute = 0;
+  int round_index = 0;
+  int field_index = 0;
+  int hour = 0;
+  int minute = 0;
+  int SENTINEL = 0;
 
-  for (i = 0; i < number_of_rounds * number_of_fields; i += number_of_fields) {
-    /* oversætter tiden fra minutter til timer og minutter */
-    hour = time / 60;
-    minute = time % 60;
+  while (SENTINEL == 0) {
+    if (isupper(tournament[round_index + field_index].team_a[0]) != 0 && isupper(tournament[round_index + field_index].team_b[0]) != 0) {
+      hour = starting_time / 60;
+      minute = starting_time % 60;
 
-    /* printer runde nummer og tidspunktet for hvornår der skal spilles */
-    printf("Runde %d:\n%.2d:%.2d\n", (i / number_of_fields) + 1, hour, minute);
+      /* Printer runde nummer og tidspunktet for hvornår der skal spilles */
+      printf("Runde %d:\n%.2d:%.2d\n", (round_index / number_of_fields) + 1, hour, minute);
 
-    /* printer bane, niveau, og de to hold, som skal spille mod hinanden */
-    for (j = 0; j < number_of_fields; j++) {
-      printf("Bane %d | %c | %s vs %s\n", tournament[i + j].field + 1, translateToChar(tournament[i + j].level),
-                                          tournament[i + j].team_a, tournament[i + j].team_b);
+      /* Printer banenummer, niveau og de to hold som skal spille mod hinanden */
+      for (field_index = 0; field_index < number_of_fields && SENTINEL == 0; field_index++) {
+        printf("Bane %2d | %c | %s vs %s\n", tournament[round_index + field_index].field + 1, translateToChar(tournament[round_index + field_index].level),
+                                             tournament[round_index + field_index].team_a, tournament[round_index + field_index].team_b);
+        /*
+        if (isupper(tournament[round_index + field_index].team_a[0]) != 0 && isupper(tournament[round_index + field_index].team_b[0]) != 0) {
+
+        }
+        else {
+          SENTINEL = 1;
+        }
+        */
+      }
+      printf("\n");
+      starting_time += ROUND_LEN;
     }
 
-    printf("\n");
+    else {
+      SENTINEL = 1;
+    }
 
-    time += ROUND_LEN;
+    round_index += number_of_fields;
+  }
+
+  for (round_index = 0; round_index < number_of_rounds * number_of_fields; round_index += number_of_fields) {
+    /* Oversætter tiden fra minutter til timer og minutter */
+    hour = starting_time / 60;
+    minute = starting_time % 60;
+
+
+    /* printer bane, niveau, og de to hold, som skal spille mod hinanden */
+
+
+    starting_time += ROUND_LEN;
   }
 }
 
@@ -99,8 +127,8 @@ char translateToChar(int level) {
     case 3:
       return 'C';
     default:
-      printf("Fejl\n");
-      return 'E';
+      printf("Fejl i print funktion\n");
+      return 'F';
   }
 }
 
