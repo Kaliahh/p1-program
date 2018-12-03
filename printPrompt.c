@@ -37,7 +37,7 @@ void printProgram(match *tournament, int starting_time, int number_of_rounds, in
 }
 
 /* Printer turneringsplanen til en fil */
-void printToFile (match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
+void printToFile(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
   int i = 0, j = 0, time = starting_time;
   int hour = 0, minute = 0;
   FILE *fp = fopen("turneringsplan.txt", "w");
@@ -63,7 +63,7 @@ void printToFile (match *tournament, int starting_time, int number_of_rounds, in
 }
 
 /* Printer turneringsplanen til terminalen */
-void printToTerminal (match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
+void printToTerminal(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
   int i = 0, j = 0, time = starting_time;
   int hour = 0, minute = 0;
 
@@ -116,20 +116,15 @@ int promptForFields(void) {
 /* Prompter brugeren for starttidspunkt.
    Returnerer starttidspunktet i minutter, fra midnat */
 int promptForTime(void) {
-  int minutter = 0, timer = 0;
+  int minutes = 0;
+  int hours = 0;
   printf("Indtast starttidspunkt (skrevet som tt:mm): ");
-  scanf(" %d:%d", &timer, &minutter);
-  return timer * 60 + minutter;
+  scanf(" %d:%d", &hours, &minutes);
+  return hours * 60 + minutes;
 }
 
 /* Prompter brugere for et filnavn */
-char *PromptForFileName(void){
-  char *file_name;
-
-  file_name = (char *) calloc(30, sizeof(char));
-
+void promptForFileName(char *file_name) {
   printf("Indtast filnavn (afslut med .txt): ");
   scanf(" %s", file_name);
-
-  return file_name;
 }

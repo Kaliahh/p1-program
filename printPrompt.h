@@ -5,4 +5,4 @@ void printProgram(match *, int, int, int);
 char translateToChar(int);
 int promptForFields(void);
 int promptForTime(void);
-char *promptForFileName(void);
+void promptForFileName(char *);

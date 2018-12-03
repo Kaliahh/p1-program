@@ -1,0 +1,50 @@
+Runde 1:
+09:00
+Bane 2 | N | Vi er de bedste vs Vi er de bedste
+Bane 1 | A | Floorball 1 vs Team noget
+
+Runde 2:
+09:08
+Bane 2 | B | De andre er dårlige vs Floorball 4
+Bane 2 | C | Floorball 2 vs Floorball 3
+
+Runde 3:
+09:16
+Bane 1 | A | Floorball 1 vs Team noget
+Bane 1 | B | Floorball 4 vs De andre er dårlige
+
+Runde 4:
+09:24
+Bane 2 | C | Floorball 2 vs Floorball 3
+Bane 1 | N | Vi er de bedste vs Vi er de bedste
+
+Runde 5:
+09:32
+Bane 1 | C | Floorball 3 vs Floorball 2
+Bane 2 | A | Team noget vs Floorball 1
+
+Runde 6:
+09:40
+Bane 2 | A | Team noget vs Floorball 1
+Bane 1 | C | Floorball 3 vs Floorball 2
+
+Runde 7:
+09:48
+Bane 2 | C | Floorball 2 vs Floorball 3
+Bane 1 | B | Floorball 4 vs De andre er dårlige
+
+Runde 8:
+09:56
+Bane 1 | B | Floorball 4 vs De andre er dårlige
+Bane 2 | A | Team noget vs Floorball 1
+
+Runde 9:
+10:04
+Bane 2 | B | De andre er dårlige vs Floorball 4
+Bane 1 | N | Vi er de bedste vs Vi er de bedste
+
+Runde 10:
+10:12
+Bane 1 | C | Floorball 3 vs Floorball 2
+Bane 2 | B | De andre er dårlige vs Floorball 4
+
