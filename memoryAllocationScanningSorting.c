@@ -1,5 +1,5 @@
-# include "main.h"
-# include "memoryAllocationScanningSorting.h"
+# include "../p1-program/h-files/main.h"
+# include "../p1-program/h-files/memoryAllocationScanningSorting.h"
 
 
 /* Allokerer plads til et array af structs med hold.

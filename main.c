@@ -1,8 +1,8 @@
-# include "main.h"
-# include "memoryAllocationScanningSorting.h"
-# include "printPrompt.h"
-# include "matches.h"
-# include "tournament.h"
+# include "../p1-program/h-files/main.h"
+# include "../p1-program/h-files/memoryAllocationScanningSorting.h"
+# include "../p1-program/h-files/printPrompt.h"
+# include "../p1-program/h-files/matches.h"
+# include "../p1-program/h-files/tournament.h"
 
 int main(void) {
   FILE *fp;

@@ -1,5 +1,5 @@
-# include "main.h"
-# include "tournament.h"
+# include "../p1-program/h-files/main.h"
+# include "../p1-program/h-files/tournament.h"
 
 /* Laver et turneringsarray ud fra kampene i all_matches */
 void createTournament(const match *all_matches, const int number_of_matches, const int number_of_fields, match *tournament) {
