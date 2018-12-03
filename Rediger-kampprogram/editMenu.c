@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "../main.h"
 
 void editMenu(team *, team *);
 
 int main(void) {
-  team *new_teams;
-  team *removed_teams;
+  team *new_teams = NULL;
+  team *removed_teams = NULL;
 
   editMenu(new_teams, removed_teams);
 
@@ -16,6 +17,9 @@ int main(void) {
 void editMenu(team *new_teams, team *removed_teams) {
   int i = 0;
   int n = 0;
+  int time = 0;
+  int hour = 0;
+  int minute = 0;
   int number_of_added_teams = 0;
   int number_of_removed_teams = 0;
   char level = ' ';
@@ -77,12 +81,36 @@ void editMenu(team *new_teams, team *removed_teams) {
     printf("Indtast holdnavnet på det hold der skal aendres:\n");
     scanf(" %[-':.,?!a-zA-Z0-9 ]", team);
 
+    printf("Indtast startstidspunkt (med : mellem tallene):\n");
+    scanf(" %d:%d", &hour, &minute);
+
+    if (hour > 60 || minute > 60) {
+      printf("Ikke et gyldigt tidspunkt. Prøv igen.\n");
+      scanf(" %d:%d", &hour, &minute);
+    }
+  
+    /* Kører ikke igen hvis der bliver tastet et bogstav. Bogstavet bliver læst som 0. */
+
+    time = hour * 60 + minute;
+
     /* KØRER FUNKTION, HVOR DER SAMMENLIGNES MED ET HOLD. HOLDETS KAMPE BLIVER RYKKET SÅ DEN STARTER FRA ET SENERE TIDSPUNKT. */
   }
   else if (n == 4) {
     printf("Indtast holdnavnet på det hold der skal aendres:\n");
     scanf(" %[-':.,?!a-zA-Z0-9 ]", team);
 
+    printf("Indtast sluttidspunkt (med : mellem tallene):\n");
+    scanf(" %d:%d", &hour, &minute);
+
+    if (hour > 60 || minute > 60) {
+      printf("Ikke et gyldigt tidspunkt. Prøv igen.\n");
+      scanf(" %d:%d", &hour, &minute);
+    }
+
+    /* Kører ikke igen hvis der bliver tastet et bogstav. Bogstavet bliver læst som 0. */
+
+    time = hour * 60 + minute;
+    
     /* KØRER FUNKTION, HVOR DER SAMMENLIGNES MED ET HOLD. HOLDETS KAMPE BLIVER RYKKET SÅ DE SLUTTER PÅ ET TIDLIGERE TIDSPUNKT. */
   }
   else if (n == 0) {
