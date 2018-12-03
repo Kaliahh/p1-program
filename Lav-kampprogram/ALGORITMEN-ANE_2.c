@@ -102,10 +102,6 @@ int main(void) {
   }
 
 
-
-
-
-
   printf("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\n");
 
   for (i = 0; i < number_of_matches; i++) {
@@ -293,8 +289,8 @@ int evaluateTournament(match *tournament, const int number_of_matches, const int
     for (int match1 = round_start; match1 < round_start + number_of_fields; match1++) {
       for (int match2 = round_start; match2 < round_start + number_of_fields; match2++) {
         /* Giv bedre karakter hvis hold ikke spiller flere gange i samme runde */
-        if (match1 != match2 && compareMatches(tournament[match1], tournament[match2]) == 0) {
-          grade--;
+        if (match1 != match2 && compareMatches(tournament[match1], tournament[match2]) == 1) {
+          grade++;
         }
         /* Giv bedre karakter hvis ingen af holdene spillede i forrige runde
            ikke sikker på om det er en god måde at gøre det på */
