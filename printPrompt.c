@@ -1,4 +1,4 @@
-# include "../main.h"
+# include "main.h"
 # include "printPrompt.h"
 
 /* Spørger brugeren om hvad der ønskes at gøre med turneringsplanen */
@@ -107,10 +107,10 @@ char translateToChar(int level) {
 /* Prompter brugeren for antallet af baner.
    Returnerer antallet af baner */
 int promptForFields(void) {
-  int antal_baner = 0;
+  int number_of_fields = 0;
   printf("Indtast antal baner: ");
-  scanf(" %d", number_of_fields);
-  return antal_baner;
+  scanf(" %d", &number_of_fields);
+  return number_of_fields;
 }
 
 /* Prompter brugeren for starttidspunkt.

@@ -1,4 +1,4 @@
-# include "../main.h"
+# include "main.h"
 # include "memoryAllocationScanningSorting.h"
 
 
@@ -116,7 +116,7 @@ int fillArray (team *all_teams, const char *file_name, int num_of_teams) {
 
 /* Bruger qsort til at sortere arrayet af hold efter niveau */
 void sortArrayByLevel(team *all_teams, int number_of_teams){
-  qsort(all_teams, number_of_teams, sizeof(team), comp);
+  qsort(all_teams, number_of_teams, sizeof(team), levelComp);
 }
 
 /* Sammenligningsfunktion til qsort. Sammenligner to holds niveauer */
