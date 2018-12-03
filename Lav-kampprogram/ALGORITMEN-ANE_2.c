@@ -269,7 +269,7 @@ void copyMatches(const match *all_matches, const int number_of_matches, match *c
   }
 }
 
-/* Bedømmer om en tournering overholder reglerne, jo lavere jo bedre. 0 er optimalt. */
+/* Bedømmer om en tournering overholder reglerne, jo højere jo bedre. */
 int evaluateTournament(match *tournament, const int number_of_matches, const int number_of_fields) {
   int grade = 0;
   int round_start = 0;
