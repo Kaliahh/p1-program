@@ -4,6 +4,7 @@
 # include <unistd.h>
 # include <ctype.h>
 # include <math.h>
+# include <time.h>
 
 # define MAX_NAME_LEN 30
 # define GAMES_PR_TEAM 6
