@@ -88,19 +88,18 @@ int main(void) {
   temp_tournament = malloc(number_of_matches * sizeof(match));
 
   resetFields(number_of_matches, all_matches);
-  printf("Check 1\n");
-  for (int noget = 0; noget < 1000000; noget++) {
+
+  for (int noget = 0; noget < 100000; noget++) {
     createTournament(all_matches, number_of_matches, number_of_fields, temp_tournament);
 
     temp_grade = evaluateTournament(temp_tournament, number_of_matches, number_of_fields);
 
-    if (temp_grade > grade) {
+    if (temp_grade > 0 && temp_grade > grade) { /* Check om turneringen er gyldig, og bedre (højere) end den bedste */
       copyMatches(temp_tournament, number_of_matches, tournament);
       grade = temp_grade;
     }
 
   }
-  printf("Check 2 \n");
 
   printf("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\n");
 
@@ -194,6 +193,7 @@ int createMatchesByLevel (team *all_teams, match *all_matches, int level_counter
   return match_count;
 }
 
+/* Returner 0, hvis kampene har hold tilfælles, ellers returnerer den 1 */
 int compareMatches (const match match_a, const match match_b) {
 
   if (strcmp(match_a.team_a, match_b.team_a) == 0 || strcmp(match_a.team_a, match_b.team_b) == 0 ||
@@ -272,7 +272,6 @@ void copyMatches(const match *all_matches, const int number_of_matches, match *c
 /* Bedømmer om en tournering overholder reglerne, jo lavere jo bedre. 0 er optimalt. */
 int evaluateTournament(match *tournament, const int number_of_matches, const int number_of_fields) {
   int grade = 0;
-  int viable = 1; /* Angiver om planen kan bruges */
   int round_start = 0;
   int round_index = 0;
   int number_of_rounds;
@@ -293,26 +292,23 @@ int evaluateTournament(match *tournament, const int number_of_matches, const int
       for (int match2 = round_start; match2 < round_start + number_of_fields; match2++) {
         /* Giv bedre karakter hvis hold ikke spiller flere gange i samme runde */
         if (match1 != match2 && compareMatches(tournament[match1], tournament[match2]) == 0) {
+          return -1;
+        }
+        else {
           grade++;
-          viable = 0;
         }
         /* Giv bedre karakter hvis ingen af holdene spillede i forrige runde
            ikke sikker på om det er en god måde at gøre det på */
-        if (compareMatches(tournament[match1], tournament[match2 - number_of_fields]) == 0) {
+        if (compareMatches(tournament[match1], tournament[match2 - number_of_fields]) == 1) {
           grade += 2;
-          if(tournament[match1].field == tournament[match2 - number_of_fields].field) {
-            grade--;
-          }
+        }
+        else if(tournament[match1].field == tournament[match2 - number_of_fields].field) {
+          grade++;
         }
       }
     }
   }
-  if(viable == 1) {
-    return grade;
-  }
-  else { /* Returner -1, hvis planen overskrider vigtige regler */
-    return -1;
-  }
+  return grade;
 }
 
 /* Fjern element fra array */
