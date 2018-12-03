@@ -66,9 +66,18 @@ void printToFile(match *tournament, int starting_time, int number_of_rounds, int
 void printToTerminal(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
   int round_index = 0;
   int field_index = 0;
+  int match_index = 0;
   int hour = 0;
   int minute = 0;
   int SENTINEL = 0;
+
+  /*
+  while (SENTINEL == 0) {
+    if (isupper(tournament[match_index].team_a[0]) != 0 && isupper(tournament[match_index].team_b[0]) != 0) {
+
+    }
+  }
+  */
 
   while (SENTINEL == 0) {
     if (isupper(tournament[round_index + field_index].team_a[0]) != 0 && isupper(tournament[round_index + field_index].team_b[0]) != 0) {
