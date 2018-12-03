@@ -33,6 +33,7 @@ void editMenu(team *new_teams, team *removed_teams) {
          "[0] Afslut program\n");
   scanf(" %d", &n);
 
+  /* Tilføjer et nyt hold */
   if (n == 1) {
     printf("Antal hold der oenskes at tilfoeje:\n");
     scanf(" %d", &number_of_added_teams);
@@ -64,6 +65,7 @@ void editMenu(team *new_teams, team *removed_teams) {
 
     /* KALD FUNKTION, SOM KØRER algoritmen FRA STARTEN AF MED DE TILFØJEDE HOLD. */
   }
+  /* Fjerner et eksisterende hold */
   else if (n == 2) {
     printf("Antal hold der oenskes at fjernes:\n");
     scanf(" %d", &number_of_removed_teams);
@@ -77,6 +79,7 @@ void editMenu(team *new_teams, team *removed_teams) {
       /* KALD FUNKTION DER SAMMENLIGNER DET INDTASTEDE HOLDNAVN OG DET HOLDNAVN FRA FILEN. NIVEAU SKAL ERSTATTES MED 4. */
     }
   }
+  /* Hvis et hold kommer senere bedømmes turneringsplanen efter dette. Tager ikke højde for, hvis to hold vil komme senere. Der bliver først genereret et kampprogram, som passer til det første hold. Når der så skal genereres et kampprogram som passer til det andet hold, vil det overskrive det første kampprogram, og ikke tage højde for deres behov. (SKAL LIGE OVEREVEJES. evt. tilføje start- og sluttidspunkt i structet team.) */
   else if (n == 3) {
     printf("Indtast holdnavnet på det hold der skal aendres:\n");
     scanf(" %[-':.,?!a-zA-Z0-9 ]", team);
@@ -95,6 +98,7 @@ void editMenu(team *new_teams, team *removed_teams) {
 
     /* KØRER FUNKTION, HVOR DER SAMMENLIGNES MED ET HOLD. HOLDETS KAMPE BLIVER RYKKET SÅ DEN STARTER FRA ET SENERE TIDSPUNKT. */
   }
+  /* Hvis et hold kommer senere bedømmes turneringsplanen efter dette. Tager ikke højde for, hvis to hold vil afsted tidligere. Se kommentar fra l. 82. Det samme gælder for denne funktion. */
   else if (n == 4) {
     printf("Indtast holdnavnet på det hold der skal aendres:\n");
     scanf(" %[-':.,?!a-zA-Z0-9 ]", team);
