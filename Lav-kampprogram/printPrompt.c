@@ -1,103 +1,37 @@
-/* Printer kampprogrammet */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "../main.h"
-#define ROUND_LGT 8
-
-void printToFile(match *tournament, int starting_time, int number_of_rounds, int number_of_fields);
-void printToTerminal(match *tournament, int starting_time, int number_of_rounds, int number_of_fields);
-void printProgram(match *tournament, int starting_time, int number_of_rounds, int number_of_fields);
-char translateToChar(int level);
-
-/* Bruges til test */
-int main(void) {
-  int number_of_fields = 2, number_of_rounds = 6, starting_time = 570;
-  match tournament[12];
-
-  strcpy(tournament[0].team_a, "Hold 1");
-  strcpy(tournament[1].team_a, "Hold 2");
-  strcpy(tournament[2].team_a, "Hold 3");
-  strcpy(tournament[3].team_a, "Hold 1");
-  strcpy(tournament[4].team_a, "Hold 2");
-  strcpy(tournament[5].team_a, "Hold 3");
-  strcpy(tournament[6].team_a, "Hold 1");
-  strcpy(tournament[7].team_a, "Hold 2");
-  strcpy(tournament[8].team_a, "Hold 3");
-  strcpy(tournament[9].team_a, "Hold 1");
-  strcpy(tournament[10].team_a, "Hold 2");
-  strcpy(tournament[11].team_a, "Hold 2");
-
-
-  strcpy(tournament[0].team_b, "Hold 2");
-  strcpy(tournament[1].team_b, "Hold 3");
-  strcpy(tournament[2].team_b, "Hold 1");
-  strcpy(tournament[3].team_b, "Hold 2");
-  strcpy(tournament[4].team_b, "Hold 3");
-  strcpy(tournament[5].team_b, "Hold 1");
-  strcpy(tournament[6].team_b, "Hold 2");
-  strcpy(tournament[7].team_b, "Hold 3");
-  strcpy(tournament[8].team_b, "Hold 1");
-  strcpy(tournament[9].team_b, "Hold 2");
-  strcpy(tournament[10].team_b, "Hold 3");
-  strcpy(tournament[11].team_b, "Hold 3");
-
-
-  tournament[0].level = 0;
-  tournament[1].level = 0;
-  tournament[2].level = 0;
-  tournament[3].level = 0;
-  tournament[4].level = 1;
-  tournament[5].level = 1;
-  tournament[6].level = 1;
-  tournament[7].level = 2;
-  tournament[8].level = 2;
-  tournament[9].level = 2;
-  tournament[10].level = 2;
-  tournament[11].level = 2;
-
-  tournament[0].field = 1;
-  tournament[1].field = 2;
-  tournament[2].field = 1;
-  tournament[3].field = 2;
-  tournament[4].field = 1;
-  tournament[5].field = 2;
-  tournament[6].field = 1;
-  tournament[7].field = 2;
-  tournament[8].field = 1;
-  tournament[9].field = 2;
-  tournament[10].field = 1;
-  tournament[11].field = 2;
-
-  printProgram(tournament, starting_time, number_of_rounds, number_of_fields);
-
-  return 0;
-}
-
+# include "../main.h"
+# include "printPrompt.h"
 
 /* Spørger brugeren om hvad der ønskes at gøre med turneringsplanen */
 void printProgram(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
-  int n = 0;
+  int choice = 0;
 
   printf("Print til terminalen - tast 1. Print til fil - tast 2:\n");
-  scanf(" %d", &n);
+  scanf(" %d", &choice);
 
-  if(n == 1) {
+  if(choice == 1) {
     printToTerminal(tournament, starting_time, number_of_rounds, number_of_fields);
 
-    printf("\nEr det i orden? Skal den printes til en fil - tast 1. Er det ikke i orden - tast Q\n");
-    scanf(" %d", &n);
+    printf("\nEr det i orden? Skal den printes til en fil - tast 1. Er det ikke i orden - tast 0\n");
+    scanf(" %d", &choice);
 
-    if (n == 1) {
+    if (choice == 1) {
       printToFile(tournament, starting_time, number_of_rounds, number_of_fields);
     }
+
+    else if (choice == 0) {
+      printProgram(tournament, starting_time, number_of_rounds, number_of_fields);
+    }
+
+    else {
+      printf("Fejl ved indtastning. Tast 1 eller 2\n");
+      printProgram(tournament, starting_time, number_of_rounds, number_of_fields);
+    }
   }
-  else if(n == 2) {
+  else if(choice == 2) {
     printToFile(tournament, starting_time, number_of_rounds, number_of_fields);
   }
   else {
-    printf("Fejl\n");
+    printf("Fejl ved indtastning. Tast 1 eller 2\n");
     printProgram(tournament, starting_time, number_of_rounds, number_of_fields);
   }
 }
@@ -106,7 +40,7 @@ void printProgram(match *tournament, int starting_time, int number_of_rounds, in
 void printToFile (match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
   int i = 0, j = 0, time = starting_time;
   int hour = 0, minute = 0;
-  FILE *fp = fopen("tournamentPlan.txt", "w");
+  FILE *fp = fopen("turneringsplan.txt", "w");
 
   for (i = 0; i < number_of_rounds * number_of_fields; i += number_of_fields) {
     /* oversætter tiden fra minutter til timer og minutter */
@@ -124,7 +58,7 @@ void printToFile (match *tournament, int starting_time, int number_of_rounds, in
 
     fprintf(fp, "\n");
 
-    time += ROUND_LGT;
+    time += ROUND_LEN;
   }
 }
 
@@ -149,7 +83,7 @@ void printToTerminal (match *tournament, int starting_time, int number_of_rounds
 
     printf("\n");
 
-    time += ROUND_LGT;
+    time += ROUND_LEN;
   }
 }
 
@@ -168,4 +102,34 @@ char translateToChar(int level) {
       printf("Fejl\n");
       return 'E';
   }
+}
+
+/* Prompter brugeren for antallet af baner.
+   Returnerer antallet af baner */
+int promptForFields(void) {
+  int antal_baner = 0;
+  printf("Indtast antal baner: ");
+  scanf(" %d", number_of_fields);
+  return antal_baner;
+}
+
+/* Prompter brugeren for starttidspunkt.
+   Returnerer starttidspunktet i minutter, fra midnat */
+int promptForTime(void) {
+  int minutter = 0, timer = 0;
+  printf("Indtast starttidspunkt (skrevet som tt:mm): ");
+  scanf(" %d:%d", &timer, &minutter);
+  return timer * 60 + minutter;
+}
+
+/* Prompter brugere for et filnavn */
+char *PromptForFileName(void){
+  char *file_name;
+
+  file_name = (char *) calloc(30, sizeof(char));
+
+  printf("Indtast filnavn (afslut med .txt): ");
+  scanf(" %s", file_name);
+
+  return file_name;
 }
