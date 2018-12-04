@@ -2,6 +2,7 @@
 # include "../p1-program/h-files/main.h"
 # include "../p1-program/h-files/tournament.h"
 # include "../p1-program/h-files/menus.h"
+# include "../p1-program/h-files/printPrompt.h"
 
 int main(void) {
 
@@ -12,10 +13,10 @@ int main(void) {
 
 int mainMenu(void) {
   int choice = -1;
-
   team *new_teams = NULL;
   team *removed_teams = NULL;
-  team all_teams[17];
+  team *all_teams = NULL;
+  FILE *fp = NULL;
 
   printf("\n\nNAVN PÅ PROGRAM\n\n");
 
@@ -31,6 +32,9 @@ int mainMenu(void) {
     }
 
     else if (choice == 2) {
+
+      fp = fopen("turneringsplan.txt", "r");
+
       printf("\n");
       editMenu(all_teams, new_teams, removed_teams);
       printMainMenu();
@@ -38,7 +42,7 @@ int mainMenu(void) {
 
     else if (choice == 3) {
       printf("\n");
-      /* createTemplate(); */
+      createTemplate();
       printMainMenu();
     }
 
@@ -52,6 +56,10 @@ int mainMenu(void) {
     }
   }
 
+  free(new_teams);
+  free(removed_teams);
+  free(all_teams);
+  fclose(fp);
   return 0;
 }
 
@@ -61,12 +69,11 @@ void printMainMenu(void) {
   printf("[2] Rediger et eksisterende kampprogram\n");
   printf("[3] Lav skabelon til liste af holdnavne\n");
   printf("[0] Afslut\n");
-  printf("\nVælg et eller andet: ");
 }
 
 int editMenu(team *all_teams, team *new_teams, team *removed_teams) {
-  int i = 0;
-  int n = 0;
+  int team_index = 0;
+  int choice = 0;
   int time = 0;
   int hour = 0;
   int minute = 0;
@@ -82,32 +89,32 @@ int editMenu(team *all_teams, team *new_teams, team *removed_teams) {
          "[3] Ændre startstidspunkt for et eksisterende hold\n"
          "[4] Ændre sluttidspunkt for et eksisterende hold\n"
          "[0] Gå til hovedmenuen\n");
-  scanf(" %d", &n);
+  scanf(" %d", &choice);
 
   /* Tilføjer et nyt hold */
-  if (n == 1) {
+  if (choice == 1) {
     printf("Antal hold der ønskes at tilføje:\n");
     scanf(" %d", &number_of_new_teams);
 
     new_teams = malloc(number_of_new_teams * sizeof(team));
 
-    for (i = 0; i < number_of_new_teams; i++) {
-      printf("Indtast det %d. holdnavn:\n", i + 1);
-      scanf(" %[-':.,?!a-zA-Z0-9 ]", new_teams[i].team);
+    for (team_index = 0; team_index < number_of_new_teams; team_index++) {
+      printf("Indtast det %d. holdnavn:\n", team_index + 1);
+      scanf(" %[-':.,?!a-zA-Z0-9 ]", new_teams[team_index].team);
 
-      printf("Indtast det %d. holds niveau (med blokbogstaver):\n", i + 1);
+      printf("Indtast det %d. holds niveau (med blokbogstaver):\n", team_index + 1);
       scanf(" %c", &level);
 
-      new_teams[i].level = (level == 'N') ? N :
+      new_teams[team_index].level = (level == 'N') ? N :
                            (level == 'A') ? A :
                            (level == 'B') ? B :
                            (level == 'C') ? C : EMPTY;
 
-      while (new_teams[i].level == EMPTY) {
-        printf("%d. holds niveau er ikke gyldigt. Prøv igen.\n", i + 1);
+      while (new_teams[team_index].level == EMPTY) {
+        printf("%d. holds niveau er ikke gyldigt. Prøv igen.\n", team_index + 1);
         scanf(" %c", &level);
 
-        new_teams[i].level = (level == 'N') ? N :
+        new_teams[team_index].level = (level == 'N') ? N :
                              (level == 'A') ? A :
                              (level == 'B') ? B :
                              (level == 'C') ? C : EMPTY;
@@ -118,15 +125,15 @@ int editMenu(team *all_teams, team *new_teams, team *removed_teams) {
     addTeams(new_teams, all_teams, number_of_new_teams, number_of_teams);
   }
   /* Fjerner et eksisterende hold */
-  else if (n == 2) {
+  else if (choice == 2) {
     printf("Antal hold der ønskes at fjernes:\n");
     scanf(" %d", &number_of_removed_teams);
 
     removed_teams = malloc(number_of_removed_teams * sizeof(team));
 
-    for (i = 0; i < number_of_removed_teams; i++) {
-      printf("Indtast det %d. holdnavn:\n", i + 1);
-      scanf(" %[-':.,?!a-zA-Z0-9 ]", removed_teams[i].team);
+    for (team_index = 0; team_index < number_of_removed_teams; team_index++) {
+      printf("Indtast det %d. holdnavn:\n", team_index + 1);
+      scanf(" %[-':.,?!a-zA-Z0-9 ]", removed_teams[team_index].team);
 
     }
 
@@ -138,7 +145,7 @@ int editMenu(team *all_teams, team *new_teams, team *removed_teams) {
      Når der så skal genereres et kampprogram som passer til det andet hold,
      vil det overskrive det første kampprogram, og ikke tage højde for deres behov.
      (SKAL LIGE OVEREVEJES. evt. tilføje start- og sluttidspunkt i structet team.) */
-  else if (n == 3) {
+  else if (choice == 3) {
     printf("Indtast holdnavnet på det hold der skal ændres:\n");
     scanf(" %[-':.,?!a-zA-Z0-9 ]", team);
 
@@ -159,7 +166,7 @@ int editMenu(team *all_teams, team *new_teams, team *removed_teams) {
   /* Hvis et hold kommer senere bedømmes turneringsplanen efter dette.
      Tager ikke højde for, hvis to hold vil afsted tidligere.
      Se kommentar fra l. 82. Det samme gælder for denne funktion. */
-  else if (n == 4) {
+  else if (choice == 4) {
     printf("Indtast holdnavnet på det hold der skal ændres:\n");
     scanf(" %[-':.,?!a-zA-Z0-9 ]", team);
 
@@ -177,7 +184,7 @@ int editMenu(team *all_teams, team *new_teams, team *removed_teams) {
 
     changeEndingTime(all_teams, team, number_of_teams, time);
   }
-  else if (n == 0) {
+  else if (choice == 0) {
     return 0;
   }
   else {

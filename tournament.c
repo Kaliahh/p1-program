@@ -8,21 +8,18 @@
 
 /* Laver og printer en ny turneringsplan */
 int createNewTournament(void) {
-  FILE *fp;
-
-  match *tournament;
-  match *all_matches;
-  team *all_teams;
-
+  FILE *fp = NULL;
+  match *tournament = NULL;
+  match *all_matches = NULL;
+  team *all_teams = NULL;
   int number_of_fields = 0;
   int number_of_rounds = 0;
   int number_of_teams = 0;
   int number_of_matches = 0;
   int starting_time = 0;
-
   char file_name[MAX_NAME_LEN];
-
   time_t t;
+
   /* Initialiserer rand */
   srand(time(&t));
 
