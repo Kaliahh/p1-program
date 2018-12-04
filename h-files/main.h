@@ -15,6 +15,8 @@ typedef struct {
   char team[MAX_NAME_LEN];
   int games;
   int level;
+  int starting_time;
+  int ending_time;
 } team;
 
 /* Struct for en kamp */
