@@ -5,6 +5,8 @@
 
 void removeTeams(const team *, team *, const int, const int);
 void addTeams(const team *, team *, const int, const int);
+void changeStartingTime (team *, const char *, const int, int);
+void changeEndingTime (team *, const char *, const int, int);
 
 int main(void) {
   int i = 0;
@@ -98,6 +100,10 @@ int main(void) {
     printf("TEAM: %s\nLEVEL: %d\n\n", all_teams[i].team, all_teams[i].level);
   }
 
+  changeStartingTime(all_teams*, team*, number_of_teams, time);
+  
+  changeEndingTime(all_teams*, team*, number_of_teams, time);
+ 
   return 0;
 }
 
@@ -129,5 +135,30 @@ void addTeams(const team *new_teams, team *all_teams, const int number_of_new_te
       j++;
     }
   }
-
 }
+
+void changeStartingTime (team all_teams*, const char team*, const int number_of_teams, int time) {
+  int i = 0;
+
+  for (i = 0; i < number_of_teams; i++) {
+    if (strcmp(team, all_teams[i].team) == 0) {
+      all_teams[i].starting_time = time;
+    }
+  }
+}
+
+void changeEndingTime (team all_teams*, const char team*, const int number_of_teams, int time) {
+  int i = 0;
+
+  for (i = 0; i < number_of_teams; i++) {
+    if (strcmp(team, all_teams[i].team) == 0) {
+      all_teams[i].ending_time = time;
+    }
+  }
+}
+
+
+
+
+
+
