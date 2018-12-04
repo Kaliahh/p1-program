@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include "../main.h"
+#include "../h-files/main.h"
 
 void editMenu(team *, team *);
 
@@ -20,7 +20,7 @@ void editMenu(team *new_teams, team *removed_teams) {
   int time = 0;
   int hour = 0;
   int minute = 0;
-  int number_of_added_teams = 0;
+  int number_of_new_teams = 0;
   int number_of_removed_teams = 0;
   char level = ' ';
   char team[MAX_NAME_LEN];
@@ -36,11 +36,11 @@ void editMenu(team *new_teams, team *removed_teams) {
   /* Tilføjer et nyt hold */
   if (n == 1) {
     printf("Antal hold der oenskes at tilfoeje:\n");
-    scanf(" %d", &number_of_added_teams);
+    scanf(" %d", &number_of_new_teams);
 
-    new_teams = malloc(number_of_added_teams * sizeof(team));
+    new_teams = malloc(number_of_new_teams * sizeof(team));
 
-    for (i = 0; i < number_of_added_teams; i++) {
+    for (i = 0; i < number_of_new_teams; i++) {
       printf("Indtast det %d. holdnavn:\n", i + 1);
       scanf(" %[-':.,?!a-zA-Z0-9 ]", new_teams[i].team);
 
