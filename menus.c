@@ -18,7 +18,7 @@ int mainMenu(void) {
   team *all_teams = NULL;
   FILE *fp = NULL;
 
-  printf("\n\nNAVN PÅ PROGRAM\n\n");
+  printf("\n\nKAMPPROGRAM.c\n\n");
 
   printMainMenu();
 
