@@ -3,18 +3,23 @@
 #include <ctype.h>
 #include "../h-files/main.h"
 
-void editMenu(team *, team *);
+void removeTeams(const team *, team *, const int, const int);
+void addTeams(const team *, team *, const int, const int);
+void changeStartingTime(team *, const char *, const int, int);
+void changeEndingTime(team *, const char *, const int, int);
+int editMenu(team *, team *, team *);
 
 int main(void) {
   team *new_teams = NULL;
   team *removed_teams = NULL;
+  team all_teams[17];
 
-  editMenu(new_teams, removed_teams);
+  editMenu(all_teams, new_teams, removed_teams);
 
   return 0;
 }
 
-void editMenu(team *new_teams, team *removed_teams) {
+int editMenu(team *all_teams, team *new_teams, team *removed_teams) {
   int i = 0;
   int n = 0;
   int time = 0;
@@ -22,6 +27,7 @@ void editMenu(team *new_teams, team *removed_teams) {
   int minute = 0;
   int number_of_new_teams = 0;
   int number_of_removed_teams = 0;
+  int number_of_teams = 0;
   char level = ' ';
   char team[MAX_NAME_LEN];
 
@@ -63,7 +69,8 @@ void editMenu(team *new_teams, team *removed_teams) {
       }
     }
 
-    /* KALD FUNKTION, SOM KØRER algoritmen FRA STARTEN AF MED DE TILFØJEDE HOLD. */
+
+    addTeams(new_teams, all_teams, number_of_new_teams, number_of_teams);
   }
   /* Fjerner et eksisterende hold */
   else if (n == 2) {
@@ -76,8 +83,9 @@ void editMenu(team *new_teams, team *removed_teams) {
       printf("Indtast det %d. holdnavn:\n", i + 1);
       scanf(" %[-':.,?!a-zA-Z0-9 ]", removed_teams[i].team);
 
-      /* KALD FUNKTION DER SAMMENLIGNER DET INDTASTEDE HOLDNAVN OG DET HOLDNAVN FRA FILEN. NIVEAU SKAL ERSTATTES MED 4. */
-    }
+    }    
+
+    removeTeams(removed_teams, all_teams, number_of_removed_teams, number_of_teams);
   }
   /* Hvis et hold kommer senere bedømmes turneringsplanen efter dette. Tager ikke højde for, hvis to hold vil komme senere. Der bliver først genereret et kampprogram, som passer til det første hold. Når der så skal genereres et kampprogram som passer til det andet hold, vil det overskrive det første kampprogram, og ikke tage højde for deres behov. (SKAL LIGE OVEREVEJES. evt. tilføje start- og sluttidspunkt i structet team.) */
   else if (n == 3) {
@@ -96,7 +104,7 @@ void editMenu(team *new_teams, team *removed_teams) {
 
     time = hour * 60 + minute;
 
-    /* KØRER FUNKTION, HVOR DER SAMMENLIGNES MED ET HOLD. HOLDETS KAMPE BLIVER RYKKET SÅ DEN STARTER FRA ET SENERE TIDSPUNKT. */
+    changeStartingTime(all_teams, team, number_of_teams, time);
   }
   /* Hvis et hold kommer senere bedømmes turneringsplanen efter dette. Tager ikke højde for, hvis to hold vil afsted tidligere. Se kommentar fra l. 82. Det samme gælder for denne funktion. */
   else if (n == 4) {
@@ -115,13 +123,68 @@ void editMenu(team *new_teams, team *removed_teams) {
 
     time = hour * 60 + minute;
     
-    /* KØRER FUNKTION, HVOR DER SAMMENLIGNES MED ET HOLD. HOLDETS KAMPE BLIVER RYKKET SÅ DE SLUTTER PÅ ET TIDLIGERE TIDSPUNKT. */
+    changeEndingTime(all_teams, team, number_of_teams, time);
   }
   else if (n == 0) {
-    exit(0);
+    return 0;
   }
   else {
     printf("Ugyldigt svar. Proev igen.\n");
-    editMenu(new_teams, removed_teams);
+    editMenu(all_teams, new_teams, removed_teams);
+  }
+
+  return 0;
+}
+
+/* Fjerner hold fra listen af hold. */
+void removeTeams(const team *removed_teams, team *all_teams, const int number_of_removed_teams, const int number_of_teams) {
+  int i = 0;
+  int j = 0;
+
+  for (i = 0; i < number_of_removed_teams; i++) {
+    for (j = 0; j < number_of_teams; j++) {
+      if (strcmp(removed_teams[i].team, all_teams[j].team) == 0) {
+        all_teams[j].level = 4;
+      } 
+    }
   }
 }
+
+/* Tilføjer hold til listen af hold. */
+void addTeams(const team *new_teams, team *all_teams, const int number_of_new_teams, const int number_of_teams) {
+  int i = 0;
+  int j = 0;
+
+  for (i = 0; i < number_of_teams; i++) {
+    if (all_teams[i].level == 4) {
+      strcpy(all_teams[i].team, new_teams[j].team);
+      all_teams[i].level = new_teams[j].level;
+      all_teams[i].games = 0;
+
+      j++;
+    }
+  }
+}
+
+/* Ændre starttidspunktet for et hold. */
+void changeStartingTime(team *all_teams, const char *team, const int number_of_teams, int time) {
+  int i = 0;
+
+  for (i = 0; i < number_of_teams; i++) {
+    if (strcmp(team, all_teams[i].team) == 0) {
+      all_teams[i].starting_time = time;
+    }
+  }
+}
+
+/* Ændre sluttidspunktet for et hold. */
+void changeEndingTime(team *all_teams, const char *team, const int number_of_teams, int time) {
+  int i = 0;
+
+  for (i = 0; i < number_of_teams; i++) {
+    if (strcmp(team, all_teams[i].team) == 0) {
+      all_teams[i].ending_time = time;
+    }
+  }
+}
+
