@@ -32,7 +32,7 @@ int main(void) {
 }
 
 match *scanFileForMatches (FILE *fp, const int number_of_matches) {
-  int scanres = 0, dump = 0, i = 0;
+  int scanres = 0, i = 0;
   char temp[200];
   char level;
 
@@ -40,10 +40,10 @@ match *scanFileForMatches (FILE *fp, const int number_of_matches) {
 
   rewind(fp);
 
-  while (fgets(temp, 200, fp) != NULL) {
-    if (strlen(temp) > MIN_LINE_LEN) {
-      scanres = sscanf(temp, " Bane %d | %c | %[a-zA-Z0-9 ] vs %[a-zA-Z0-9 ] ", &dump, &level, all_matches[i].team_a, all_matches[i].team_b);
-      all_matches[i].level = (enum levels) level;
+  while (fgets(temp, 200, fp) != NULL) {   /* Gennemgår hele filen */
+    if (strlen(temp) > MIN_LINE_LEN) {     /* Hvis har en bestemt størrelse, må den indeholde en kamp */
+      scanres = sscanf(temp, " Bane %*d | %c | %[a-zA-Z0-9 ] vs %[a-zA-Z0-9 ] ", &level, all_matches[i].team_a, all_matches[i].team_b);
+      all_matches[i].level = (enum levels) level; /* Lav level om til int, og put den i struct */
       i++;
       printf("Scanres = %d\n", scanres);
     }
