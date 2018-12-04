@@ -6,13 +6,12 @@
 # include <string.h>
 # include <math.h>
 # include <time.h>
-# include "../main.h"
+# include "../h-files/main.h"
+# define NUMBER_OF_TEAMS 10
 
 int createMatches (team *, match *, int);
 int createMatchesByLevel (team *, match *, int, int);
 int compareMatches (const match match_a, const match match_b);
-match* createRandomTournament(match *, int, const int);
-void removeElement(match *, const int, const int);
 int evaluateTournament(match *, const int, const int);
 
 void switchMatches(match *tournament, const int number_of_matches, const int number_of_fields);
@@ -22,12 +21,12 @@ void copyMatches(const match *, const int, match *);
 void resetFields(const int, match *);
 
 int main(void) {
-  int i = 0, number_of_teams = 21;
+  int i = 0, number_of_teams = NUMBER_OF_TEAMS;
   int number_of_fields = 2;
   int number_of_matches = (6 * number_of_teams) / 2;
   int grade = 0;
   int temp_grade = 0;
-  team all_teams[21];
+  team all_teams[NUMBER_OF_TEAMS];
   match *all_matches;
   match *tournament;  /* antal runder = antal kampe / antal baner */
   match *temp_tournament;
@@ -41,66 +40,66 @@ int main(void) {
   all_teams[2].level = 0;
   all_teams[3].level = 0;
   all_teams[4].level = 0;
-  all_teams[5].level = 0;
+/*  all_teams[5].level = 0;
   all_teams[6].level = 0;
   all_teams[7].level = 0;
   all_teams[8].level = 0;
-  all_teams[9].level = 0;
+  all_teams[9].level = 0;*/
   all_teams[10].level = 1;
   all_teams[11].level = 1;
   all_teams[12].level = 1;
   all_teams[13].level = 1;
   all_teams[14].level = 1;
-  all_teams[15].level = 1;
+  /*all_teams[15].level = 1;
   all_teams[16].level = 1;
   all_teams[17].level = 1;
   all_teams[18].level = 1;
   all_teams[19].level = 1;
-  all_teams[20].level = 1;
+  all_teams[20].level = 1;*/
 
   all_teams[0].games = 0;
   all_teams[1].games = 0;
   all_teams[2].games = 0;
   all_teams[3].games = 0;
   all_teams[4].games = 0;
-  all_teams[5].games = 0;
+/*  all_teams[5].games = 0;
   all_teams[6].games = 0;
   all_teams[7].games = 0;
   all_teams[8].games = 0;
-  all_teams[9].games = 0;
+  all_teams[9].games = 0;*/
   all_teams[10].games = 0;
   all_teams[11].games = 0;
   all_teams[12].games = 0;
   all_teams[13].games = 0;
   all_teams[14].games = 0;
-  all_teams[15].games = 0;
+  /*all_teams[15].games = 0;
   all_teams[16].games = 0;
   all_teams[17].games = 0;
   all_teams[18].games = 0;
   all_teams[19].games = 0;
-  all_teams[20].games = 0;
+  all_teams[20].games = 0;*/
 
   strcpy(all_teams[0].team, "Hold 1");
   strcpy(all_teams[1].team, "Hold 2");
   strcpy(all_teams[2].team, "Hold 3");
   strcpy(all_teams[3].team, "Hold 4");
   strcpy(all_teams[4].team, "Hold 5");
-  strcpy(all_teams[5].team, "Hold 6");
+  /*strcpy(all_teams[5].team, "Hold 6");
   strcpy(all_teams[6].team, "Hold 7");
   strcpy(all_teams[7].team, "Hold 8");
   strcpy(all_teams[8].team, "Hold 9");
-  strcpy(all_teams[9].team, "Hold 10");
+  strcpy(all_teams[9].team, "Hold 10");*/
   strcpy(all_teams[10].team, "Hold 11");
   strcpy(all_teams[11].team, "Hold 12");
   strcpy(all_teams[12].team, "Hold 13");
   strcpy(all_teams[13].team, "Hold 14");
   strcpy(all_teams[14].team, "Hold 15");
-  strcpy(all_teams[15].team, "Hold 16");
+  /*strcpy(all_teams[15].team, "Hold 16");
   strcpy(all_teams[16].team, "Hold 17");
   strcpy(all_teams[17].team, "Hold 18");
   strcpy(all_teams[18].team, "Hold 19");
   strcpy(all_teams[19].team, "Hold 20");
-  strcpy(all_teams[20].team, "Hold 21");
+  strcpy(all_teams[20].team, "Hold 21");*/
 
   all_matches = malloc(number_of_matches * sizeof(match));
 
@@ -112,7 +111,7 @@ int main(void) {
 
   printf("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\n");
 
-  for (i = 0; i < 21; i++){
+  for (i = 0; i < NUMBER_OF_TEAMS; i++){
     printf("Hold %d: %d kampe\n", i+1, all_teams[i].games);
   }
 
@@ -267,27 +266,6 @@ int compareMatches (const match match_a, const match match_b) {
 
 
 
-/* Laver en tilfældig tournering af tvivlsom kvalitet */
-match *createRandomTournament(match *all_matches, int number_of_matches, const int number_of_fields) {
-  match *tournament = malloc(number_of_matches * sizeof(match));
-  match *copy_matches = all_matches;
-  int remaning_matches = number_of_matches;
-
-  int field = 0, picked;
-  for(int match = 0; match < number_of_matches; match++) {
-    picked = rand() % remaning_matches;
-    field = (field + 1) % 3;                                 /* Usikker på beregningen */
-    tournament[match] = all_matches[picked];                 /* sæt en tilfældig kamp på */
-    tournament[match].field = field;                         /* Fastlæg bane */
-    removeElement(copy_matches, remaning_matches, picked);   /* Fjern kampen, så den ikke kan sættes ind flere gange */
-    remaning_matches--;
-    field++;
-  }
-  return tournament;
-}
-
-
-
 void createTournament(const match *all_matches, const int number_of_matches, const int number_of_fields, match *tournament) {
   match *copy_of_matches;
   int tournament_index = 0;
@@ -366,7 +344,7 @@ int evaluateTournament(match *tournament, const int number_of_matches, const int
           grade++;
         }
         else if(tournament[match1].field != tournament[match2 - number_of_fields].field){
-          grade -= 10;
+          grade -= 10;  /* return -1 i stedet */
         }
       }
     }
@@ -396,12 +374,5 @@ void switchMatches(match *tournament, const int number_of_matches, const int num
         }
       }
     }
-  }
-}
-
-/* Fjern element fra array */
-void removeElement(match *matches, const int size, const int element) {
-  for(int i = element; i <= size; i++) {
-    matches[i] = matches[i+1];
   }
 }
