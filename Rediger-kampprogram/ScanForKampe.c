@@ -39,23 +39,11 @@ match *scanFileForMatches (FILE *fp, const int number_of_matches) {
   match *all_matches = (match*) malloc(number_of_matches * sizeof (match));
 
   rewind(fp);
-  /*
-  while (feof(fp) == 0) {
-    scanres = fscanf (fp, " %[-A-Za-z0-9| ]", temp);
-    printf("Scanres = %d\n", scanres);
-    if (scanres != 1) {
-      printf ("Fejl i scanning af fil\n");
-    }
-    if (strlen(temp) > MIN_LINE_LEN) {
-      sscanf (temp, " Bane %d | %d | %[A-Za-z0-9 ] vs %[A-Za-z0-9 ] ", &dump, &all_matches[i].level, all_matches[i].team_a, all_matches[i].team_b);
-      i++;
-    }
-  }
-*/
 
   while (fgets(temp, 200, fp) != NULL) {
     if (strlen(temp) > MIN_LINE_LEN) {
       scanres = sscanf(temp, " Bane %d | %c | %[a-zA-Z0-9 ] vs %[a-zA-Z0-9 ] ", &dump, &level, all_matches[i].team_a, all_matches[i].team_b);
+      all_matches[i].level = (enum levels) level;
       i++;
       printf("Scanres = %d\n", scanres);
     }
