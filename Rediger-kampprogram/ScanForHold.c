@@ -3,13 +3,13 @@
 # include <string.h>
 # include "../main.h"
 
-match *scanFileForTeams (match *all_teams, int *number_of_teams, int number_of_added_teams);
+match *scanFileForTeams (match *all_teams, int *number_of_teams, int number_of_new_teams);
 void get_number_of_matches (FILE *fp, int *number_of_teams);
 int doesTeamExist (char *temp_team, team * all_teams, int i);
 
 
 int main(void) {
-  int number_of_teams = 0, number_of_added_teams = 20;
+  int number_of_teams = 0, number_of_new_teams = 20;
   match *all_teams = NULL;
 
   scanFileForTeams(all_matches, &number_of_teams);
@@ -21,7 +21,7 @@ int main(void) {
   return 0;
 }
 
-match *scanFileForTeams (match *all_teams, int *number_of_teams, int number_of_added_teams) {
+match *scanFileForTeams (match *all_teams, int *number_of_teams, int number_of_new_teams) {
   int scanres = 0, dump = 0, i = 0;
   match temp[200], temp_team_a[MAX_NAME_LEN], temp_team_b[MAX_NAME_LEN];
   char temp_level;
@@ -34,7 +34,7 @@ match *scanFileForTeams (match *all_teams, int *number_of_teams, int number_of_a
   }
 
   get_number_of_teams(fp, *number_of_matches);
-  *number_of_teams += number_of_added_teams;
+  *number_of_teams += number_of_new_teams;
 
   all_teams = (team*) malloc (*number_of_teams * sizeof (team));
 

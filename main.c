@@ -31,7 +31,7 @@ int main(void) {
 
   fp = fopen(file_name, "r");
 
-  if (fp == NULL) { /* Check at filen ikke er NULL */
+  if (fp == NULL) { /* Check at filen er NULL */
     perror("Error opening file");
     return -1;
   }
@@ -40,7 +40,7 @@ int main(void) {
   number_of_teams = getNumberOfTeams(fp);
 
   /* Udregner antallet af kampe og antallet af runder */
-  number_of_matches = (number_of_teams * NUM_OF_MATCHES) / 2;
+  number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
   number_of_rounds = (number_of_matches / number_of_fields) + 10;
 
   /* Allokerer plads til teams arrayet og matches arrayet */
@@ -60,17 +60,6 @@ int main(void) {
   /* Laver et turneringsarray ud fra kampene i all_matches */
   tournament = malloc(number_of_matches * sizeof(match));
   createTournament(all_matches, number_of_matches, number_of_fields, tournament);
-
-  for (int i = 0; i < number_of_matches; i++) {
-    if (i % number_of_fields == 0 && i != 0) {
-      printf("- - - - - - - - - - - - - - - - - - - - - - - - -\n");
-      printf("%2d | %8s vs %-10s\n", i + 1, tournament[i].team_a, tournament[i].team_b);
-    }
-
-    else {
-      printf("%2d | %8s vs %-10s\n", i + 1, tournament[i].team_a, tournament[i].team_b);
-    }
-  }
 
   /* Printer det færdige kampprogram, enten til en fil eller til terminalen */
   printProgram(tournament, starting_time, number_of_rounds, number_of_fields);
