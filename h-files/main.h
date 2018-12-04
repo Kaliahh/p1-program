@@ -8,7 +8,6 @@
 # define MAX_NAME_LEN 30
 # define GAMES_PR_TEAM 6
 # define ROUND_LEN 8
-# define NUM_OF_MATCHES 6
 # define MIN_LINE_LEN 16
 
 /* Struct for et hold */
