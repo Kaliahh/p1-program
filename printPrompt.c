@@ -36,91 +36,87 @@ void printProgram(match *tournament, int starting_time, int number_of_rounds, in
   }
 }
 
-/* Printer turneringsplanen til en fil */
-void printToFile(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
-  int i = 0, j = 0, time = starting_time;
-  int hour = 0, minute = 0;
-  FILE *fp = fopen("turneringsplan.txt", "w");
+int printToFile(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
+  int round_index = 0;
+  int match_index = 0;
+  int hour = 0;
+  int minute = 0;
+  FILE *fp;
 
-  for (i = 0; i < number_of_rounds * number_of_fields; i += number_of_fields) {
-    /* Oversætter tiden fra minutter til timer og minutter */
-    hour = time / 60;
-    minute = time % 60;
+  fp = fopen("turneringsplan.txt", "w");
 
-    /* Printer runde nummer og tidspunktet for hvornår der skal spilles */
-    fprintf (fp, "Runde %d:\n%.2d:%.2d\n", (i / number_of_fields) + 1, hour, minute);
+  if (fp == NULL) { /* Check at filen er NULL */
+    perror("Error opening file");
+    return -1;
+  }
 
-    /* Printer banenummer, niveau og de to hold, som skal spille mod hinanden */
-    for (j = 0; j < number_of_fields; j++) {
-      fprintf(fp, "Bane %2d | %c | %s vs %s\n", tournament[i + j].field + 1, translateToChar(tournament[i + j].level),
-                                               tournament[i + j].team_a, tournament[i + j].team_b);
+  while (isupper(tournament[match_index].team_a[0]) != 0 && isupper(tournament[match_index].team_b[0]) != 0) {
+    hour = starting_time / 60;
+    minute = starting_time % 60;
+
+    /* Hvis det er den første kamp i runden */
+    if (match_index % number_of_fields == 0) {
+      /* Printer runde nummer og tidspunktet for hvornår der skal spilles */
+      fprintf(fp, "Runde %d:\n%.2d:%.2d\n", round_index + 1, hour, minute);
+      /* Printer banenummer, niveau og holdene der skal spille mod hinanden */
+      fprintf(fp, "Bane %2d | %c | %s vs %s\n", tournament[match_index].field + 1, translateToChar(tournament[match_index].level),
+                                                tournament[match_index].team_a, tournament[match_index].team_b);
+      starting_time += ROUND_LEN;
+      round_index++;
     }
 
-    fprintf(fp, "\n");
+    /* Hvis det er den sidste kamp i runden */
+    else if (match_index % number_of_fields == number_of_fields - 1) {
+      fprintf(fp, "Bane %2d | %c | %s vs %s\n", tournament[match_index].field + 1, translateToChar(tournament[match_index].level),
+                                                tournament[match_index].team_a, tournament[match_index].team_b);
+      fprintf(fp, "\n");
+    }
 
-    time += ROUND_LEN;
+    else {
+      fprintf(fp, "Bane %2d | %c | %s vs %s\n", tournament[match_index].field + 1, translateToChar(tournament[match_index].level),
+                                                tournament[match_index].team_a, tournament[match_index].team_b);
+    }
+    match_index++;
   }
+  return 0;
 }
 
 /* Printer turneringsplanen til terminalen */
 void printToTerminal(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
   int round_index = 0;
-  int field_index = 0;
   int match_index = 0;
   int hour = 0;
   int minute = 0;
-  int SENTINEL = 0;
 
-  /*
-  while (SENTINEL == 0) {
-    if (isupper(tournament[match_index].team_a[0]) != 0 && isupper(tournament[match_index].team_b[0]) != 0) {
+  printf("\n");
 
-    }
-  }
-  */
-
-  while (SENTINEL == 0) {
-    if (isupper(tournament[round_index + field_index].team_a[0]) != 0 && isupper(tournament[round_index + field_index].team_b[0]) != 0) {
-      hour = starting_time / 60;
-      minute = starting_time % 60;
-
-      /* Printer runde nummer og tidspunktet for hvornår der skal spilles */
-      printf("Runde %d:\n%.2d:%.2d\n", (round_index / number_of_fields) + 1, hour, minute);
-
-      /* Printer banenummer, niveau og de to hold som skal spille mod hinanden */
-      for (field_index = 0; field_index < number_of_fields && SENTINEL == 0; field_index++) {
-        printf("Bane %2d | %c | %s vs %s\n", tournament[round_index + field_index].field + 1, translateToChar(tournament[round_index + field_index].level),
-                                             tournament[round_index + field_index].team_a, tournament[round_index + field_index].team_b);
-        /*
-        if (isupper(tournament[round_index + field_index].team_a[0]) != 0 && isupper(tournament[round_index + field_index].team_b[0]) != 0) {
-
-        }
-        else {
-          SENTINEL = 1;
-        }
-        */
-      }
-      printf("\n");
-      starting_time += ROUND_LEN;
-    }
-
-    else {
-      SENTINEL = 1;
-    }
-
-    round_index += number_of_fields;
-  }
-
-  for (round_index = 0; round_index < number_of_rounds * number_of_fields; round_index += number_of_fields) {
-    /* Oversætter tiden fra minutter til timer og minutter */
+  while (isupper(tournament[match_index].team_a[0]) != 0 && isupper(tournament[match_index].team_b[0]) != 0) {
     hour = starting_time / 60;
     minute = starting_time % 60;
 
+    /* Hvis det er den første kamp i runden */
+    if (match_index % number_of_fields == 0) {
+      /* Printer runde nummer og tidspunktet for hvornår der skal spilles */
+      printf("Runde %d:\n%.2d:%.2d\n", round_index + 1, hour, minute);
+      /* Printer banenummer, niveau og holdene der skal spille mod hinanden */
+      printf("Bane %2d | %c | %s vs %s\n", tournament[match_index].field + 1, translateToChar(tournament[match_index].level),
+                                           tournament[match_index].team_a, tournament[match_index].team_b);
+      starting_time += ROUND_LEN;
+      round_index++;
+    }
 
-    /* printer bane, niveau, og de to hold, som skal spille mod hinanden */
+    /* Hvis det er den sidste kamp i runden */
+    else if (match_index % number_of_fields == number_of_fields - 1) {
+      printf("Bane %2d | %c | %s vs %s\n", tournament[match_index].field + 1, translateToChar(tournament[match_index].level),
+                                           tournament[match_index].team_a, tournament[match_index].team_b);
+      printf("\n");
+    }
 
-
-    starting_time += ROUND_LEN;
+    else {
+      printf("Bane %2d | %c | %s vs %s\n", tournament[match_index].field + 1, translateToChar(tournament[match_index].level),
+                                           tournament[match_index].team_a, tournament[match_index].team_b);
+    }
+    match_index++;
   }
 }
 
