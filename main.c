@@ -40,7 +40,7 @@ int main(void) {
   number_of_teams = getNumberOfTeams(fp);
 
   /* Udregner antallet af kampe og antallet af runder */
-  number_of_matches = (number_of_teams * NUM_OF_MATCHES) / 2;
+  number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
   number_of_rounds = (number_of_matches / number_of_fields) + 10;
 
   /* Allokerer plads til teams arrayet og matches arrayet */
