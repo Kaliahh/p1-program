@@ -140,3 +140,23 @@ void sgetTeams(match* match, char* teams) {
     i++;
   }
 }
+
+
+/* Finder og returnerer antallet af baner der bruges i et givent kampprogram */
+int getNumberOfFields(FILE *fp) {
+  char line[200]; /* Navnet på en bane fylder 7 tegn, hvis der er under 10 baner */
+  char test[7]; /* Strengen der testes om det er en bane */
+  int number_of_fields = 0, done = 0, field_number = 0;
+  rewind(fp);
+
+  while (fgets (line, 200, fp) != NULL && !done) { /* Læser indtil flag (done) er sand */
+    sscanf(line, " %s %d ", test, &field_number);
+    if (strcmp(test, "Bane") == 0 && field_number == number_of_fields + 1) {    /* Hvis der står "bane" betyder det at der er en kamp på linjen */
+      number_of_fields++;
+    }
+    else if((strcmp(test, "Runde") == 0) && field_number == 2) { /* Hvis scanningen er nået runde 2, afslut */
+      done = 1;
+    }
+  }
+  return number_of_fields;
+}
