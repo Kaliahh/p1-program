@@ -1,6 +1,16 @@
 # include "../p1-program/h-files/main.h"
 # include "../p1-program/h-files/printPrompt.h"
 
+void createTemplate(void) {
+  FILE *fPointer = NULL;
+
+  fPointer = fopen("holdnavne.txt", "w");
+
+  fprintf(fPointer, "%s\n", "# Holdnavn, niveau");
+
+  fclose(fPointer);
+}
+
 /* Spørger brugeren om hvad der ønskes at gøre med turneringsplanen */
 void printProgram(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
   int choice = 0;

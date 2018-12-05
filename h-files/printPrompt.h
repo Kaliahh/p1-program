@@ -1,4 +1,5 @@
 /* Prototyper */
+void createTemplate(void);
 int printToFile(match *, int, int, int);
 void printToTerminal(match *, int, int, int);
 void printProgram(match *, int, int, int);
