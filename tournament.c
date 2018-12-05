@@ -9,14 +9,14 @@
 /* Laver og printer en ny turneringsplan */
 int createNewTournament(void) {
   FILE *fp = NULL;
-  match *tournament = NULL;
-  match *all_matches = NULL;
-  team *all_teams = NULL;
   int number_of_fields = 0;
   int number_of_rounds = 0;
   int number_of_teams = 0;
   int number_of_matches = 0;
   int starting_time = 0;
+  match *tournament = NULL;
+  match *all_matches = NULL;
+  team *all_teams = NULL;
   char file_name[MAX_NAME_LEN];
   time_t t;
 
@@ -77,7 +77,7 @@ int updateTournament(FILE *fp) {
   int number_of_teams = 0;
   int number_of_matches = 0;
   int number_of_rounds = 0;
-  int number_of_fields = 2;
+  int number_of_fields = 0;
   int starting_time = 0;
   team *new_teams = NULL;
   team *removed_teams = NULL;
@@ -88,9 +88,14 @@ int updateTournament(FILE *fp) {
   /* Prompter brugeren for ændringer der skal laves */
   all_teams = editMenu(fp, all_teams, new_teams, removed_teams, &number_of_teams);
   /* Sorterer team arrayet efter niveau */
-  sortArrayByLevel(all_teams, number_of_teams);
+  /* sortArrayByLevel(all_teams, number_of_teams); */
 
-  /* alokkerer plads til et nyt all_matches array */
+  printf("number_of_teams: %d\n", number_of_teams);
+  for (int i = 0; i < number_of_teams; i++) {
+    printf("%s, %d\n", all_teams[i].team, all_teams[i].level);
+  }
+
+  /* Alokkerer plads til et nyt all_matches array */
   number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
   all_matches = allocateMemoryMatches(number_of_matches);
 
@@ -101,10 +106,8 @@ int updateTournament(FILE *fp) {
 
   /* Opdaterer kampprogrammet */
   tournament = malloc(number_of_matches * sizeof(match));
-  /* number_of_fields = getNumberOfFields(fp); */
+  number_of_fields = getNumberOfFields(fp);
   createTournament(all_matches, number_of_matches, number_of_fields, tournament);
-
-  /* printf("%s\n", tournament[0].team_a.team); */
 
   /* Printer det færdige kampprogram, enten til en fil eller til terminalen */
   number_of_rounds = (number_of_matches / number_of_fields) + 10;
@@ -118,7 +121,6 @@ int updateTournament(FILE *fp) {
   free(tournament);
 
   rewind(fp);
-
   return 0;
 }
 

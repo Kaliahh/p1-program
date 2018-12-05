@@ -89,8 +89,8 @@ team *editMenu(FILE *fp, team *all_teams, team *new_teams, team *removed_teams, 
   char team[MAX_NAME_LEN];
 
   *number_of_teams = getNumberOfTeamsTournament(fp);
-  all_teams = scanFileForTeams(fp, *number_of_teams, number_of_new_teams);
-  
+
+
   printf("######################  REDIGER  ######################\n\n");
   printf("Hvad vil du gerne ændre?\n");
   printf("[1] Tilføj nyt hold\n"
@@ -106,6 +106,7 @@ team *editMenu(FILE *fp, team *all_teams, team *new_teams, team *removed_teams, 
     scanf(" %d", &number_of_new_teams);
 
     new_teams = malloc(number_of_new_teams * sizeof(team));
+    all_teams = scanFileForTeams(fp, *number_of_teams, number_of_new_teams);
 
     for (team_index = 0; team_index < number_of_new_teams; team_index++) {
       printf("Indtast det %d. holdnavn\n>> ", team_index + 1);
@@ -132,6 +133,7 @@ team *editMenu(FILE *fp, team *all_teams, team *new_teams, team *removed_teams, 
 
 
     addTeams(new_teams, all_teams, number_of_new_teams, *number_of_teams);
+    sortArrayByLevel(all_teams, *number_of_teams);
   }
   /* Fjerner et eksisterende hold */
   else if (choice == 2) {
@@ -139,14 +141,15 @@ team *editMenu(FILE *fp, team *all_teams, team *new_teams, team *removed_teams, 
     scanf(" %d", &number_of_removed_teams);
 
     removed_teams = malloc(number_of_removed_teams * sizeof(team));
+    all_teams = scanFileForTeams(fp, *number_of_teams, 0);
 
     for (team_index = 0; team_index < number_of_removed_teams; team_index++) {
       printf("Indtast det %d. holdnavn\n>> ", team_index + 1);
       scanf(" %[-':.,?!a-zA-Z0-9 ]", removed_teams[team_index].team);
-
     }
 
     removeTeams(removed_teams, all_teams, number_of_removed_teams, *number_of_teams);
+    sortArrayByLevel(all_teams, *number_of_teams);
   }
   /* Hvis et hold kommer senere bedømmes turneringsplanen efter dette.
      Tager ikke højde for, hvis to hold vil komme senere.
@@ -195,7 +198,7 @@ team *editMenu(FILE *fp, team *all_teams, team *new_teams, team *removed_teams, 
   }
   else if (choice == 0) {
     rewind(fp);
-    *number_of_teams += number_of_new_teams;
+    *number_of_teams += (number_of_new_teams > 0) ? number_of_new_teams : -number_of_removed_teams;
     return all_teams;
   }
   else {
@@ -205,7 +208,7 @@ team *editMenu(FILE *fp, team *all_teams, team *new_teams, team *removed_teams, 
 
   rewind(fp);
 
-  *number_of_teams += number_of_new_teams;
+  *number_of_teams += (number_of_new_teams > 0) ? number_of_new_teams : -number_of_removed_teams;
   return all_teams;
 }
 

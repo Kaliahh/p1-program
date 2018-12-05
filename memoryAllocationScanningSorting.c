@@ -142,7 +142,7 @@ team *scanFileForTeams (FILE *fp, int number_of_teams, const int number_of_new_t
                          (level == 'A') ? A :
                          (level == 'B') ? B :
                          (level == 'C') ? C : EMPTY;
-                         
+
       sgetTeams(&temp_match, temp_teams);
       /* Kopier data */
       strcpy(temp_team_a.team, temp_match.team_a.team);
@@ -228,9 +228,29 @@ void sgetTeams(match* match, char* teams) {
 int getStartingTime(FILE *fp) {
   int hours = 0;
   int minutes = 0;
+  rewind(fp);
 
   fscanf(fp, "Runde 1: %d:%d", &hours, &minutes);
 
   rewind(fp);
   return hours * 60 + minutes;
+}
+
+/* Finder og returnerer antallet af baner der bruges i et givent kampprogram */
+int getNumberOfFields(FILE *fp) {
+  char line[200]; /* Navnet på en bane fylder 7 tegn, hvis der er under 10 baner */
+  char test[7]; /* Strengen der testes om det er en bane */
+  int number_of_fields = 0, done = 0, field_number = 0;
+  rewind(fp);
+
+  while (fgets (line, 200, fp) != NULL && !done) { /* Læser indtil flag (done) er sand */
+    sscanf(line, " %s %d ", test, &field_number);
+    if (strcmp(test, "Bane") == 0 && field_number == number_of_fields + 1) {    /* Hvis der står "bane" betyder det at der er en kamp på linjen */
+      number_of_fields++;
+    }
+    else if((strcmp(test, "Runde") == 0) && field_number == 2) { /* Hvis scanningen er nået runde 2, afslut */
+      done = 1;
+    }
+  }
+  return number_of_fields;
 }
