@@ -87,14 +87,10 @@ int updateTournament(FILE *fp) {
 
   /* Prompter brugeren for ændringer der skal laves */
   all_teams = editMenu(fp, all_teams, new_teams, removed_teams, &number_of_teams);
-  /* Sorterer team arrayet efter niveau */
-  /* sortArrayByLevel(all_teams, number_of_teams); */
 
-  printf("number_of_teams: %d\n", number_of_teams);
-  for (int i = 0; i < number_of_teams; i++) {
-    printf("%s, %d\n", all_teams[i].team, all_teams[i].level);
+  if (all_teams == NULL) {
+    return 0;
   }
-
   /* Alokkerer plads til et nyt all_matches array */
   number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
   all_matches = allocateMemoryMatches(number_of_matches);
@@ -126,7 +122,7 @@ int updateTournament(FILE *fp) {
 
 /* Laver et turneringsarray ud fra kampene i all_matches */
 void createTournament(const match *all_matches, const int number_of_matches, const int number_of_fields, match *tournament) {
-  match *copy_of_matches;
+  match *copy_of_matches = NULL;
   int tournament_index = 0;
   int match_index = 0;
   int SENTINEL = 0;

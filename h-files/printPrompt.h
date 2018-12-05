@@ -7,3 +7,4 @@ char translateToChar(int);
 int promptForFields(void);
 int promptForTime(void);
 void promptForFileName(char *);
+void showPrintOptions(void);

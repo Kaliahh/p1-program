@@ -13,19 +13,20 @@ void createTemplate(void) {
 
 /* Spørger brugeren om hvad der ønskes at gøre med turneringsplanen */
 int printProgram(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
-  int choice = 0;
+  int choice = -1;
 
-  printf("\n[1] Print til terminalen \n[2] Print til fil\n>> ");
-  scanf(" %d", &choice);
-
-  if(choice == 1) {
-    printToTerminal(tournament, starting_time, number_of_rounds, number_of_fields);
-
-    printf("\n[1] Print til fil\n[0] Gå til hovedmenuen\n>> ");
+  showPrintOptions();
+  while (choice != 0) {
     scanf(" %d", &choice);
 
     if (choice == 1) {
+      printToTerminal(tournament, starting_time, number_of_rounds, number_of_fields);
+      showPrintOptions();
+    }
+
+    else if (choice == 2) {
       printToFile(tournament, starting_time, number_of_rounds, number_of_fields);
+      showPrintOptions();
     }
 
     else if (choice == 0) {
@@ -34,17 +35,15 @@ int printProgram(match *tournament, int starting_time, int number_of_rounds, int
 
     else {
       printf("Fejl ved indtastning. Tast 1 eller 2\n>> ");
-      printProgram(tournament, starting_time, number_of_rounds, number_of_fields);
+      showPrintOptions();
     }
   }
-  else if(choice == 2) {
-    printToFile(tournament, starting_time, number_of_rounds, number_of_fields);
-  }
-  else {
-    printf("Fejl ved indtastning. Tast 1 eller 2\n>> ");
-    printProgram(tournament, starting_time, number_of_rounds, number_of_fields);
-  }
   return 0;
+}
+
+void showPrintOptions(void) {
+  printf("\n#####################    PRINT    #####################\n\n");
+  printf("[1] Se kampprogram i terminalen \n[2] Gem kampprogram\n[0] Gå til hovedmenuen\n>> ");
 }
 
 int printToFile(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {

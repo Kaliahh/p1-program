@@ -129,10 +129,6 @@ team *scanFileForTeams (FILE *fp, int number_of_teams, const int number_of_new_t
   team *all_teams = (team*) malloc (number_of_teams * sizeof(team));
 
   while (fgets(temp, 200, fp) != NULL) {
-  /*  scanres = fscanf (fp, " %[-A-Za-z0-9| ]", temp);
-    if (scanres != 1) {
-      printf("Fejl i scanning af fil\n");
-    } */
     if (strlen(temp) > MIN_LINE_LEN) {     /* Hvis har en bestemt størrelse, må den indeholde en kamp */
       scanres = sscanf(temp, " Bane %*d | %c | %[a-zA-Z0-9æøåÆØÅ ] ", &level, temp_teams);
       if(scanres != 2) {

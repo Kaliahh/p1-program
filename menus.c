@@ -73,7 +73,7 @@ void printMainMenu(void) {
   printf("#####################  HOVEDMENU  #####################\n\n");
   printf("[1] Lav et nyt kampprogram\n");
   printf("[2] Rediger et eksisterende kampprogram\n");
-  printf("[3] Lav skabelon til liste af holdnavne\n");
+  printf("[3] Lav skabelon til liste af holdnavne (!)\n");
   printf("[0] Afslut\n>> ");
 }
 
@@ -90,13 +90,12 @@ team *editMenu(FILE *fp, team *all_teams, team *new_teams, team *removed_teams, 
 
   *number_of_teams = getNumberOfTeamsTournament(fp);
 
-
   printf("######################  REDIGER  ######################\n\n");
   printf("Hvad vil du gerne ændre?\n");
   printf("[1] Tilføj nyt hold\n"
          "[2] Slet eksisterende hold\n"
-         "[3] Ændre startstidspunkt for et eksisterende hold\n"
-         "[4] Ændre sluttidspunkt for et eksisterende hold\n"
+         "[3] Ændre startstidspunkt for et eksisterende hold (!)\n"
+         "[4] Ændre sluttidspunkt for et eksisterende hold (!)\n"
          "[0] Gå til hovedmenuen\n>> ");
   scanf(" %d", &choice);
 
@@ -112,7 +111,7 @@ team *editMenu(FILE *fp, team *all_teams, team *new_teams, team *removed_teams, 
       printf("Indtast det %d. holdnavn\n>> ", team_index + 1);
       scanf(" %[-':.,?!a-zA-Z0-9 ]", new_teams[team_index].team);
 
-      printf("Indtast det %d. holds niveau (med blokbogstaver)\n>> ", team_index + 1);
+      printf("Indtast det %d. holds niveau (N, A, B eller C)\n>> ", team_index + 1);
       scanf(" %c", &level);
 
       new_teams[team_index].level = (level == 'N') ? N :
