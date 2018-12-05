@@ -1,10 +1,10 @@
-Team noget, N
-De andre er dårlige, N
+Team noget, A
+De andre er dårlige, A
 Floorball 1, A
 Floorball 2, A
 Floorball 4, A
 Floorball 3, A
 Kort navn, A
-Vi er de bedste, B
-Test 1, B
-Test 2, B
+Vi er de bedste, A
+Test 1, A
+Test 2, A

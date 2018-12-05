@@ -118,8 +118,8 @@ int main(void){
 }
 
 /* Laver en turneringsplan, som returnerer antallet af gange planen bryder med reglerne. */
-int createTournament_2(team *all_teams, const int number_of_teams, match *tournament, 
-                        const int number_of_matches, const int number_of_fields){
+int createTournament_2(team *all_teams, const int number_of_teams, match *tournament,
+                       const int number_of_matches, const int number_of_fields){
   int i = 0;
   int round_count = 0;
   int tournament_index = 0;
@@ -157,7 +157,7 @@ int createTournament_2(team *all_teams, const int number_of_teams, match *tourna
       sentinel_count = 0;
 
       /* Finder et hold b. */
-      while (sentinel_count < CHECK_NUM){            
+      while (sentinel_count < CHECK_NUM){
         team_index = (rand() + 1) % number_of_teams;
 
         if (all_teams[team_index].games <= 6 && all_teams[team_index].level == tournament[tournament_index].team_a.level && strcmp(tournament[tournament_index].team_a.team, all_teams[team_index].team) != 0){

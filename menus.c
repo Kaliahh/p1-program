@@ -3,7 +3,6 @@
 # include "../p1-program/h-files/tournament.h"
 # include "../p1-program/h-files/menus.h"
 # include "../p1-program/h-files/printPrompt.h"
-# include "../p1-program/h-files/matches.h"
 # include "../p1-program/h-files/memoryAllocationScanningSorting.h"
 
 int main(void) {
@@ -17,8 +16,6 @@ int main(void) {
 int mainMenu(void) {
   int choice = -1;
   FILE *fp = NULL;
-
-  /* printf("\nTurnerings Planlægger 2000\n\n"); */
 
   printf("           ______ ___   ___  ___   ___   ___ \n");
   printf("          /_  __// _ \\ |_  |/ _ \\ / _ \\ / _ \\\n");
@@ -73,7 +70,7 @@ int mainMenu(void) {
 void printMainMenu(void) {
   printf("#####################  HOVEDMENU  #####################\n\n");
   printf("[1] Lav et nyt kampprogram\n");
-  printf("[2] Rediger et eksisterende kampprogram\n");
+  printf("[2] Rediger et eksisterende kampprogram (!)\n");
   printf("[3] Lav skabelon til liste af holdnavne (!)\n");
   printf("[0] Afslut\n>> ");
 }
