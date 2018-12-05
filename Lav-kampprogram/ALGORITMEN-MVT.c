@@ -17,14 +17,18 @@ typedef struct{
   int field;
 } match_2;
 
-
+void createNewTournament(team *, int, match_2 *, int, int);
+int evaluateRound(match_2 *, int, int, int *);
+int is_already_in_round(match_2 *, int, int);
+int is_in_previous_round(match_2 *, int, int);
+int is_same_field(match_2 *, int, int);
 
 
 int main(void){
   int number_of_teams = 21;
   int number_of_fields = 2;
-  match_2 *tournament[NUMBER_OF_MATCHES];
-
+  match_2 tournament[NUMBER_OF_MATCHES];
+  team all_teams[21];
 
   time_t t;
   /* initialiserer rand */
@@ -102,45 +106,110 @@ int main(void){
 }
 
 
-void *createNewTournament(team *all_teams, int number_of_teams, match_2 *tournament, int number_of_matches, int number_of_fields){
-  int tournament_index = 0, team_index = 0, sentinel = 0;
+void createNewTournament(team *all_teams, int number_of_teams, match_2 *tournament, int number_of_matches, int number_of_fields){
+  int round_count = 0, tournament_index = 0, team_index = 0, sentinel = 0, sentinel_count = 0, grade = 0;
 
-  for (tournament_index = 0; tournament_index < number_of_matches; tournament_index++){
-    while (sentinel == 0){
-      team_index = rand() % number_of_teams;
+  for (round_count = 0; round_count < number_of_matches / number_of_fields; round_count++){
+    printf("r_i: %d\n", round_count);
+    for (tournament_index = round_count * number_of_fields; tournament_index < (round_count + 1) * number_of_fields; tournament_index++){
+      printf("T_I: %d\n", tournament_index);
 
-      if (all_teams[team_index].field == -1){
-        all_teams[team_index].field = tournament_index % number_of_fields;
-        tournament[tournament_index].team_a = all_teams[team_index];
+      sentinel = 0;
 
-        sentinel++;
+      while (sentinel == 0){
+        team_index = rand() % number_of_teams;
+
+        if (all_teams[team_index].games <= 6 && all_teams[team_index].level != 4){
+          all_teams[team_index].games++;
+          tournament[tournament_index].team_a = all_teams[team_index];
+          tournament[tournament_index].field = tournament_index % number_of_fields;
+
+          sentinel++;
+        }
+      }
+
+      sentinel = 0;
+
+      while (sentinel == 0){            /* Sidder nogle gange fast her... */
+        team_index = rand() % number_of_teams;
+
+        if (all_teams[team_index].games <= 6 && all_teams[team_index].level == tournament[tournament_index].team_a.level){
+          all_teams[team_index].games++;
+          tournament[tournament_index].team_b = all_teams[team_index];
+
+          sentinel++;
+        }
       }
     }
-    sentinel = 0;
-    while (sentinel == 0){
-      team_index = rand() % number_of_teams;
 
-      if (all_teams[team_index].field == -1 && all_teams[team_index].level == tournament[tournament_index].team_a.level){
-        all_teams[team_index].field = tournament_index % number_of_fields;
-        tournament[tournament_index].team_b = all_teams[team_index];
-
-        sentinel++;
-      }
+    if (evaluateRound(tournament, tournament_index, number_of_fields, &grade) > 0 && sentinel_count < 10){
+      round_count--;
+      sentinel_count++;
     }
-    evaluataRound(tournament, tournament_index);
   }
-
-
-
-
 }
 
+int evaluateRound(match_2 *tournament, int tournament_index, int number_of_fields, int *grade){
+  int i = 0, no_go_count = 0;
 
+  for (i = tournament_index - number_of_fields; i < tournament_index; i++){
+    if (is_already_in_round (tournament, i, number_of_fields) == 1){
+      no_go_count++;
+    }
+    if (is_in_previous_round (tournament, i, number_of_fields) == 1){
+      if (is_same_field (tournament, i, number_of_fields) == 0){
+        no_go_count++;
+      }
+    }
+    else {
+      *grade += 2;
+    }
+  }
 
+  return no_go_count;
+}
 
+int is_already_in_round(match_2 *tournament, int tournament_index, int number_of_fields){
+  int i = 0, start_of_round = 0;
 
+  start_of_round = tournament_index - (tournament_index % number_of_fields);
 
+  for (i = start_of_round; i < tournament_index; i++) {
+    if (strcmp(tournament[i].team_a.team, tournament[tournament_index].team_a.team) == 0 ||
+        strcmp(tournament[i].team_a.team, tournament[tournament_index].team_b.team) == 0 ||
+        strcmp(tournament[i].team_b.team, tournament[tournament_index].team_a.team) == 0 ||
+        strcmp(tournament[i].team_b.team, tournament[tournament_index].team_b.team) == 0) {
+      return 1;
+    }
+  }
 
+  return 0;
+}
+
+int is_in_previous_round(match_2 *tournament, int tournament_index, int number_of_fields) {
+  int i = 0, start_of_previous_round = 0;
+
+  start_of_previous_round = tournament_index - ((tournament_index % number_of_fields) + number_of_fields);
+
+  for (i = start_of_previous_round; i < tournament_index - (tournament_index % number_of_fields); i++) {
+    if (strcmp(tournament[i].team_a.team, tournament[tournament_index].team_a.team) == 0 ||
+        strcmp(tournament[i].team_a.team, tournament[tournament_index].team_b.team) == 0 ||
+        strcmp(tournament[i].team_b.team, tournament[tournament_index].team_a.team) == 0 ||
+        strcmp(tournament[i].team_b.team, tournament[tournament_index].team_b.team) == 0) {
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
+int is_same_field(match_2 *tournament, int tournament_index, int number_of_fields){
+  if (tournament[tournament_index].field == tournament[tournament_index - number_of_fields].field) {
+    return 1;
+  }
+
+  return 0;
+}
 
 
 
