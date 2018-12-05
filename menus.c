@@ -4,6 +4,7 @@
 # include "../p1-program/h-files/menus.h"
 # include "../p1-program/h-files/printPrompt.h"
 # include "../p1-program/h-files/matches.h"
+# include "../p1-program/h-files/memoryAllocationScanningSorting.h"
 
 # define NOGET 1;
 
@@ -43,14 +44,21 @@ int mainMenu(void) {
     }
 
     else if (choice == 2) {
-
-      fp = fopen("turneringsplan.txt", "r");
       printf("\n");
 
-      number_of_teams = NOGET;
+      fp = fopen("turneringsplan.txt", "r");
+
       /* Prompter brugeren for ændringer der skal laves */
-      editMenu(all_teams, new_teams, removed_teams);
-      /* Laver de nye kampe ud fra ændringerne */
+      number_of_teams = editMenu(fp, all_teams, new_teams, removed_teams);
+
+      printf("%d\n", number_of_teams);
+      printf("%s\n", all_teams[0].team);
+      /*
+      for (int i = 0; i < number_of_teams; i++) {
+        printf("%s\n", all_teams[i].team);
+      }
+      */
+
       /* createMatches(all_teams, all_matches, number_of_teams); /*
       /* Opdaterer kampprogrammet */
       /* updateTournament(all_matches); */
@@ -92,7 +100,7 @@ void printMainMenu(void) {
   printf("[0] Afslut\n>> ");
 }
 
-int editMenu(team *all_teams, team *new_teams, team *removed_teams) {
+int editMenu(FILE *fp, team *all_teams, team *new_teams, team *removed_teams) {
   int team_index = 0;
   int choice = 0;
   int time = 0;
@@ -119,6 +127,9 @@ int editMenu(team *all_teams, team *new_teams, team *removed_teams) {
     scanf(" %d", &number_of_new_teams);
 
     new_teams = malloc(number_of_new_teams * sizeof(team));
+
+    number_of_teams = getNumberOfTeamsTournament(fp);
+    all_teams = scanFileForTeams(fp, number_of_teams, number_of_new_teams);
 
     for (team_index = 0; team_index < number_of_new_teams; team_index++) {
       printf("Indtast det %d. holdnavn\n>> ", team_index + 1);
@@ -207,14 +218,16 @@ int editMenu(team *all_teams, team *new_teams, team *removed_teams) {
     changeEndingTime(all_teams, team, number_of_teams, time);
   }
   else if (choice == 0) {
-    return 0;
+    rewind(fp);
+    return number_of_teams + number_of_new_teams;
   }
   else {
     printf("Ugyldigt svar. Prøv igen.\n>> ");
-    editMenu(all_teams, new_teams, removed_teams);
+    editMenu(fp, all_teams, new_teams, removed_teams);
   }
 
-  return 0;
+  rewind(fp);
+  return number_of_teams + number_of_new_teams;
 }
 
 /* Fjerner hold fra listen af hold. */
@@ -236,14 +249,11 @@ void addTeams(const team *new_teams, team *all_teams, const int number_of_new_te
   int i = 0;
   int j = 0;
 
-  for (i = 0; i < number_of_teams; i++) {
-    if (all_teams[i].level == 4) {
-      strcpy(all_teams[i].team, new_teams[j].team);
-      all_teams[i].level = new_teams[j].level;
-      all_teams[i].games = 0;
-
-      j++;
-    }
+  for (i = number_of_teams; i < number_of_teams + number_of_new_teams; i++) {
+    strcpy(all_teams[i].team, new_teams[j].team);
+    all_teams[i].level = new_teams[j].level;
+    all_teams[i].games = 0;
+    j++;
   }
 }
 

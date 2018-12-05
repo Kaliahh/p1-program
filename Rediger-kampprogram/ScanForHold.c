@@ -3,10 +3,10 @@
 # include <string.h>
 # include "../h-files/main.h"
 
-team *scanFileForTeams (FILE *fp, int number_of_teams, const int number_of_new_teams);
-int getNumberOfTeams (FILE *fp);
-int doesTeamExist (team temp_team, team * all_teams, const int index);
-int getNumberOfMatches (FILE *fp);
+team *scanFileForTeams(FILE *fp, int number_of_teams, const int number_of_new_teams);
+int getNumberOfTeamsTournament(FILE *fp);
+int doesTeamExist(team temp_team, team * all_teams, const int index);
+int getNumberOfMatches(FILE *fp);
 void sgetTeams(match* all_matches, char* teams);
 
 
@@ -83,8 +83,9 @@ team *scanFileForTeams (FILE *fp, int number_of_teams, const int number_of_new_t
 
   return all_teams;
 }
+
 /* Læser og returnerer antallet af hold i en given fil */
-int getNumberOfTeams (FILE *fp) {
+int getNumberOfTeamsTournament(FILE *fp) {
   int number_of_matches;
   number_of_matches = getNumberOfMatches(fp);
   /* Tidligere: (number_of_matches - 1) / 3
