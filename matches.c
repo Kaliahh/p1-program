@@ -1,6 +1,7 @@
 # include "../p1-program/h-files/main.h"
 # include "../p1-program/h-files/matches.h"
 
+/* Laver et array af kampe */
 void createMatches(team *all_teams, match *all_matches, int number_of_teams) {
   int i = 0, match_count = 0;
   int N_counter = 0, A_counter = 0, B_counter = 0, C_counter = 0;

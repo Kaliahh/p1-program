@@ -105,7 +105,7 @@ void sortArrayByLevel(team *all_teams, const int number_of_teams) {
 }
 
 /* Sammenligningsfunktion til qsort. Sammenligner to holds niveauer */
-int levelComp (const void *a, const void*b) {
+int levelComp(const void *a, const void*b) {
   team *team_a = (team*) a;
   team *team_b = (team*) b;
 
@@ -113,8 +113,8 @@ int levelComp (const void *a, const void*b) {
 }
 
 
-
-team *scanFileForTeams (FILE *fp, int number_of_teams, const int number_of_new_teams) {
+/* Scanner et kampprogram, returnerer et array af alle hold */
+team *scanFileForTeams(FILE *fp, int number_of_teams, const int number_of_new_teams) {
   int scanres = 0, i = 0;
   char temp[200];
   char temp_teams[200];
@@ -174,7 +174,7 @@ int getNumberOfTeamsTournament(FILE *fp) {
 }
 
 /* Chekker om et givent team allerede er indsat i et givent array */
-int doesTeamExist (team temp_team, team *all_teams, const int index) {
+int doesTeamExist(team temp_team, team *all_teams, const int index) {
   int j = 0, exists = 0;
   for (j = 0; j < index && exists == 0; j++) {
     if (strcmp(temp_team.team, all_teams[j].team) == 0) {
@@ -186,7 +186,7 @@ int doesTeamExist (team temp_team, team *all_teams, const int index) {
 
 /* Kopi af funktion -- skal muligvis slettes */
 /* Tæller og returnerer antallet af kampe i en given fil */
-int getNumberOfMatches (FILE *fp) {
+int getNumberOfMatches(FILE *fp) {
   char dump[5];
   int number_of_matches = 0;
 
@@ -207,9 +207,9 @@ int getNumberOfMatches (FILE *fp) {
 void sgetTeams(match* match, char* teams) {
   int SENTINEL = 0;
   int length = strlen(teams), i = 0;
-  while(SENTINEL == 0) {
-    if(teams[i] == 'v') {   /* Hvis der er et 'v' */
-      if(teams[i-1] == ' ' && teams[i+1] == 's' && teams[i+2] == ' ') {  /* Check om det er en del af " vs " */
+  while (SENTINEL == 0) {
+    if (teams[i] == 'v') {   /* Hvis der er et 'v' */
+      if (teams[i-1] == ' ' && teams[i+1] == 's' && teams[i+2] == ' ') {  /* Check om det er en del af " vs " */
         strncpy((*match).team_a.team, teams, i - 1); /* Kopier første team navn, uden sidste mellemrum */
         (*match).team_a.team[i - 1] = '\0';  /* Definer enden af strengen */
         strncpy((*match).team_b.team, teams + (i + 3), length - (i+2)); /* Kopier det andet team navn */
@@ -221,6 +221,7 @@ void sgetTeams(match* match, char* teams) {
   }
 }
 
+/* Finder starttidspunktet for en eksisterende turneringsplan */
 int getStartingTime(FILE *fp) {
   int hours = 0;
   int minutes = 0;

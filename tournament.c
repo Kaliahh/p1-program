@@ -73,6 +73,7 @@ int createNewTournament(void) {
   return 0;
 }
 
+/* Opdaterer en eksisterende turneringsplan */
 int updateTournament(FILE *fp) {
   int number_of_teams = 0;
   int number_of_matches = 0;
@@ -148,6 +149,7 @@ void createTournament(const match *all_matches, const int number_of_matches, con
   }
 }
 
+/* Sætter alle baner til -1 */
 void resetFields(const int number_of_matches, match *copy_of_matches) {
   int match_index = 0;
 
@@ -156,6 +158,7 @@ void resetFields(const int number_of_matches, match *copy_of_matches) {
   }
 }
 
+/* Kopierer kampe fra et array til et andet */
 void copyMatches(const match *all_matches, const int number_of_matches, match *copy_of_matches) {
   int match_index = 0;
 

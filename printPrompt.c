@@ -1,6 +1,7 @@
 # include "../p1-program/h-files/main.h"
 # include "../p1-program/h-files/printPrompt.h"
 
+/* Laver en template til holdnavne.txt. WIP */
 void createTemplate(void) {
   FILE *fPointer = NULL;
 
@@ -41,11 +42,13 @@ int printProgram(match *tournament, int starting_time, int number_of_rounds, int
   return 0;
 }
 
+/* Viser valgmuligheder ved print */
 void showPrintOptions(void) {
   printf("\n#####################    PRINT    #####################\n\n");
   printf("[1] Se kampprogram i terminalen \n[2] Gem kampprogram\n[0] Gå til hovedmenuen\n>> ");
 }
 
+/* Printer turneringsplan til fil */
 int printToFile(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
   int round_index = 0;
   int match_index = 0;

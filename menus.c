@@ -6,8 +6,6 @@
 # include "../p1-program/h-files/matches.h"
 # include "../p1-program/h-files/memoryAllocationScanningSorting.h"
 
-# define NOGET 1;
-
 int main(void) {
 
   mainMenu();
@@ -15,16 +13,18 @@ int main(void) {
   return 0;
 }
 
+/* Hovedmenuen til programmet */
 int mainMenu(void) {
   int choice = -1;
   FILE *fp = NULL;
 
   /* printf("\nTurnerings Planlægger 2000\n\n"); */
 
-  printf("            ______ ___   ___  ___   ___   ___ \n");
-  printf("           /_  __// _ \\ |_  |/ _ \\ / _ \\ / _ \\\n");
-  printf("            / /  / ___// __// // // // // // /\n");
-  printf("           /_/  /_/   /____/\\___/ \\___/ \\___/\n\n");
+  printf("           ______ ___   ___  ___   ___   ___ \n");
+  printf("          /_  __// _ \\ |_  |/ _ \\ / _ \\ / _ \\\n");
+  printf("           / /  / ___// __// // // // // // /\n");
+  printf("          /_/  /_/   /____/\\___/ \\___/ \\___/\n");
+  printf("                      Working title\n\n");
 
   printMainMenu();
 
@@ -69,6 +69,7 @@ int mainMenu(void) {
   return 0;
 }
 
+/* Printer valgmulighederne for hovedmenuen */
 void printMainMenu(void) {
   printf("#####################  HOVEDMENU  #####################\n\n");
   printf("[1] Lav et nyt kampprogram\n");
@@ -77,6 +78,7 @@ void printMainMenu(void) {
   printf("[0] Afslut\n>> ");
 }
 
+/* Funktioner til ændringer af eksisterende kampprogram. Skal deles op i flere funktioner */
 team *editMenu(FILE *fp, team *all_teams, team *new_teams, team *removed_teams, int *number_of_teams) {
   int team_index = 0;
   int choice = 0;
