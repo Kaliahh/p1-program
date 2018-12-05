@@ -59,8 +59,8 @@ int createMatchesByLevel(team *all_teams, match *all_matches, int level_counter,
         team_b = (team_a + skip) % level_counter;
       }
 
-      strcpy(all_matches[match_count].team_a, all_teams[team_a].team);
-      strcpy(all_matches[match_count].team_b, all_teams[team_b].team);
+      strcpy(all_matches[match_count].team_a.team, all_teams[team_a].team);
+      strcpy(all_matches[match_count].team_b.team, all_teams[team_b].team);
       all_matches[match_count].level = all_teams[team_a].level;
 
       all_teams[team_a].games++;
@@ -75,8 +75,8 @@ int createMatchesByLevel(team *all_teams, match *all_matches, int level_counter,
 /* Returner 0, hvis kampene har hold tilfælles, ellers returnerer den 1 */
 int compareMatches(const match match_a, const match match_b) {
 
-  if (strcmp(match_a.team_a, match_b.team_a) == 0 || strcmp(match_a.team_a, match_b.team_b) == 0 ||
-      strcmp(match_a.team_b, match_b.team_a) == 0 || strcmp(match_a.team_b, match_b.team_b) == 0) {
+  if (strcmp(match_a.team_a.team, match_b.team_a.team) == 0 || strcmp(match_a.team_a.team, match_b.team_b.team) == 0 ||
+      strcmp(match_a.team_b.team, match_b.team_a.team) == 0 || strcmp(match_a.team_b.team, match_b.team_b.team) == 0) {
     return 0;
   }
   else {

@@ -60,7 +60,7 @@ int printToFile(match *tournament, int starting_time, int number_of_rounds, int 
     return -1;
   }
 
-  while (isupper(tournament[match_index].team_a[0]) != 0 && isupper(tournament[match_index].team_b[0]) != 0) {
+  while (isupper(tournament[match_index].team_a.team[0]) != 0 && isupper(tournament[match_index].team_b.team[0]) != 0) {
     hour = starting_time / 60;
     minute = starting_time % 60;
 
@@ -70,7 +70,7 @@ int printToFile(match *tournament, int starting_time, int number_of_rounds, int 
       fprintf(fp, "Runde %d:\n%.2d:%.2d\n", round_index + 1, hour, minute);
       /* Printer banenummer, niveau og holdene der skal spille mod hinanden */
       fprintf(fp, "Bane %2d | %c | %s vs %s\n", tournament[match_index].field + 1, translateToChar(tournament[match_index].level),
-                                                tournament[match_index].team_a, tournament[match_index].team_b);
+                                                tournament[match_index].team_a.team, tournament[match_index].team_b.team);
       starting_time += ROUND_LEN;
       round_index++;
     }
@@ -78,13 +78,13 @@ int printToFile(match *tournament, int starting_time, int number_of_rounds, int 
     /* Hvis det er den sidste kamp i runden */
     else if (match_index % number_of_fields == number_of_fields - 1) {
       fprintf(fp, "Bane %2d | %c | %s vs %s\n", tournament[match_index].field + 1, translateToChar(tournament[match_index].level),
-                                                tournament[match_index].team_a, tournament[match_index].team_b);
+                                                tournament[match_index].team_a.team, tournament[match_index].team_b.team);
       fprintf(fp, "\n");
     }
 
     else {
       fprintf(fp, "Bane %2d | %c | %s vs %s\n", tournament[match_index].field + 1, translateToChar(tournament[match_index].level),
-                                                tournament[match_index].team_a, tournament[match_index].team_b);
+                                                tournament[match_index].team_a.team, tournament[match_index].team_b.team);
     }
     match_index++;
   }
@@ -100,7 +100,7 @@ void printToTerminal(match *tournament, int starting_time, int number_of_rounds,
 
   printf("\n");
 
-  while (isupper(tournament[match_index].team_a[0]) != 0 && isupper(tournament[match_index].team_b[0]) != 0) {
+  while (isupper(tournament[match_index].team_a.team[0]) != 0 && isupper(tournament[match_index].team_b.team[0]) != 0) {
     hour = starting_time / 60;
     minute = starting_time % 60;
 
@@ -110,7 +110,7 @@ void printToTerminal(match *tournament, int starting_time, int number_of_rounds,
       printf("Runde %d:\n%.2d:%.2d\n", round_index + 1, hour, minute);
       /* Printer banenummer, niveau og holdene der skal spille mod hinanden */
       printf("Bane %2d | %c | %s vs %s\n", tournament[match_index].field + 1, translateToChar(tournament[match_index].level),
-                                           tournament[match_index].team_a, tournament[match_index].team_b);
+                                           tournament[match_index].team_a.team, tournament[match_index].team_b.team);
       starting_time += ROUND_LEN;
       round_index++;
     }
@@ -118,13 +118,13 @@ void printToTerminal(match *tournament, int starting_time, int number_of_rounds,
     /* Hvis det er den sidste kamp i runden */
     else if (match_index % number_of_fields == number_of_fields - 1) {
       printf("Bane %2d | %c | %s vs %s\n", tournament[match_index].field + 1, translateToChar(tournament[match_index].level),
-                                           tournament[match_index].team_a, tournament[match_index].team_b);
+                                           tournament[match_index].team_a.team, tournament[match_index].team_b.team);
       printf("\n");
     }
 
     else {
       printf("Bane %2d | %c | %s vs %s\n", tournament[match_index].field + 1, translateToChar(tournament[match_index].level),
-                                           tournament[match_index].team_a, tournament[match_index].team_b);
+                                           tournament[match_index].team_a.team, tournament[match_index].team_b.team);
     }
     match_index++;
   }

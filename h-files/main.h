@@ -21,8 +21,8 @@ typedef struct {
 
 /* Struct for en kamp */
 typedef struct{
-  char team_a[MAX_NAME_LEN];
-  char team_b[MAX_NAME_LEN];
+  team team_a;
+  team team_b;
   int level;
   int field;
 } match;
