@@ -31,6 +31,7 @@ int main(void) {
   }
 
   fclose(fp);
+  free(all_teams);
   return 0;
 }
 
