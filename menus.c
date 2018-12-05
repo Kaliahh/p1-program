@@ -59,7 +59,7 @@ int mainMenu(void) {
   free(new_teams);
   free(removed_teams);
   free(all_teams);
-  fclose(fp);
+  /* fclose(fp); */ /* Segmentation fault hvis filpointeren lukkes */
   return 0;
 }
 
