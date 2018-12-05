@@ -1,68 +1,52 @@
 Runde 1:
 09:00
-Bane  1 | B | Vi er de bedste vs Test 1
-Bane  2 | B | Vi er de bedste vs Test 1
+Bane  1 | N | Team noget vs De andre er dårlige
+Bane  2 | N | Team noget vs De andre er dårlige
 
 Runde 2:
 09:08
-Bane  1 | A | Floorball 4 vs Floorball 3
+Bane  1 | N | Team noget vs De andre er dårlige
 Bane  2 | B | Test 1 vs Vi er de bedste
 
 Runde 3:
 09:16
-Bane  1 | A | Floorball 2 vs Floorball 3
-Bane  2 | A | Floorball 1 vs Floorball 3
+Bane  1 | N | De andre er dårlige vs Team noget
+Bane  2 | A | Floorball 4 vs Floorball 1
 
 Runde 4:
 09:24
-Bane  1 | A | Floorball 4 vs Kort navn
-Bane  2 | A | Floorball 4 vs Floorball 1
+Bane  1 | A | Floorball 3 vs Floorball 2
+Bane  2 | A | Floorball 2 vs Floorball 3
 
 Runde 5:
 09:32
-Bane  1 | B | Vi er de bedste vs Test 1
-Bane  2 | A | Floorball 3 vs Floorball 1
+Bane  1 | A | Floorball 4 vs Floorball 3
+Bane  2 | B | Test 1 vs Vi er de bedste
 
 Runde 6:
 09:40
-Bane  1 | B | Test 1 vs Vi er de bedste
-Bane  2 | A | Floorball 1 vs Floorball 2
+Bane  1 | B | Vi er de bedste vs Test 1
+Bane  2 | B | Vi er de bedste vs Test 1
 
 Runde 7:
 09:48
-Bane  1 | N | De andre er dårlige vs Team noget
-Bane  2 | A | Kort navn vs Floorball 4
+Bane  1 | A | Floorball 4 vs Kort navn
+Bane  2 | A | Floorball 3 vs Kort navn
 
 Runde 8:
 09:56
-Bane  1 | A | Kort navn vs Floorball 1
-Bane  2 | A | Floorball 3 vs Kort navn
+Bane  1 | A | Floorball 1 vs Floorball 2
+Bane  2 | A | Floorball 1 vs Floorball 3
 
 Runde 9:
 10:04
-Bane  1 | A | Floorball 2 vs Floorball 4
-Bane  2 | A | Floorball 1 vs Floorball 4
+Bane  1 | A | Floorball 3 vs Floorball 1
+Bane  2 | A | Kort navn vs Floorball 4
 
 Runde 10:
 10:12
 Bane  1 | N | De andre er dårlige vs Team noget
-Bane  2 | N | De andre er dårlige vs Team noget
+Bane  2 | A | Kort navn vs Floorball 2
 
 Runde 11:
 10:20
-Bane  1 | B | Test 1 vs Vi er de bedste
-Bane  2 | A | Kort navn vs Floorball 2
-
-Runde 12:
-10:28
-Bane  1 | N | Team noget vs De andre er dårlige
-Bane  2 | N | Team noget vs De andre er dårlige
-
-Runde 13:
-10:36
-Bane  1 | A | Floorball 2 vs Kort navn
-Bane  2 | N | Team noget vs De andre er dårlige
-
-Runde 14:
-10:44
-Bane  1 | A | Floorball 3 vs Floorball 2

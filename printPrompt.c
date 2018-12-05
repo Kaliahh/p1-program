@@ -15,13 +15,13 @@ void createTemplate(void) {
 int printProgram(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
   int choice = 0;
 
-  printf("\n[1] Print til terminalen \n[2] Print til fil\n");
+  printf("\n[1] Print til terminalen \n[2] Print til fil\n>> ");
   scanf(" %d", &choice);
 
   if(choice == 1) {
     printToTerminal(tournament, starting_time, number_of_rounds, number_of_fields);
 
-    printf("\n[1] Print til fil\n[0] Gå til hovedmenuen\n");
+    printf("\n[1] Print til fil\n[0] Gå til hovedmenuen\n>> ");
     scanf(" %d", &choice);
 
     if (choice == 1) {
@@ -33,7 +33,7 @@ int printProgram(match *tournament, int starting_time, int number_of_rounds, int
     }
 
     else {
-      printf("Fejl ved indtastning. Tast 1 eller 2\n");
+      printf("Fejl ved indtastning. Tast 1 eller 2\n>> ");
       printProgram(tournament, starting_time, number_of_rounds, number_of_fields);
     }
   }
@@ -41,7 +41,7 @@ int printProgram(match *tournament, int starting_time, int number_of_rounds, int
     printToFile(tournament, starting_time, number_of_rounds, number_of_fields);
   }
   else {
-    printf("Fejl ved indtastning. Tast 1 eller 2\n");
+    printf("Fejl ved indtastning. Tast 1 eller 2\n>> ");
     printProgram(tournament, starting_time, number_of_rounds, number_of_fields);
   }
   return 0;
@@ -152,7 +152,7 @@ char translateToChar(int level) {
    Returnerer antallet af baner */
 int promptForFields(void) {
   int number_of_fields = 0;
-  printf("Indtast antal baner: ");
+  printf("Indtast antal baner\n>> ");
   scanf(" %d", &number_of_fields);
   return number_of_fields;
 }
@@ -162,13 +162,13 @@ int promptForFields(void) {
 int promptForTime(void) {
   int minutes = 0;
   int hours = 0;
-  printf("Indtast starttidspunkt (skrevet som tt:mm): ");
+  printf("Indtast starttidspunkt (skrevet som tt:mm)\n>> ");
   scanf(" %d:%d", &hours, &minutes);
   return hours * 60 + minutes;
 }
 
 /* Prompter brugere for et filnavn */
 void promptForFileName(char *file_name) {
-  printf("Indtast filnavn (afslut med .txt): ");
+  printf("Indtast filnavn (afslut med .txt)\n>> ");
   scanf(" %s", file_name);
 }
