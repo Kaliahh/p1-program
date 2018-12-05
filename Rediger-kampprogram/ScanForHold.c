@@ -26,7 +26,7 @@ int main(void) {
   printf("%d teams\n", number_of_teams);
   all_teams = scanFileForTeams(fp, number_of_teams, number_of_new_teams);
 
-  for (int i = 0; i < number_of_teams + 20; i++) {
+  for (int i = 0; i < number_of_teams; i++) {
     printf("%s | %c\n", all_teams[i].team, all_teams[i].level);
   }
 
@@ -70,12 +70,13 @@ team *scanFileForTeams (FILE *fp, int number_of_teams, const int number_of_new_t
       if (doesTeamExist(temp_team_a, all_teams, i) == 0) {
         strcpy(all_teams[i].team, temp_team_a.team);
         all_teams[i].level = temp_team_a.level;
+        i++;
       }
       if (doesTeamExist(temp_team_b, all_teams, i) == 0) {
         strcpy(all_teams[i].team, temp_team_b.team);
         all_teams[i].level = temp_team_b.level;
+        i++;
       }
-      i++;
     }
   }
 
@@ -128,7 +129,9 @@ void sgetTeams(match* match, char* teams) {
     if(teams[i] == 'v') {   /* Hvis der er et 'v' */
       if(teams[i-1] == ' ' && teams[i+1] == 's' && teams[i+2] == ' ') {  /* Check om det er en del af " vs " */
         strncpy((*match).team_a.team, teams, i - 1); /* Kopier første team navn, uden sidste mellemrum */
+        (*match).team_a.team[i - 1] = '\0';  /* Definer enden af strengen */
         strncpy((*match).team_b.team, teams + (i + 3), length - (i+2)); /* Kopier det andet team navn */
+        (*match).team_b.team[length - (i+1)] = '\0';  /* Definer enden af strengen */
         SENTINEL = 1;
       }
     }

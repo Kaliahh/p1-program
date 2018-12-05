@@ -5,7 +5,7 @@
 
 match *scanFileForMatches (FILE *fp, const int number_of_matches);
 int getNumberOfMatches (FILE *fp);
-void sgetTeams(match* all_matches, char* teams, const int index);
+void sgetTeamsToArray(match* all_matches, char* teams, const int index);
 
 int main(void) {
   int number_of_matches = 0, i = 0;
@@ -50,7 +50,7 @@ match *scanFileForMatches (FILE *fp, const int number_of_matches) {
         perror("Error scanning matches");
       }
       all_matches[i].level = (enum levels) level; /* typecast til levels (int), og put den i struct */
-      sgetTeams(all_matches, temp_teams, i);
+      sgetTeamsToArray(all_matches, temp_teams, i);
       i++;
     }
   }
@@ -76,7 +76,7 @@ int getNumberOfMatches (FILE *fp) {
   return number_of_matches;
 }
 
-void sgetTeams(match* all_matches, char* teams, const int index) {
+void sgetTeamsToArray(match* all_matches, char* teams, const int index) {
   int SENTINEL = 0;
   int length = strlen(teams), i = 0;
   while(SENTINEL == 0) {
