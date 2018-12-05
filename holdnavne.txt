@@ -5,6 +5,6 @@ Floorball 2, A
 Floorball 4, A
 Floorball 3, A
 Kort navn, A
-Vi er de bedste, A
+Vi er de bedste, B
 Test 1, B
 Test 2, B

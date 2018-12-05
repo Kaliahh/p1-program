@@ -16,7 +16,7 @@ int mainMenu(void) {
   team *new_teams = NULL;
   team *removed_teams = NULL;
   team *all_teams = NULL;
-  FILE *fp = NULL;
+  FILE *fp = fopen("turneringsplan.txt", "r");
 
   printf("\n\nKAMPPROGRAM.c\n\n");
 
@@ -33,7 +33,7 @@ int mainMenu(void) {
 
     else if (choice == 2) {
 
-      fp = fopen("turneringsplan.txt", "r");
+      /* fp = fopen("turneringsplan.txt", "r"); */
 
       printf("\n");
       editMenu(all_teams, new_teams, removed_teams);
@@ -59,7 +59,7 @@ int mainMenu(void) {
   free(new_teams);
   free(removed_teams);
   free(all_teams);
-  /* fclose(fp); */ /* Segmentation fault hvis filpointeren lukkes */
+  fclose(fp); /* Segmentation fault hvis filpointeren lukkes */
   return 0;
 }
 
