@@ -23,7 +23,7 @@ int main(void) {
   all_matches = scanFileForMatches(fp, number_of_matches);
 
   for (i = 0; i < number_of_matches; i++) {
-    printf("%20s vs %-22s | %c\n", all_matches[i].team_a, all_matches[i].team_b, all_matches[i].level);
+    printf("%20s vs %-22s | %c\n", all_matches[i].team_a.team, all_matches[i].team_b.team, all_matches[i].level);
   }
 
   fclose (fp);
@@ -82,8 +82,8 @@ void sgetTeams(match* all_matches, char* teams, const int index) {
   while(SENTINEL == 0) {
     if(teams[i] == 'v') {   /* Hvis der er et 'v' */
       if(teams[i-1] == ' ' && teams[i+1] == 's' && teams[i+2] == ' ') {  /* Check om det er en del af " vs " */
-        strncpy(all_matches[index].team_a, teams, i - 1); /* Kopier første team navn, uden sidste mellemrum */
-        strncpy(all_matches[index].team_b, teams + (i + 3), length - (i+2)); /* Kopier det andet team navn */
+        strncpy(all_matches[index].team_a.team, teams, i - 1); /* Kopier første team navn, uden sidste mellemrum */
+        strncpy(all_matches[index].team_b.team, teams + (i + 3), length - (i+2)); /* Kopier det andet team navn */
         SENTINEL = 1;
       }
     }
