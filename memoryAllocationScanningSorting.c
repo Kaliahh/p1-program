@@ -138,7 +138,11 @@ team *scanFileForTeams (FILE *fp, int number_of_teams, const int number_of_new_t
       if(scanres != 2) {
         perror("Error scanning matches");
       }
-      temp_match.level = (enum levels) level; /* typecast til levels (int), og put den i struct */
+      temp_match.level = (level == 'N') ? N :
+                         (level == 'A') ? A :
+                         (level == 'B') ? B :
+                         (level == 'C') ? C : EMPTY;
+                         
       sgetTeams(&temp_match, temp_teams);
       /* Kopier data */
       strcpy(temp_team_a.team, temp_match.team_a.team);
@@ -219,4 +223,14 @@ void sgetTeams(match* match, char* teams) {
     }
     i++;
   }
+}
+
+int getStartingTime(FILE *fp) {
+  int hours = 0;
+  int minutes = 0;
+
+  fscanf(fp, "Runde 1: %d:%d", &hours, &minutes);
+
+  rewind(fp);
+  return hours * 60 + minutes;
 }

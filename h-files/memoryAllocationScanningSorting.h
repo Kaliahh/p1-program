@@ -12,3 +12,4 @@ int getNumberOfTeamsTournament(FILE *);
 int doesTeamExist(team, team *, const int);
 int getNumberOfMatches(FILE *);
 void sgetTeams(match *, char *);
+int getStartingTime(FILE *);

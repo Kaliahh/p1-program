@@ -73,9 +73,51 @@ int createNewTournament(void) {
   return 0;
 }
 
-int updateTournament(match *all_matches) {
+int updateTournament(FILE *fp) {
+  int number_of_teams = 0;
+  int number_of_matches = 0;
+  int number_of_rounds = 0;
+  int number_of_fields = 2;
+  int starting_time = 0;
+  team *new_teams = NULL;
+  team *removed_teams = NULL;
+  team *all_teams = NULL;
+  match *tournament = NULL;
+  match *all_matches = NULL;
 
-  printf("\nOpdaterer kampprogram\n");
+  /* Prompter brugeren for ændringer der skal laves */
+  all_teams = editMenu(fp, all_teams, new_teams, removed_teams, &number_of_teams);
+  /* Sorterer team arrayet efter niveau */
+  sortArrayByLevel(all_teams, number_of_teams);
+
+  /* alokkerer plads til et nyt all_matches array */
+  number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
+  all_matches = allocateMemoryMatches(number_of_matches);
+
+  /* Laver alle kampe der skal spilles, og lægger dem over i matches arrayet */
+  createMatches(all_teams, all_matches, number_of_teams);
+  /* Sætter alle kampenes field member til -1, da ingen kampe er spillet endnu */
+  resetFields(number_of_matches, all_matches);
+
+  /* Opdaterer kampprogrammet */
+  tournament = malloc(number_of_matches * sizeof(match));
+  /* number_of_fields = getNumberOfFields(fp); */
+  createTournament(all_matches, number_of_matches, number_of_fields, tournament);
+
+  /* printf("%s\n", tournament[0].team_a.team); */
+
+  /* Printer det færdige kampprogram, enten til en fil eller til terminalen */
+  number_of_rounds = (number_of_matches / number_of_fields) + 10;
+  starting_time = getStartingTime(fp);
+  printProgram(tournament, starting_time, number_of_rounds, number_of_fields);
+
+  free(new_teams);
+  free(removed_teams);
+  free(all_teams);
+  free(all_matches);
+  free(tournament);
+
+  rewind(fp);
 
   return 0;
 }
