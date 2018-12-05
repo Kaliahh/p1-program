@@ -319,6 +319,7 @@ int evaluateTournament(match *tournament, const int number_of_matches, const int
   for (round_index = 0; round_index < number_of_rounds; round_index++) {
 
     round_start = round_index * number_of_fields;
+    printf("%d\n",round_start);
     /* int current_round = match / number_of_fields; */
     /* int prev_round = round_start - number_of_fields; */
 
@@ -346,6 +347,9 @@ int evaluateTournament(match *tournament, const int number_of_matches, const int
         }*/
         else if(tournament[match_a].field != tournament[match_b - number_of_fields].field){
           grade -=20;
+        }
+        else if(tournament[match1].field != tournament[match2 - number_of_fields].field){
+          grade -= 10;  /* return -1 i stedet */
         }
       }
     }
