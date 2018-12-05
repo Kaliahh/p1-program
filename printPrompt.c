@@ -6,22 +6,22 @@ void createTemplate(void) {
 
   fPointer = fopen("holdnavne.txt", "w");
 
-  fprintf(fPointer, "%s\n", "# Holdnavn, niveau");
+  fprintf(fPointer, "%s\n", "# Holdnavn, NIVEAU");
 
   fclose(fPointer);
 }
 
 /* Spørger brugeren om hvad der ønskes at gøre med turneringsplanen */
-void printProgram(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
+int printProgram(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
   int choice = 0;
 
-  printf("Print til terminalen - tast 1. Print til fil - tast 2:\n");
+  printf("\n[1] Print til terminalen \n[2] Print til fil\n");
   scanf(" %d", &choice);
 
   if(choice == 1) {
     printToTerminal(tournament, starting_time, number_of_rounds, number_of_fields);
 
-    printf("\nEr det i orden? Skal den printes til en fil - tast 1. Er det ikke i orden - tast 0\n");
+    printf("\n[1] Print til fil\n[0] Gå til hovedmenuen\n");
     scanf(" %d", &choice);
 
     if (choice == 1) {
@@ -29,7 +29,7 @@ void printProgram(match *tournament, int starting_time, int number_of_rounds, in
     }
 
     else if (choice == 0) {
-      printProgram(tournament, starting_time, number_of_rounds, number_of_fields);
+      return 0;
     }
 
     else {
@@ -44,6 +44,7 @@ void printProgram(match *tournament, int starting_time, int number_of_rounds, in
     printf("Fejl ved indtastning. Tast 1 eller 2\n");
     printProgram(tournament, starting_time, number_of_rounds, number_of_fields);
   }
+  return 0;
 }
 
 int printToFile(match *tournament, int starting_time, int number_of_rounds, int number_of_fields) {
