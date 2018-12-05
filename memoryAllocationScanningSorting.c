@@ -57,17 +57,17 @@ int getNumberOfTeams(FILE *fp) {
   /* Saetter fil position til starten af filen */
   rewind(fp);
 
-  return number_of_teams - 1;
+  return number_of_teams;
 }
 
 /* Fylder et array med hold */
-void fillArray(FILE *fp, team *all_teams, const char *file_name, const int num_of_teams) {
+void fillArray(FILE *fp, team *all_teams, const char *file_name, const int number_of_teams) {
   char dump = ' ', level = ' ';
 
   /* Fylder alle teams med nul-tegn,
      sætter alle niveauer til EMPTY
      og antallet af spillede kampe til 0 */
-  for (int k = 0; k < num_of_teams; k++) {
+  for (int k = 0; k < number_of_teams; k++) {
     all_teams[k].level = EMPTY;
     all_teams[k].games = 0;
     for (int j = 0; j < MAX_NAME_LEN; j++) {
@@ -77,7 +77,7 @@ void fillArray(FILE *fp, team *all_teams, const char *file_name, const int num_o
 
 
   /* Gennemgår filen med holdnavne, og kopierer holdnavn og niveau over på de rigtige pladser i et array af structs */
-  for (int i = 0; i < num_of_teams; i++) {
+  for (int i = 0; i < number_of_teams; i++) {
     /* Checker om filpointeren er kommet til slutningen af filen,
        og stopper hvis det er sandt */
     if (feof(fp)) {

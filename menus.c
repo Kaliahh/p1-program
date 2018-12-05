@@ -3,6 +3,9 @@
 # include "../p1-program/h-files/tournament.h"
 # include "../p1-program/h-files/menus.h"
 # include "../p1-program/h-files/printPrompt.h"
+# include "../p1-program/h-files/matches.h"
+
+# define NOGET 1;
 
 int main(void) {
 
@@ -13,10 +16,13 @@ int main(void) {
 
 int mainMenu(void) {
   int choice = -1;
+  int number_of_teams = 0;
   team *new_teams = NULL;
   team *removed_teams = NULL;
   team *all_teams = NULL;
   FILE *fp = NULL;
+  match *tournament = NULL;
+  match *all_matches = NULL;
 
   /* printf("\nTurnerings Planlægger 2000\n\n"); */
 
@@ -39,9 +45,15 @@ int mainMenu(void) {
     else if (choice == 2) {
 
       fp = fopen("turneringsplan.txt", "r");
-
       printf("\n");
+
+      number_of_teams = NOGET;
+      /* Prompter brugeren for ændringer der skal laves */
       editMenu(all_teams, new_teams, removed_teams);
+      /* Laver de nye kampe ud fra ændringerne */
+      /* createMatches(all_teams, all_matches, number_of_teams); /*
+      /* Opdaterer kampprogrammet */
+      /* updateTournament(all_matches); */
       printMainMenu();
     }
 

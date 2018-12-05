@@ -73,6 +73,13 @@ int createNewTournament(void) {
   return 0;
 }
 
+int updateTournament(match *all_matches) {
+
+  printf("\nOpdaterer kampprogram\n");
+
+  return 0;
+}
+
 /* Laver et turneringsarray ud fra kampene i all_matches */
 void createTournament(const match *all_matches, const int number_of_matches, const int number_of_fields, match *tournament) {
   match *copy_of_matches;
