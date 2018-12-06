@@ -4,6 +4,7 @@
 # include "../p1-program/h-files/menus.h"
 # include "../p1-program/h-files/printPrompt.h"
 # include "../p1-program/h-files/memoryAllocationScanningSorting.h"
+# include <time.h>
 
 int main(void) {
   time_t t;
