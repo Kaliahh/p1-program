@@ -106,6 +106,8 @@ team *editMenu(FILE *fp, team *all_teams, team *new_teams, team *removed_teams, 
     new_teams = malloc(number_of_new_teams * sizeof(team));
     all_teams = scanFileForTeams(fp, *number_of_teams, number_of_new_teams);
 
+    printTeams(all_teams, *number_of_teams);
+
     for (team_index = 0; team_index < number_of_new_teams; team_index++) {
       printf("Indtast det %d. holdnavn\n>> ", team_index + 1);
       scanf(" %[-':.,?!a-zA-Z0-9 ]", new_teams[team_index].team);
@@ -140,6 +142,8 @@ team *editMenu(FILE *fp, team *all_teams, team *new_teams, team *removed_teams, 
 
     removed_teams = malloc(number_of_removed_teams * sizeof(team));
     all_teams = scanFileForTeams(fp, *number_of_teams, 0);
+
+    printTeams(all_teams, *number_of_teams);
 
     for (team_index = 0; team_index < number_of_removed_teams; team_index++) {
       printf("Indtast det %d. holdnavn\n>> ", team_index + 1);
@@ -196,7 +200,7 @@ team *editMenu(FILE *fp, team *all_teams, team *new_teams, team *removed_teams, 
   }
   else if (choice == 0) {
     rewind(fp);
-    *number_of_teams += (number_of_new_teams > 0) ? number_of_new_teams : -number_of_removed_teams;
+    *number_of_teams += (number_of_new_teams > 0) ? number_of_new_teams : 0;
     return all_teams;
   }
   else {
@@ -206,7 +210,7 @@ team *editMenu(FILE *fp, team *all_teams, team *new_teams, team *removed_teams, 
 
   rewind(fp);
 
-  *number_of_teams += (number_of_new_teams > 0) ? number_of_new_teams : -number_of_removed_teams;
+  *number_of_teams += (number_of_new_teams > 0) ? number_of_new_teams : 0;
   return all_teams;
 }
 
