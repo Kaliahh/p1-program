@@ -8,3 +8,14 @@ Kort navn, A
 Vi er de bedste, A
 Test 1, A
 Test 2, A
+Ny Niveau1, B
+Ny Niveau2, B
+Ny Niveau3, B
+Ny Niveau4, B
+Ny Niveau5, B
+Ny Niveau6, B
+Ny Niveau7, B
+Ny Niveau8, B
+Ny Niveau9, B
+Ny Niveau, B
+

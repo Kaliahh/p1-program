@@ -114,18 +114,18 @@ team *editMenu(FILE *fp, team *all_teams, team *new_teams, team *removed_teams, 
       scanf(" %c", &level);
 
       new_teams[team_index].level = (level == 'N') ? N :
-                           (level == 'A') ? A :
-                           (level == 'B') ? B :
-                           (level == 'C') ? C : EMPTY;
+                                    (level == 'A') ? A :
+                                    (level == 'B') ? B :
+                                    (level == 'C') ? C : EMPTY;
 
       while (new_teams[team_index].level == EMPTY) {
         printf("%d. holds niveau er ikke gyldigt. Prøv igen.\n>> ", team_index + 1);
         scanf(" %c", &level);
 
         new_teams[team_index].level = (level == 'N') ? N :
-                             (level == 'A') ? A :
-                             (level == 'B') ? B :
-                             (level == 'C') ? C : EMPTY;
+                                      (level == 'A') ? A :
+                                      (level == 'B') ? B :
+                                      (level == 'C') ? C : EMPTY;
       }
     }
 
