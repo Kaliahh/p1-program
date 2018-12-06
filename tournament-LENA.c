@@ -121,8 +121,11 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
   int sentinel_count_2 = 0;
   int grade = 0;
   int no_go_count = 0;
-  int team_a[number_of_fields];
-  int team_b[number_of_fields];
+  int *team_a;
+  int *team_b;
+
+  team_a = (int *) malloc (number_of_fields * sizeof(int));
+  team_b = (int *) malloc (number_of_fields * sizeof(int));
 
   /* Kører igennem hver runde. */
   for (round_count = 0; round_count < number_of_matches / number_of_fields; round_count++){
@@ -154,7 +157,9 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
       while (sentinel_count < CHECK_NUM){
         team_index = (rand() + 1) % number_of_teams;
 
-        if (all_teams[team_index].games < 6 && all_teams[team_index].level == tournament[tournament_index].team_a.level && strcmp(tournament[tournament_index].team_a.team, all_teams[team_index].team) != 0){
+        if (all_teams[team_index].games < 6 && 
+            all_teams[team_index].level == tournament[tournament_index].team_a.level && 
+            strcmp(tournament[tournament_index].team_a.team, all_teams[team_index].team) != 0){
           all_teams[team_index].games++;
           tournament[tournament_index].team_b = all_teams[team_index];
 
