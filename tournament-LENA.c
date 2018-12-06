@@ -13,6 +13,8 @@ int createNewTournament(void) {
   int number_of_teams = 0;
   int number_of_matches = 0;
   int starting_time = 0;
+  int i = 0;
+  int no_go_count = CHECK_NUM;
   match *tournament = NULL;
   team *all_teams = NULL;
   char file_name[MAX_NAME_LEN];
@@ -50,7 +52,15 @@ int createNewTournament(void) {
 
   /* Laver et turneringsarray ud fra kampene i all_matches */
   tournament = malloc(number_of_matches * sizeof(match));
-  createTournament(all_teams, number_of_teams, tournament, number_of_matches, number_of_fields);
+
+  while (no_go_count != 0){
+
+    for (i = 0; i < number_of_teams; i++) {
+      all_teams[i].games = 0;
+    }
+
+    no_go_count = createTournament(all_teams, number_of_teams, tournament, number_of_matches, number_of_fields);
+  }
 
   /* Printer det færdige kampprogram, enten til en fil eller til terminalen */
   printProgram(tournament, starting_time, number_of_rounds, number_of_fields);
