@@ -1,0 +1,9 @@
+Når der fjernes et hold, går tilbage til hovedmenuen, fjerner et hold igen -> segmentation default
+
+Når der tilføjes et hold, går tilbage til hovedmenuen, tilføjes endnu et hold, går tilbage til hovedmenuen, tilføjes et hold igen -> segmentation default
+
+Når holdene bliver printet ud med printTeams, bliver det sidste holds niveau lidt indrykket
+
+Når der tilføjes et hold, går tilbage til hovedmenuen, og der tilføjes et hold igen, printes det forkert ud
+
+s
