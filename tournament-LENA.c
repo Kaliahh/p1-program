@@ -18,10 +18,7 @@ int createNewTournament(void) {
   match *tournament = NULL;
   team *all_teams = NULL;
   char file_name[MAX_NAME_LEN];
-  time_t t;
 
-  /* Initialiserer rand */
-  srand(time(&t));
 
   /* Prompter brugeren for antallet af baner, startidspunkt og filnavn */
   number_of_fields = promptForFields();
@@ -209,7 +206,7 @@ int evaluateRound(const match *tournament, const int tournament_index, const int
     if (round_count != 0){
       no_go_count += is_in_previous_round(tournament, i, number_of_fields, grade);
     }
-    
+
   }
 
   return no_go_count;

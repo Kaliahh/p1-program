@@ -6,6 +6,10 @@
 # include "../p1-program/h-files/memoryAllocationScanningSorting.h"
 
 int main(void) {
+  time_t t;
+
+  /* Initialiserer rand */
+  srand(time(&t));
 
   mainMenu();
 
