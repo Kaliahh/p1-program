@@ -140,7 +140,6 @@ int checkRules(const int number_of_fields, const int last_match_index, const int
   int no_go_count = 0;
   int count = 0;
   int sentinel_count = 0;
-  printf("%d\n", *round_count);
 
   /* Tjekker om programmet overholder reglerne. */
   no_go_count = evaluateRound(tournament, last_match_index, number_of_fields, grade);
