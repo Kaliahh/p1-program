@@ -143,29 +143,16 @@ int checkRules(const int number_of_fields, const int last_match_index, const int
   printf("%d\n", *round_count);
 
   /* Tjekker om programmet overholder reglerne. */
-  while (no_go_count > 0) {
-    no_go_count = evaluateRound(tournament, last_match_index, number_of_fields, grade);
+  no_go_count = evaluateRound(tournament, last_match_index, number_of_fields, grade);
 
-    /* Hvis reglerne ikke overholder reglerne sammensættes runden på ny. */
-    if (no_go_count > 0 && sentinel_count < CHECK_NUM && round_count > 0) {
-      *round_count -= 1;
-      sentinel_count++;
+  /* Hvis reglerne ikke overholder reglerne sammensættes runden på ny. */
+  if (no_go_count > 0 && sentinel_count != CHECK_NUM){
+    *round_count -= 1;
+    sentinel_count++;
 
-      /* Sætter antallet af kampe tilbage til det den var før runden blev sammensat. */
-      resetGames(tournament, all_teams, (last_match_index - number_of_fields), last_match_index, number_of_teams);
-    }
-
-    else if (sentinel_count >= CHECK_NUM && count <= *round_count) {
-      resetGames(tournament, all_teams, (last_match_index - number_of_fields * count), last_match_index, number_of_teams);
-
-      *round_count -= count;
-      count++;
-
-      sentinel_count = 0;
-    }
+    /* Sætter antallet af kampe tilbage til det den var før runden blev sammensat. */
+    resetGames(tournament, all_teams, (last_match_index - number_of_fields), last_match_index, number_of_teams);
   }
-
-
 
   return no_go_count;
 }
@@ -233,7 +220,7 @@ int is_in_previous_round(const match *tournament, const int match_index, const i
   /* Kører igennem for hver kamp i runden før. */
   for (i = start_of_previous_round; i < match_index - (match_index % number_of_fields); i++) {
     /* Køres hvis der er et hold som også har spillet i runden før. */
-    if (compareTeams(&tournament[i], &tournament[tournament_index]) == 1) {
+    if (compareTeams(&tournament[i], &tournament[match_index]) == 1) {
       /* Køres hvis holdet ikke spiller på samme bane. */
       if (tournament[i].field != tournament[match_index].field){
         no_go_count++;
