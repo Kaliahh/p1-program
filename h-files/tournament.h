@@ -6,8 +6,8 @@ int updateTournament(FILE *);
 void copyTournament(match *, const int, const match *);*/
 int createTournament(team *, const int, match *, const int, const int);
 void findFirstTeam(const int, const int, const int, team *, match *);
-void findSecondTeam(const int, const int, team *, match *, int *);
-int checkRules(const int, const int, const int, match *, team *, int *, int *);
+void findSecondTeam(const int, const int, team *, match *);
+int checkRules(const int, const int, const int, match *, team *, int *, int *, int *);
 int compareTeams(const match *, const match *);
 int evaluateRound(const match *, const int, const int, int *);
 int is_already_in_round(const match *, const int, const int);

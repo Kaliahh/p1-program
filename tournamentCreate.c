@@ -44,13 +44,12 @@ int createNewTournament(void) {
   /* Fylder teams arrayet med hold */
   fillArray(fp, all_teams, file_name, number_of_teams);
   /* Sorterer teams arrayet efter niveau */
-  sortArrayByLevel(all_teams, number_of_teams);
+  /*sortArrayByLevel(all_teams, number_of_teams);*/
 
   /* Laver et turneringsarray ud fra kampene i all_matches */
   tournament = malloc(number_of_matches * sizeof(match));
 
   while (no_go_count != 0){
-
     for (i = 0; i < number_of_teams; i++) {
       all_teams[i].games = 0;
     }
@@ -73,21 +72,34 @@ int createNewTournament(void) {
 
 /* Laver en turneringsplan, som returnerer antallet af gange planen bryder med reglerne. */
 int createTournament(team *all_teams, const int number_of_teams, match *tournament, const int number_of_matches, const int number_of_fields) {
-  int i = 0;
   int round_count = 0;
   int tournament_index = 0;
   int grade = 0;
   int no_go_count = 0;
+  int end_of_round = 0;
+  int number_of_rounds = 0;
+  int sentinel_count = 0;
+
+  number_of_rounds = number_of_matches / number_of_fields;
 
   /* Kører igennem hver runde. */
-  for (round_count = 0; round_count < number_of_matches / number_of_fields; round_count++) {
+  for (round_count = 0; round_count < number_of_rounds; round_count++) {
+    
+    tournament_index = round_count * number_of_fields;
+    end_of_round = (round_count + 1) * number_of_fields;
+
+    printf("%d\n", round_count);
+
     /* Kører igennem kampene i en runde */
-    for (i = 0, tournament_index = round_count * number_of_fields; tournament_index < (round_count + 1) * number_of_fields; tournament_index++) {
+    for (grade = 0; tournament_index < end_of_round; tournament_index++) {
+
       findFirstTeam(tournament_index, number_of_fields, number_of_teams, all_teams, tournament);
-      findSecondTeam(tournament_index, number_of_teams, all_teams, tournament, &i);
+      findSecondTeam(tournament_index, number_of_teams, all_teams, tournament);
     }
-    no_go_count = checkRules(number_of_fields, tournament_index, number_of_teams, tournament, all_teams, &grade, &round_count);
+    no_go_count = checkRules(number_of_fields, tournament_index, number_of_teams, tournament, all_teams, &grade, &round_count, sentinel_count);
   }
+
+  printf("HEJ?\n");
 
   return no_go_count;
 }
@@ -100,7 +112,7 @@ void findFirstTeam(const int tournament_index, const int number_of_fields, const
   while (sentinel_count < CHECK_NUM) {
     team_index = rand() % number_of_teams;
 
-    if (all_teams[team_index].games < 6 && all_teams[team_index].level != 4) {
+    if (all_teams[team_index].games < 6 && all_teams[team_index].level < 4) {
       all_teams[team_index].games++;
       tournament[tournament_index].team_a = all_teams[team_index];
       tournament[tournament_index].level = all_teams[team_index].level;
@@ -114,12 +126,12 @@ void findFirstTeam(const int tournament_index, const int number_of_fields, const
 }
 
 /* Finder det andet hold til en kamp, baseret på det første hold */
-void findSecondTeam(const int tournament_index, const int number_of_teams, team *all_teams, match *tournament, int *i) {
+void findSecondTeam(const int tournament_index, const int number_of_teams, team *all_teams, match *tournament) {
   int sentinel_count = 0;
   int team_index = 0;
 
   while (sentinel_count < CHECK_NUM) {
-    team_index = (rand() + 1) % number_of_teams;
+    team_index = (rand()+1) % number_of_teams;
 
     if (all_teams[team_index].games < 6 &&
         all_teams[team_index].level == tournament[tournament_index].team_a.level &&
@@ -128,7 +140,6 @@ void findSecondTeam(const int tournament_index, const int number_of_teams, team 
       tournament[tournament_index].team_b = all_teams[team_index];
 
       sentinel_count = CHECK_NUM;
-      *i += 1;
     }
 
     sentinel_count++;
@@ -136,21 +147,22 @@ void findSecondTeam(const int tournament_index, const int number_of_teams, team 
 }
 
 /* Checker om reglerne bliver overholdt for den nuværende runde og runden før */
-int checkRules(const int number_of_fields, const int last_match_index, const int number_of_teams, match *tournament, team *all_teams, int *grade, int *round_count) {
+int checkRules(const int number_of_fields, const int last_match_index, const int number_of_teams, match *tournament, team *all_teams, int *grade, int *round_count, int *sentinel_count) {
   int no_go_count = 0;
   int count = 0;
-  int sentinel_count = 0;
 
   /* Tjekker om programmet overholder reglerne. */
   no_go_count = evaluateRound(tournament, last_match_index, number_of_fields, grade);
 
   /* Hvis reglerne ikke overholder reglerne sammensættes runden på ny. */
-  if (no_go_count > 0 && sentinel_count != CHECK_NUM){
+  if (no_go_count > 0 && *sentinel_count < CHECK_NUM){
     *round_count -= 1;
-    sentinel_count++;
+    *sentinel_count += 1;
 
     /* Sætter antallet af kampe tilbage til det den var før runden blev sammensat. */
-    resetGames(tournament, all_teams, (last_match_index - number_of_fields), last_match_index, number_of_teams);
+    resetGames(tournament, all_teams, (last_match_index - number_of_fields + 1), last_match_index, number_of_teams);
+
+    printf("s: %d\n", *sentinel_count);
   }
 
   return no_go_count;
@@ -160,7 +172,7 @@ int checkRules(const int number_of_fields, const int last_match_index, const int
 void resetGames(match * tournament, team *all_teams, int i, const int end_of_round, const int number_of_teams) {
   int j = 0;
 
-  for (; i < end_of_round; i++){
+  for (j = 0; i < end_of_round; i++){
     for (j = 0; j < number_of_teams; j++) {
       if (strcmp(tournament[i].team_a.team, all_teams[j].team) == 0 ||
           strcmp(tournament[i].team_b.team, all_teams[j].team) == 0) {
