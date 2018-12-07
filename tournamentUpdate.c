@@ -21,7 +21,7 @@ int updateTournament(FILE *fp) {
 
   /* Prompter brugeren for ændringer der skal laves */
   editMenu(fp, all_teams, &number_of_teams);
-
+printf("n: %d\n", number_of_teams);
   /* Udregner antallet af kampe. */
   number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
 
@@ -58,7 +58,8 @@ void addTeams (FILE *fp, team *all_teams, int *number_of_teams) {
   /* Allokere plads til array med nye hold. */
   new_teams = allocateMemoryTeams(number_of_new_teams);
   /* Scanner eksisterende kampprograms-fil og generere et array med de nuværende hold og plads til de nye. */
-  all_teams = scanFileForTeams(fp, *number_of_teams, number_of_new_teams);
+  *number_of_teams += number_of_new_teams;
+  all_teams = scanFileForTeams(fp, *number_of_teams);
 
   /* Printer de nuværende hold ud til terminalen. */
   printTeams(all_teams, *number_of_teams);
@@ -129,7 +130,7 @@ void removeTeams(FILE *fp, team *all_teams, int *number_of_teams) {
   /* Allokere plads til array med hold der skal fjernes. */
   removed_teams = allocateMemoryTeams(number_of_removed_teams);
   /* Scanner eksisterende kampprograms-fil og generere et array med de nuværende hold. */
-  all_teams = scanFileForTeams(fp, *number_of_teams, 0);
+  all_teams = scanFileForTeams(fp, *number_of_teams);
 
   /* Printer all nuværende hold ud. */
   printTeams(all_teams, *number_of_teams);

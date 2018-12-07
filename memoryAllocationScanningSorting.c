@@ -124,7 +124,7 @@ void fillArray(FILE *fp, team *all_teams, const char *file_name, const int numbe
 
 
 /* Scanner et kampprogram, returnerer et array af alle hold. */
-team *scanFileForTeams(FILE *fp, int number_of_teams, const int number_of_new_teams) {
+team *scanFileForTeams(FILE *fp, int number_of_teams) {
   int scanres = 0, i = 0;
   char temp[MAX_LINE_LEN];
   char temp_teams[MAX_LINE_LEN];
@@ -134,8 +134,6 @@ team *scanFileForTeams(FILE *fp, int number_of_teams, const int number_of_new_te
   team *all_teams = NULL;
 
   rewind(fp);
-
-  number_of_teams += number_of_new_teams;
 
   all_teams = (team*) malloc (number_of_teams * sizeof(team));
 

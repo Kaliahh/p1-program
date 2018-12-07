@@ -7,7 +7,7 @@ void sortArrayByLevel(team *, const int);
 int levelComp(const void *a, const void*b);
 
 
-team *scanFileForTeams(FILE *, int, const int);
+team *scanFileForTeams(FILE *, int);
 int getNumberOfTeamsTournament(FILE *);
 int doesTeamExist(team, team *, const int);
 int getNumberOfMatches(FILE *);

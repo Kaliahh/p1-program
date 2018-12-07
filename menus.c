@@ -100,7 +100,6 @@ int editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
       printf("Ugyldigt svar. Proev igen.\n");
       editMenu(fp, all_teams, number_of_teams);
     }
-  printf("test\n");
   return 0;
 }
 
