@@ -185,8 +185,15 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
         all_teams[team_b[i]].games--;
       }
     }
-    else if (sentinel_count_2 == CHECK_NUM){
-      return 1;
+    if (sentinel_count_2 == CHECK_NUM && count <= round_count){
+      for (i = 0; i < number_of_fields; i++){
+        all_teams[team_a[i]].games--;
+        all_teams[team_b[i]].games--;
+      }
+
+      round_count -= count;
+      count++;
+
     }
   }
 
