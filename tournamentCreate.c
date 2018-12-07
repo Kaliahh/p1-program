@@ -81,6 +81,7 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
   int sentinel_count_2 = 0;
   int grade = 0;
   int no_go_count = 0;
+  int count = 1;
   int *team_a;
   int *team_b;
 
@@ -134,31 +135,43 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
 
     /* Tjekker om programmet overholder reglerne. */
     no_go_count = evaluateRound(tournament, tournament_index, number_of_fields, &grade);
+    
+    if (no_go_count == 0) {
+      count = 1;
+    }
     /* Hvis reglerne ikke overholder reglerne sammensættes runden på ny. */
-    if (no_go_count > 0 && sentinel_count_2 != CHECK_NUM){
+    else if (no_go_count > 0 && sentinel_count_2 != CHECK_NUM){
       round_count--;
       sentinel_count_2++;
 
       /* Sætter antallet af kampe tilbage til det den var før runden blev sammensat. */
-      for (i = 0; i < number_of_fields; i++){
-        all_teams[team_a[i]].games--;
-        all_teams[team_b[i]].games--;
-      }
+      resetGames(tournament, all_teams, (tournament_index - number_of_fields), tournament_index, number_of_teams);
     }
-    if (sentinel_count_2 == CHECK_NUM && count <= round_count){
-      for (i = 0; i < number_of_fields; i++){
-        all_teams[team_a[i]].games--;
-        all_teams[team_b[i]].games--;
-      }
+    else if (sentinel_count_2 == CHECK_NUM && count <= round_count){
+      resetGames(tournament, all_teams, (tournament_index - number_of_fields * count), tournament_index, number_of_teams);
 
       round_count -= count;
       count++;
 
+      sentinel_count_2 = 0;
     }
   }
 
-
   return no_go_count;
+}
+
+/* NAVNET SKAL ÆNDERS */
+void resetGames(match * tournament, team *all_teams, int i, const int end_of_round, const int number_of_teams) {
+  int j = 0;
+
+  for (; i < end_of_round; i++){
+    for (j = 0; j < number_of_teams; j++) {
+      if (strcmp(tournament[i].team_a.team, all_teams[j].team) == 0 ||
+          strcmp(tournament[i].team_b.team, all_teams[j].team) == 0) {
+        all_teams[j].games--;
+      }
+    }
+  }
 }
 
 int evaluateRound(const match *tournament, const int tournament_index, const int number_of_fields, int *grade) {
