@@ -126,8 +126,8 @@ int levelComp(const void *a, const void*b) {
 /* Scanner et kampprogram, returnerer et array af alle hold. */
 team *scanFileForTeams(FILE *fp, int number_of_teams, const int number_of_new_teams) {
   int scanres = 0, i = 0;
-  char temp[200];
-  char temp_teams[200];
+  char temp[MAX_LINE_LEN];
+  char temp_teams[MAX_LINE_LEN];
   match temp_match;
   team temp_team_a, temp_team_b;
   char level;
@@ -138,7 +138,7 @@ team *scanFileForTeams(FILE *fp, int number_of_teams, const int number_of_new_te
 
   team *all_teams = (team*) malloc (number_of_teams * sizeof(team));
 
-  while (fgets(temp, 200, fp) != NULL) {
+  while (fgets(temp, MAX_LINE_LEN, fp) != NULL) {
     if (strlen(temp) > MIN_LINE_LEN) {                              /* Hvis har en bestemt størrelse, må den indeholde en kamp. */
       scanres = sscanf(temp, " Bane %*d | %c | %[a-zA-Z0-9æøåÆØÅ ] ", &level, temp_teams);
       if(scanres != 2) {
@@ -207,7 +207,8 @@ int getNumberOfMatches(FILE *fp) {
   return number_of_matches;
 }
 
-/* */
+/* Deler en given string af formen "Hold_a vs Hold_b"
+   og assigner de enkelte holdnavne, til holdene i en given match */
 void sgetTeams(match* match, char* teams) {
   int sentinel = 0;
   int length = strlen(teams), i = 0;
@@ -239,12 +240,12 @@ int getStartingTime(FILE *fp) {
 
 /* Finder og returnerer antallet af baner der bruges i et givent kampprogram. */
 int getNumberOfFields(FILE *fp) {
-  char line[200];                                                               /* Navnet på en bane fylder 7 tegn, hvis der er under 10 baner. */
+  char line[MAX_LINE_LEN];                                                               /* Navnet på en bane fylder 7 tegn, hvis der er under 10 baner. */
   char test[7];                                                                 /* Strengen der testes om det er en bane. */
   int number_of_fields = 0, done = 0, field_number = 0;
   rewind(fp);
 
-  while (fgets (line, 200, fp) != NULL && !done) {                              /* Læser indtil flag (done) er sand. */
+  while (fgets (line, MAX_LINE_LEN, fp) != NULL && !done) {                              /* Læser indtil flag (done) er sand. */
     sscanf(line, " %s %d ", test, &field_number);
     if (strcmp(test, "Bane") == 0 && field_number == number_of_fields + 1) {    /* Hvis der står "bane" betyder det at der er en kamp på linjen. */
       number_of_fields++;

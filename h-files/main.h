@@ -9,6 +9,7 @@
 # define GAMES_PR_TEAM 6
 # define ROUND_LEN 8
 # define MIN_LINE_LEN 16
+# define MAX_LINE_LEN 200;
 # define CHECK_NUM 100000
 
 /* Struct for et hold */
