@@ -70,46 +70,6 @@ int createNewTournament(void) {
   return 0;
 }
 
-/* Opdaterer en eksisterende turneringsplan */
-int updateTournament(FILE *fp) {
-  int number_of_teams = 0;
-  int number_of_matches = 0;
-  int number_of_rounds = 0;
-  int number_of_fields = 0;
-  int starting_time = 0;
-  team *new_teams = NULL;
-  team *removed_teams = NULL;
-  team *all_teams = NULL;
-  match *tournament = NULL;
-
-  /* Prompter brugeren for ændringer der skal laves */
-  all_teams = editMenu(fp, all_teams, new_teams, removed_teams, &number_of_teams);
-
-  if (all_teams == NULL) {
-    return 0;
-  }
-
-  number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
-
-  /* Opdaterer kampprogrammet */
-  tournament = malloc(number_of_matches * sizeof(match));
-  number_of_fields = getNumberOfFields(fp);
-  createTournament(all_teams, number_of_teams, tournament, number_of_matches, number_of_fields);
-
-  /* Printer det færdige kampprogram, enten til en fil eller til terminalen */
-  number_of_rounds = (number_of_matches / number_of_fields) + 10;
-  starting_time = getStartingTime(fp);
-  printProgram(tournament, starting_time, number_of_rounds, number_of_fields);
-
-  free(new_teams);
-  free(removed_teams);
-  free(all_teams);
-  free(tournament);
-
-  rewind(fp);
-  return 0;
-}
-
 
 /* Laver en turneringsplan, som returnerer antallet af gange planen bryder med reglerne. */
 int createTournament(team *all_teams, const int number_of_teams, match *tournament, const int number_of_matches, const int number_of_fields) {
@@ -157,8 +117,8 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
       while (sentinel_count < CHECK_NUM){
         team_index = (rand() + 1) % number_of_teams;
 
-        if (all_teams[team_index].games < 6 && 
-            all_teams[team_index].level == tournament[tournament_index].team_a.level && 
+        if (all_teams[team_index].games < 6 &&
+            all_teams[team_index].level == tournament[tournament_index].team_a.level &&
             strcmp(tournament[tournament_index].team_a.team, all_teams[team_index].team) != 0){
           all_teams[team_index].games++;
           tournament[tournament_index].team_b = all_teams[team_index];
