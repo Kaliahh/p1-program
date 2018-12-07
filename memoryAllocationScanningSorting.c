@@ -1,5 +1,6 @@
 # include "../p1-program/h-files/main.h"
 # include "../p1-program/h-files/memoryAllocationScanningSorting.h"
+# include "../p1-program/h-files/printPrompt.h"
 
 
 /* Allokerer plads til et array af structs med hold.
@@ -147,8 +148,9 @@ team *scanFileForTeams(FILE *fp, int number_of_teams, const int number_of_new_te
 
       sgetTeams(&temp_match, temp_teams);
       /* Kopier navne og niveau fra kampen, til holdene */
-      temp_team_a.team = temp_match.team_a.team;
-      temp_team_b.team = temp_match.team_b.team;
+      temp_team_a = temp_match.team_a;
+      temp_team_b = temp_match.team_b;
+      /* De enkelte teams i temp_match, har ikke korrekt niveau */
       temp_team_a.level = temp_match.level;
       temp_team_b.level = temp_match.level;
 
