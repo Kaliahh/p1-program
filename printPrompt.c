@@ -18,11 +18,7 @@ void printTeams(const team *all_teams, const int number_of_teams) {
 
   printf("\nHold: \n- - - - - - - - - - - - - -\n");
   for (team_index = 0; team_index < number_of_teams; team_index++) {
-    level = (all_teams[team_index].level == N) ? 'N' :
-            (all_teams[team_index].level == A) ? 'A' :
-            (all_teams[team_index].level == B) ? 'B' :
-            (all_teams[team_index].level == C) ? 'C' : 'F';
-
+    level = translateToChar(all_teams[team_index].level);
 
     printf("%-20s | %c\n", all_teams[team_index].team, level);
   }
