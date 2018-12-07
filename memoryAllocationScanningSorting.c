@@ -3,6 +3,7 @@
 
 
 /* Allokerer plads til et array af structs med hold.
+   Tager int med antallet af teams, dvs, antallet af elementer
    Returnerer pointer til arrayet. */
 team* allocateMemoryTeams(const int number_of_teams) {
   team *all_teams = malloc(number_of_teams * sizeof(team));         /* Allokerer plads. */
@@ -11,13 +12,13 @@ team* allocateMemoryTeams(const int number_of_teams) {
     return all_teams;
   }
   else {                                                            /* Fejlhåndtering, hvis der ikke kunne allokeres plads. */
-    printf("Der skete en fejl under pladsallokeringen \n");
-
-    return EXIT_FAILURE;
+    perror("Der skete en fejl under pladsallokeringen");
+    exit(EXIT_FAILURE);
   }
 }
 
 /* Allokerer plads til et array af structs med kampe.
+   Tager int med antallet af matches, dvs, antallet af elementer
    Returnerer pointer til arrayet. */
 match* allocateMemoryMatches(const int number_of_matches) {
   match *all_matches = malloc(number_of_matches * sizeof(match));   /* Allokerer plads. */
@@ -26,15 +27,14 @@ match* allocateMemoryMatches(const int number_of_matches) {
     return all_matches;
   }
   else {                                                            /* Fejlhåndtering, hvis der ikke kunne allokeres plads. */
-    printf("Der skete en fejl under pladsallokeringen \n");
-
-    return EXIT_FAILURE;
+    perror("Der skete en fejl under pladsallokeringen");
+    exit(EXIT_FAILURE);
   }
 }
 
 /* Find og returner antallet af linjer med indhold i en fil.
-   Returner -1 hvis der sker en fejl. 
-   Der antages at fil position er i starten af filen, 
+   Returner -1 hvis der sker en fejl.
+   Der antages at fil position er i starten af filen,
    og når funktionen er kørt ender den i slutningen af filen. */
 int getNumberOfTeams(FILE *fp) {
   char tmp[MAX_NAME_LEN];
@@ -73,22 +73,23 @@ int getNumberOfTeams(FILE *fp) {
 /* Fylder et arrayet all_teams med holdnavne og niveau. */
 void fillArray(FILE *fp, team *all_teams, const char *file_name, const int number_of_teams) {
   char level = ' ';
+  int i, j, k;
 
   /* Fylder alle teams med nul-tegn,
      sætter alle niveauer til EMPTY
      og antallet af spillede kampe til 0. */
-  for (int k = 0; k < number_of_teams; k++) {
+  for (k = 0; k < number_of_teams; k++) {
     all_teams[k].level = EMPTY;
     all_teams[k].games = 0;
 
-    for (int j = 0; j < MAX_NAME_LEN; j++) {
+    for (j = 0; j < MAX_NAME_LEN; j++) {
       all_teams[k].team[j] = '\0';
     }
   }
 
 
   /* Gennemgår filen med holdnavne, og kopierer holdnavn og niveau over på de rigtige pladser i et array af structs. */
-  for (int i = 0; i < number_of_teams; i++) {
+  for (i = 0; i < number_of_teams; i++) {
     /* Checker om filpointeren er kommet til slutningen af filen,
        og stopper hvis det er sandt. */
     if (feof(fp)) {
@@ -101,18 +102,11 @@ void fillArray(FILE *fp, team *all_teams, const char *file_name, const int numbe
     /* Sætter niveauet til stort. */
     level = toupper(level);
     /* Oversætter level fra char til enuem typen 'level'. */
-    all_teams[i].level = changeLevelFromChar(level);
+    all_teams[i].level = getLevel(level);
   }
 
   rewind(fp);
 }
-
-int changeLevelFromChar(char level) {
-  return (level == 'N') ? N :
-         (level == 'A') ? A :
-         (level == 'B') ? B :
-         (level == 'C') ? C : EMPTY;                     
- }
 
 /* Bruger qsort til at sortere arrayet af hold efter niveau. */
 void sortArrayByLevel(team *all_teams, const int number_of_teams) {
@@ -149,16 +143,13 @@ team *scanFileForTeams(FILE *fp, int number_of_teams, const int number_of_new_te
       if(scanres != 2) {
         perror("Error scanning matches");
       }
-      temp_match.level = (level == 'N') ? N :
-                         (level == 'A') ? A :
-                         (level == 'B') ? B :
-                         (level == 'C') ? C : EMPTY;
+      temp_match.level = getLevel(level);
 
       sgetTeams(&temp_match, temp_teams);
-      /* Kopier data */
-      strcpy(temp_team_a.team, temp_match.team_a.team);
+      /* Kopier navne og niveau fra kampen, til holdene */
+      temp_team_a.team = temp_match.team_a.team;
+      temp_team_b.team = temp_match.team_b.team;
       temp_team_a.level = temp_match.level;
-      strcpy(temp_team_b.team, temp_match.team_b.team);
       temp_team_b.level = temp_match.level;
 
       /* Indsæt hold, hvis de ikke er der allerede. */
@@ -199,7 +190,6 @@ int doesTeamExist(team temp_team, team *all_teams, const int index) {
   return exists;
 }
 
-/* Kopi af funktion -- skal muligvis slettes. */
 /* Tæller og returnerer antallet af kampe i en given fil. */
 int getNumberOfMatches(FILE *fp) {
   char dump[5];
@@ -208,13 +198,10 @@ int getNumberOfMatches(FILE *fp) {
   rewind(fp);                                                       /* Gå til starten af filen. */
 
   while (fgets (dump, 5, fp) != NULL) {                             /* Læser indtil der ikke er mere at læse (EOF). */
-    if (strcmp(dump, "Bane") == 0) {                                /* Hvis der står "bane" betyder det at der er en kamp på linjen. */
+    if (strcmp(dump, "Bane") == 0) {                                /* Hvis der står "bane" betyder det at der er en kamp på linjen.*/
       number_of_matches += 1;
     }
   }
-  /* For testing purposes
-  printf("%d matches\n", number_of_matches);
-  */
   return number_of_matches;
 }
 
