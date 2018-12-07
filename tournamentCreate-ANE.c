@@ -105,6 +105,7 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
 }
 
 
+/* Der er noget galt med sentinel_count og round_count her */
 int checkRules(match *tournament, const int end_of_round, const int number_of_fields, team *all_teams, int *team_a, int *team_b, int *round_count) {
   int no_go_count = 0;
   int sentinel_count = 0;
