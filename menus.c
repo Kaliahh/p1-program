@@ -9,7 +9,7 @@
 int main(void) {
   time_t t;
 
-  /* Initialiserer rand */
+  /* Initialiserer rand. */
   srand(time(&t));
 
   mainMenu();
@@ -17,11 +17,13 @@ int main(void) {
   return 0;
 }
 
-/* Hovedmenuen til programmet */
+/* Hovedmenuen til programmet.
+Tager input fra brugen og derefter kalder passende funktioner i forhold til brugerens valg. */
 int mainMenu(void) {
   int choice = -1;
   FILE *fp = NULL;
 
+  /* Printer navn på programmet. */
   printf("           ______ ___   ___  ___   ___   ___ \n");
   printf("          /_  __// _ \\ |_  |/ _ \\ / _ \\ / _ \\\n");
   printf("           / /  / ___// __// // // // // // /\n");
@@ -68,7 +70,7 @@ int mainMenu(void) {
   return 0;
 }
 
-/* Printer valgmulighederne for hovedmenuen */
+/* Printer valgmulighederne for hovedmenuen. */
 void printMainMenu(void) {
   printf("#####################  HOVEDMENU  #####################\n\n");
   printf("[1] Lav et nyt kampprogram\n");
@@ -77,7 +79,8 @@ void printMainMenu(void) {
   printf("[0] Afslut\n>> ");
 }
 
-/* Funktioner til ændringer af eksisterende kampprogram. Skal deles op i flere funktioner */
+/* Redigerings menu over hvilke muligheder der kan vælges, til at redigere et eksisterende kampprogram.
+Tager input fra brugen og derefter kalder passende funktioner i forhold til brugerens valg. */
 int editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
   int choice = -1;
 
@@ -101,8 +104,8 @@ int editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
   return 0;
 }
 
+/* Printer valgmulighederne for edit menu. */
 void printEditMenu(void){
-
   printf("######################  REDIGER  ######################\n\n");
   printf("Hvad vil du gerne aendre?\n");
   printf("[1] Tilføj nyt hold\n"
