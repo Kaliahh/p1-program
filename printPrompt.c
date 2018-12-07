@@ -80,7 +80,7 @@ int printToFile(FILE *fp, match *tournament, int starting_time, int number_of_ro
   int minute = 0;
 
   /* Chekker om et givent index i turnerings arrayet indeholder gyldige hold. Afgjort ved at navnet starter med stort bogstav */
-  while (isupper(tournament[match_index].team_a.team[0]) != 0 && isupper(tournament[match_index].team_b.team[0]) != 0) {
+  while (isalpha(tournament[match_index].team_a.team[0]) != 0 && isalpha(tournament[match_index].team_b.team[0]) != 0) {
     hour = starting_time / 60;
     minute = starting_time % 60;
 
