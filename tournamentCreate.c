@@ -84,7 +84,7 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
 
   /* Kører igennem hver runde. */
   for (round_count = 0; round_count < number_of_rounds; round_count++) {
-    
+
     tournament_index = round_count * number_of_fields;
     end_of_round = (round_count + 1) * number_of_fields;
 
@@ -96,7 +96,7 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
       findFirstTeam(tournament_index, number_of_fields, number_of_teams, all_teams, tournament);
       findSecondTeam(tournament_index, number_of_teams, all_teams, tournament);
     }
-    no_go_count = checkRules(number_of_fields, tournament_index, number_of_teams, tournament, all_teams, &grade, &round_count, sentinel_count);
+    no_go_count = checkRules(number_of_fields, tournament_index, number_of_teams, tournament, all_teams, &grade, &round_count, &sentinel_count);
   }
 
   printf("HEJ?\n");
@@ -149,7 +149,6 @@ void findSecondTeam(const int tournament_index, const int number_of_teams, team 
 /* Checker om reglerne bliver overholdt for den nuværende runde og runden før */
 int checkRules(const int number_of_fields, const int last_match_index, const int number_of_teams, match *tournament, team *all_teams, int *grade, int *round_count, int *sentinel_count) {
   int no_go_count = 0;
-  int count = 0;
 
   /* Tjekker om programmet overholder reglerne. */
   no_go_count = evaluateRound(tournament, last_match_index, number_of_fields, grade);

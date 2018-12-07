@@ -131,17 +131,18 @@ team *scanFileForTeams(FILE *fp, int number_of_teams, const int number_of_new_te
   match temp_match;
   team temp_team_a, temp_team_b;
   char level;
+  team *all_teams = NULL;
 
   rewind(fp);
 
   number_of_teams += number_of_new_teams;
 
-  team *all_teams = (team*) malloc (number_of_teams * sizeof(team));
+  all_teams = (team*) malloc (number_of_teams * sizeof(team));
 
   while (fgets(temp, MAX_LINE_LEN, fp) != NULL) {
     if (strlen(temp) > MIN_LINE_LEN) {                              /* Hvis har en bestemt størrelse, må den indeholde en kamp. */
       scanres = sscanf(temp, " Bane %*d | %c | %[a-zA-Z0-9æøåÆØÅ ] ", &level, temp_teams);
-      if(scanres != 2) {
+      if (scanres != 2) {
         perror("Error scanning matches");
       }
       temp_match.level = getLevel(level);
