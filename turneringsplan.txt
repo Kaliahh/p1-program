@@ -1,75 +1,120 @@
 Runde 1:
-09:00
-Bane  1 | N | Test 1 vs Vi er de bedste
-Bane  2 | N | Floorball 4 vs Floorball 1
+12:12
+Bane  1 | A | Vi er de bedste vs Floorball 4
+Bane  2 | B | Ny Niveau5 vs Ny Niveau9
+Bane  3 | A | Floorball 1 vs Test 2
 
 Runde 2:
-09:08
-Bane  1 | N | Floorball 2 vs Kort navn
-Bane  2 | N | Floorball 3 vs Floorball 4
+12:20
+Bane  1 | B | Ny Niveau6 vs Ny Niveau2
+Bane  2 | B | Ny Niveau8 vs Ny Niveau4
+Bane  3 | A | Floorball 2 vs Floorball 3
 
 Runde 3:
-09:16
-Bane  1 | N | Floorball 2 vs Floorball 4
-Bane  2 | N | Test 2 vs Vi er de bedste
+12:28
+Bane  1 | A | Kort navn vs Team noget
+Bane  2 | B | Ny Niveau8 vs Ny Niveau1
+Bane  3 | B | Ny Niveau9 vs Ny Niveau
 
 Runde 4:
-09:24
-Bane  1 | N | Kort navn vs Floorball 1
-Bane  2 | N | Team noget vs De andre er dårlige
+12:36
+Bane  1 | A | Team noget vs De andre er dårlige
+Bane  2 | A | Vi er de bedste vs Floorball 3
+Bane  3 | B | Ny Niveau3 vs Ny Niveau2
 
 Runde 5:
-09:32
-Bane  1 | N | Floorball 2 vs Kort navn
-Bane  2 | N | Vi er de bedste vs Test 1
+12:44
+Bane  1 | B | Ny Niveau7 vs Ny Niveau1
+Bane  2 | A | Vi er de bedste vs Test 2
+Bane  3 | A | Floorball 1 vs Floorball 2
 
 Runde 6:
-09:40
-Bane  1 | N | Team noget vs De andre er dårlige
-Bane  2 | N | Test 1 vs Test 2
+12:52
+Bane  1 | B | Ny Niveau7 vs Ny Niveau6
+Bane  2 | B | Ny Niveau2 vs Ny Niveau4
+Bane  3 | A | Kort navn vs De andre er dårlige
 
 Runde 7:
-09:48
-Bane  1 | N | Floorball 3 vs Floorball 1
-Bane  2 | N | Test 1 vs Vi er de bedste
+13:00
+Bane  1 | B | Ny Niveau3 vs Ny Niveau6
+Bane  2 | A | Floorball 3 vs Test 2
+Bane  3 | A | Kort navn vs Test 1
 
 Runde 8:
-09:56
-Bane  1 | N | Floorball 3 vs Kort navn
-Bane  2 | N | Team noget vs De andre er dårlige
+13:08
+Bane  1 | A | Floorball 2 vs Floorball 1
+Bane  2 | A | Test 2 vs Floorball 4
+Bane  3 | B | Ny Niveau9 vs Ny Niveau5
 
 Runde 9:
-10:04
-Bane  1 | N | Floorball 3 vs Floorball 1
-Bane  2 | N | Test 1 vs Test 2
+13:16
+Bane  1 | B | Ny Niveau2 vs Ny Niveau
+Bane  2 | A | Floorball 4 vs Team noget
+Bane  3 | B | Ny Niveau5 vs Ny Niveau9
 
 Runde 10:
-10:12
-Bane  1 | N | Floorball 2 vs Floorball 3
-Bane  2 | N | Team noget vs De andre er dårlige
+13:24
+Bane  1 | A | Kort navn vs Floorball 2
+Bane  2 | A | Test 2 vs Floorball 3
+Bane  3 | B | Ny Niveau4 vs Ny Niveau9
 
 Runde 11:
-10:20
-Bane  1 | N | Test 1 vs Vi er de bedste
-Bane  2 | N | Kort navn vs Floorball 4
+13:32
+Bane  1 | B | Ny Niveau vs Ny Niveau7
+Bane  2 | A | Floorball 3 vs Floorball 1
+Bane  3 | B | Ny Niveau6 vs Ny Niveau3
 
 Runde 12:
-10:28
-Bane  1 | N | Test 1 vs Test 2
-Bane  2 | N | Kort navn vs Floorball 3
+13:40
+Bane  1 | A | Test 2 vs Test 1
+Bane  2 | A | De andre er dårlige vs Vi er de bedste
+Bane  3 | A | Kort navn vs Floorball 4
 
 Runde 13:
-10:36
-Bane  1 | N | Vi er de bedste vs Test 2
-Bane  2 | N | Floorball 4 vs Floorball 3
+13:48
+Bane  1 | A | Test 1 vs Floorball 2
+Bane  2 | A | Team noget vs Floorball 3
+Bane  3 | B | Ny Niveau3 vs Ny Niveau8
 
 Runde 14:
-10:44
-Bane  1 | N | Kort navn vs Floorball 2
-Bane  2 | N | Floorball 1 vs Floorball 4
+13:56
+Bane  1 | B | Ny Niveau2 vs Ny Niveau9
+Bane  2 | A | Team noget vs Floorball 4
+Bane  3 | B | Ny Niveau vs Ny Niveau8
 
 Runde 15:
-10:52
-Bane  1 | N | Floorball 1 vs Floorball 2
-Bane  2 | N | Team noget vs De andre er dårlige
+14:04
+Bane  1 | A | Vi er de bedste vs Test 1
+Bane  2 | A | Floorball 2 vs Team noget
+Bane  3 | B | Ny Niveau3 vs Ny Niveau5
+
+Runde 16:
+14:12
+Bane  1 | A | Kort navn vs Test 1
+Bane  2 | A | De andre er dårlige vs Floorball 1
+Bane  3 | B | Ny Niveau1 vs Ny Niveau8
+
+Runde 17:
+14:20
+Bane  1 | A | Vi er de bedste vs Test 1
+Bane  2 | A | Floorball 1 vs De andre er dårlige
+Bane  3 | B | Ny Niveau5 vs Ny Niveau6
+
+Runde 18:
+14:28
+Bane  1 | B | Ny Niveau vs Ny Niveau4
+Bane  2 | B | Ny Niveau7 vs Ny Niveau1
+Bane  3 | B | Ny Niveau8 vs Ny Niveau6
+
+Runde 19:
+14:36
+Bane  1 | B | Ny Niveau vs Ny Niveau5
+Bane  2 | B | Ny Niveau2 vs Ny Niveau7
+Bane  3 | A | Floorball 4 vs De andre er dårlige
+
+Runde 20:
+14:44
+Bane  1 | B | Ny Niveau3 vs Ny Niveau4
+Bane  2 | B | Ny Niveau7 vs Ny Niveau4
+Bane  3 | B | Ny Niveau1 vs Ny Niveau4
 
