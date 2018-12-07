@@ -248,11 +248,10 @@ int is_in_previous_round(const match *tournament, const int match_index, const i
   return no_go_count;
 }
 
+/* Sammenligner to kampes hold, og returner 1 hvis den finder et hold der går igen */
 int compareTeams(const match *tp1, const match *tp2) {
-  if (strcmp(tp1->team_a.team, tp2->team_a.team) == 0 ||
-      strcmp(tp1->team_a.team, tp2->team_b.team) == 0 ||
-      strcmp(tp1->team_b.team, tp2->team_a.team) == 0 ||
-      strcmp(tp1->team_b.team, tp2->team_b.team) == 0) {
+  if (strcmp(tp1->team_a.team, tp2->team_a.team) == 0 || strcmp(tp1->team_a.team, tp2->team_b.team) == 0 ||
+      strcmp(tp1->team_b.team, tp2->team_a.team) == 0 || strcmp(tp1->team_b.team, tp2->team_b.team) == 0) {
     return 1;
   }
   else {
