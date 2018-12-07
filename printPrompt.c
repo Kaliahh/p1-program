@@ -37,20 +37,21 @@ int printProgram(match *tournament, int starting_time, int number_of_rounds, int
   while (choice != 0) {
     scanf(" %d", &choice);
 
-    if (choice == 1) {
+    if (choice == 1) {  /* Se i terminalen */
       printToFile(stdout, tournament, starting_time, number_of_rounds, number_of_fields);
       showPrintOptions();
     }
 
-    else if (choice == 2) {
+    else if (choice == 2) { /* gem kampprogram */
       FILE *fp;
       fp = fopen("turneringsplan.txt", "w");
       isFileOpen(fp);
       printToFile(fp, tournament, starting_time, number_of_rounds, number_of_fields);
       showPrintOptions();
+      fclose(fp);
     }
 
-    else if (choice == 0) {
+    else if (choice == 0) { /* gå til hovedmenu */
       return 0;
     }
 
