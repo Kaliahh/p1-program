@@ -11,6 +11,10 @@
 # define MIN_LINE_LEN 16
 # define MAX_LINE_LEN 200
 # define CHECK_NUM 100000
+# define LOWERCASE "abcdefghijklmnopqrstuvwxzyæøå"
+# define UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXZYÆØÅ"
+# define SPECIAL "-':.,?!"
+# define NUMBERS "0123456789"
 
 /* Struct for et hold */
 typedef struct {
