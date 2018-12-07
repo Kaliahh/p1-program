@@ -3,13 +3,13 @@
 
 /* Laver en template til holdnavne.txt. WIP */
 void createTemplate(void) {
-  FILE *fPointer = NULL;
+  FILE *fp = NULL;
 
-  fPointer = fopen("holdnavne.txt", "w");
+  fp = fopen("holdnavne.txt", "w");
 
-  fprintf(fPointer, "%s\n", "# Holdnavn, NIVEAU");
+  fprintf(fp, "%s\n", "# Holdnavn, NIVEAU");
 
-  fclose(fPointer);
+  fclose(fp);
 }
 
 void printTeams(const team *all_teams, const int number_of_teams) {
@@ -22,6 +22,7 @@ void printTeams(const team *all_teams, const int number_of_teams) {
             (all_teams[team_index].level == A) ? 'A' :
             (all_teams[team_index].level == B) ? 'B' :
             (all_teams[team_index].level == C) ? 'C' : 'F';
+
 
     printf("%-20s | %c\n", all_teams[team_index].team, level);
   }
@@ -164,6 +165,14 @@ char translateToChar(int level) {
       printf("Fejl i print funktion\n");
       return 'F';
   }
+}
+
+/* Får en char, der er et niveau for et hold. Funktionen konverterer niveauet til heltal, og returner resultatet. */
+int getLevel(const char level) {
+  return (level == 'N') ? N :
+         (level == 'A') ? A :
+         (level == 'B') ? B :
+         (level == 'C') ? C : EMPTY;
 }
 
 /* Prompter brugeren for antallet af baner.
