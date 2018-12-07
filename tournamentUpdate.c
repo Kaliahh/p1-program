@@ -18,18 +18,22 @@ int updateTournament(FILE *fp) {
   team *all_teams = NULL;
   match *tournament = NULL;
 
-  /* Prompter brugeren for ændringer der skal laves */
-  all_teams = editMenu(fp, all_teams, new_teams, removed_teams, &number_of_teams);
 
-  if (all_teams == NULL) {
+  number_of_teams = getNumberOfTeamsTournament(fp);
+
+  /* Prompter brugeren for ændringer der skal laves */
+  editMenu(fp, all_teams, &number_of_teams);
+
+  /*if (all_teams == NULL) {
     return 0;
-  }
+  }*/
 
   number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
 
   /* Opdaterer kampprogrammet */
-  tournament = malloc(number_of_matches * sizeof(match));
+  tournament = allocateMemoryMatches(number_of_matches);
   number_of_fields = getNumberOfFields(fp);
+
   createTournament(all_teams, number_of_teams, tournament, number_of_matches, number_of_fields);
 
   /* Printer det færdige kampprogram, enten til en fil eller til terminalen */
@@ -46,8 +50,86 @@ int updateTournament(FILE *fp) {
   return 0;
 }
 
+void addTeams (FILE *fp, team *all_teams, int *number_of_teams) {
+  team *new_teams = NULL;
+  int number_of_new_teams = 0;
+
+  printf("Antal hold der ønskes at tilføje\n>> ");
+  scanf(" %d", &number_of_new_teams);
+
+  new_teams = allocateMemoryTeams(number_of_new_teams);
+  all_teams = scanFileForTeams(fp, *number_of_teams, number_of_new_teams);
+
+  printTeams(all_teams, *number_of_teams);
+
+  getNewTeams(all_teams, number_of_new_teams, new_teams);
+
+  copyTeams(new_teams, all_teams, number_of_new_teams, *number_of_teams);
+}
+
+/* Flyt til print og prompt */
+void getNewTeams(team *all_teams, int number_of_new_teams, team *new_teams) {
+  int team_index = 0;
+  char level = '\0';
+
+  for (team_index = 0; team_index < number_of_new_teams; team_index++) {
+    getTeamNames(new_teams[team_index].team, team_index);
+
+    printf("Indtast det %d. holds niveau (N, A, B eller C)\n>> ", team_index + 1);
+    scanf(" %c", &level);
+
+    new_teams[team_index].level = getLevel(level);
+
+    while (new_teams[team_index].level == EMPTY) {
+      printf("%d. holds niveau er ikke gyldigt. Prøv igen.\n>> ", team_index + 1);
+      scanf(" %c", &level);
+
+      new_teams[team_index].level = getLevel(level);
+    }
+  }
+}
+
+void getTeamNames(char *team, int team_index) {
+  printf("Indtast det %d. holdnavn\n>> ", team_index + 1);
+  scanf(" %[-':.,?!a-zA-Z0-9 ]", team);
+}
+
+
+/* Tilføjer hold til listen af hold. */
+void copyTeams(const team *new_teams, team *all_teams, const int number_of_new_teams, const int number_of_teams) {
+  int i = 0;
+  int j = 0;
+
+  for (i = number_of_teams; i < number_of_teams + number_of_new_teams; i++) {
+    all_teams[i] = new_teams[j];
+    j++;
+  }
+}
+
+void removeTeams(FILE *fp, team *all_teams, int *number_of_teams) {
+  int team_index = 0;
+  int number_of_removed_teams = 0;
+  team *removed_teams = NULL;
+
+  printf("Antal hold der ønskes at fjernes\n>> ");
+  scanf(" %d", &number_of_removed_teams);
+
+  removed_teams = allocateMemoryTeams(number_of_removed_teams);
+  all_teams = scanFileForTeams(fp, *number_of_teams, 0);
+
+  printTeams(all_teams, *number_of_teams);
+
+/* Samme som i add teams */
+  for (team_index = 0; team_index < number_of_removed_teams; team_index++) {
+    getTeamNames(removed_teams[team_index].team, team_index);
+  }
+
+  deleteTeams(removed_teams, all_teams, number_of_removed_teams, *number_of_teams);
+}
+
+
 /* Fjerner hold fra listen af hold. */
-void removeTeams(const team *removed_teams, team *all_teams, const int number_of_removed_teams, const int number_of_teams) {
+void deleteTeams(const team *removed_teams, team *all_teams, const int number_of_removed_teams, const int number_of_teams) {
   int i = 0;
   int j = 0;
 
@@ -60,21 +142,8 @@ void removeTeams(const team *removed_teams, team *all_teams, const int number_of
   }
 }
 
-/* Tilføjer hold til listen af hold. */
-void addTeams(const team *new_teams, team *all_teams, const int number_of_new_teams, const int number_of_teams) {
-  int i = 0;
-  int j = 0;
-
-  for (i = number_of_teams; i < number_of_teams + number_of_new_teams; i++) {
-    strcpy(all_teams[i].team, new_teams[j].team);
-    all_teams[i].level = new_teams[j].level;
-    all_teams[i].games = 0;
-    j++;
-  }
-}
-
 /* Ændre starttidspunktet for et hold. */
-void changeStartingTime(team *all_teams, const char *team, const int number_of_teams, int time) {
+/*void changeStartingTime(team *all_teams, const char *team, const int number_of_teams, int time) {
   int i = 0;
 
   for (i = 0; i < number_of_teams; i++) {
@@ -82,10 +151,10 @@ void changeStartingTime(team *all_teams, const char *team, const int number_of_t
       all_teams[i].starting_time = time;
     }
   }
-}
+}*/
 
 /* Ændre sluttidspunktet for et hold. */
-void changeEndingTime(team *all_teams, const char *team, const int number_of_teams, int time) {
+/*void changeEndingTime(team *all_teams, const char *team, const int number_of_teams, int time) {
   int i = 0;
 
   for (i = 0; i < number_of_teams; i++) {
@@ -93,4 +162,4 @@ void changeEndingTime(team *all_teams, const char *team, const int number_of_tea
       all_teams[i].ending_time = time;
     }
   }
-}
+}*/

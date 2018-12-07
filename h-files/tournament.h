@@ -1,6 +1,6 @@
 /* Prototyper */
 int createNewTournament(void);
-int updateTournament(FILE *);
+
 
 /*void noget(match *, team *, const int, const int, const int);
 void copyTournament(match *, const int, const match *);*/
@@ -16,3 +16,14 @@ int is_in_previous_round(const match *, const int, const int, int *);
 void resetGames(match *, team *, int, const int, const int);
 /*int played_in_a_row(const match *, const int, const int, int *);*/
 /*int number_of_times_played(const team *, const int);*/
+
+/* tournamentUpdate */
+int updateTournament(FILE *);
+
+void addTeams (FILE *, team *, int *);
+void getNewTeams(team *, int , team *);
+void getTeamNames(char *, int );
+void copyTeams(const team *, team *, const int , const int );
+
+void removeTeams(FILE *, team *, int *);
+void deleteTeams(const team *, team *, const int , const int);
