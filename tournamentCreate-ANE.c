@@ -49,7 +49,7 @@ int createNewTournament(void) {
   /* Laver et turneringsarray ud fra kampene i all_matches */
   tournament = malloc(number_of_matches * sizeof(match));
 
-  while (no_go_count != 0){
+  while (no_go_count > 0){
 
     for (i = 0; i < number_of_teams; i++) {
       all_teams[i].games = 0;
@@ -72,13 +72,11 @@ int createNewTournament(void) {
 
 /* Laver en turneringsplan, som returnerer antallet af gange planen bryder med reglerne. */
 int createTournament(team *all_teams, const int number_of_teams, match *tournament, const int number_of_matches, const int number_of_fields) {
-  int i = 0;
   int round_count = 0;
   int number_of_rounds = 0;
   int end_of_round = 0;
   int start_of_round = 0;
   int start_of_next_round = 0;
-  int sentinel_count = 0;
   int no_go_count = 0;
   int *team_a;
   int *team_b;
@@ -89,29 +87,44 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
   number_of_rounds = number_of_matches / number_of_fields;
 
   /* Kører igennem hver runde. */
-  for (round_count = 0; round_count < number_of_rounds; round_count++){
+  for (round_count = 0; round_count < number_of_rounds; round_count++) {
     start_of_round = round_count * number_of_fields;
     start_of_next_round = (round_count + 1) * number_of_fields;
 
     end_of_round = createRound(tournament, all_teams, team_a, team_b, start_of_next_round, start_of_round, number_of_teams, number_of_fields);
 
     /* Tjekker om programmet overholder reglerne. */
-    no_go_count = evaluateRound(tournament, end_of_round, number_of_fields);
+    no_go_count = checkRules(tournament, end_of_round, number_of_fields, all_teams, team_a, team_b, &round_count);
 
-    /* Hvis reglerne ikke overholder reglerne sammensættes runden på ny. */
-    if (no_go_count > 0 && sentinel_count != CHECK_NUM){
-      /* Sætter antallet af kampe tilbage til det den var før runden blev sammensat. */
-      for (i = 0; i < number_of_fields; i++){
-        all_teams[team_a[i]].games--;
-        all_teams[team_b[i]].games--;
-      }
-
-      round_count--;
-      sentinel_count++;
-    }
-    else if (sentinel_count == CHECK_NUM){
+    if (no_go_count > 0) {
       return 1;
     }
+  }
+
+  return no_go_count;
+}
+
+
+int checkRules(match *tournament, const int end_of_round, const int number_of_fields, team *all_teams, int *team_a, int *team_b, int *round_count) {
+  int no_go_count = 0;
+  int sentinel_count = 0;
+  int i = 0;
+
+  no_go_count = evaluateRound(tournament, end_of_round, number_of_fields);
+
+  /* Hvis reglerne ikke overholder reglerne sammensættes runden på ny. */
+  if (no_go_count > 0 && sentinel_count < CHECK_NUM) {
+    /* Sætter antallet af kampe tilbage til det den var før runden blev sammensat. */
+    for (i = 0; i < number_of_fields; i++){
+      all_teams[team_a[i]].games--;
+      all_teams[team_b[i]].games--;
+    }
+
+    *round_count -= 1;
+    sentinel_count++;
+  }
+  else if (sentinel_count >= CHECK_NUM){
+    return 1;
   }
 
   return no_go_count;
@@ -179,15 +192,15 @@ int findSecondTeam(const int tournament_index, const int number_of_teams, team *
 }
 
 /* Tjekker reglerne igennem og returnerer antallet af fejl. */
-int evaluateRound(const match *tournament, const int tournament_index, const int number_of_fields) {
+int evaluateRound(const match *tournament, const int end_of_round, const int number_of_fields) {
   int i = 0;
   int no_go_count = 0;
   int round_count = 0;
 
-  round_count = tournament_index / number_of_fields;
+  round_count = end_of_round / number_of_fields;
 
   /* Kører igennem alle kampene i runden. */
-  for (i = tournament_index - number_of_fields; i < tournament_index; i++){
+  for (i = end_of_round - number_of_fields; i < end_of_round; i++){
     /* Kører hvis kampen allerede er i samme runde. */
     if (isAlreadyInRound(tournament, i, number_of_fields) == 1){
       no_go_count++;
@@ -196,7 +209,6 @@ int evaluateRound(const match *tournament, const int tournament_index, const int
     if (round_count != 0){
       no_go_count += isInPreviousRound(tournament, i, number_of_fields);
     }
-
   }
 
   return no_go_count;

@@ -8,9 +8,10 @@ int evaluateRound(const match *, const int, const int);
 int isAlreadyInRound(const match *, const int, const int);
 int isInPreviousRound(const match *, const int, const int);
 /*int is_different_match(const match *, const int, const int, const int);*/
-int createMatch(match *, team *, int *, int *, const int, const int, const int, const int);
+int createRound(match *, team *, int *, int *, const int, const int, const int, const int);
 int findFirstTeam(const int, const int, const int, team *, match *);
 int findSecondTeam(const int, const int, team *, match *);
+int checkRules(match *, const int, const int, team *, int *, int *, int *);
 int compareTeams(const match *, const match *);
 void resetGames(match *, team *, int, const int, const int);
 /*int played_in_a_row(const match *, const int, const int, int *);*/
