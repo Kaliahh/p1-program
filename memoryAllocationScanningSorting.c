@@ -21,11 +21,13 @@ team* allocateMemoryTeams(const int number_of_teams) {
 /* Allokerer plads til et array af structs med kampe.
    Tager int med antallet af matches, dvs, antallet af elementer
    Returnerer pointer til arrayet. */
-match* allocateMemoryMatches(const int number_of_matches) {
-  match *all_matches = malloc(number_of_matches * sizeof(match));   /* Allokerer plads. */
+match* allocateMemoryTournament(const int number_of_matches) {
+  match *tournament = NULL;
 
-  if (all_matches != NULL) {                                        /* Returner pointer, hvis der kunne allokeres plads. */
-    return all_matches;
+  tournament = malloc(number_of_matches * sizeof(match));   /* Allokerer plads. */
+
+  if (tournament != NULL) {                                        /* Returner pointer, hvis der kunne allokeres plads. */
+    return tournament;
   }
   else {                                                            /* Fejlhåndtering, hvis der ikke kunne allokeres plads. */
     perror("Der skete en fejl under pladsallokeringen");
