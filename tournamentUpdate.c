@@ -11,8 +11,7 @@ int updateTournament(FILE *fp) {
   int number_of_rounds = 0;
   int number_of_fields = 0;
   int starting_time = 0;
-  team *new_teams = NULL;
-  team *removed_teams = NULL;
+  int result = 0;
   team *all_teams = NULL;
   match *tournament = NULL;
 
@@ -20,13 +19,20 @@ int updateTournament(FILE *fp) {
   number_of_teams = getNumberOfTeamsTournament(fp);
 
   /* Prompter brugeren for ændringer der skal laves */
-  editMenu(fp, all_teams, &number_of_teams);
+  result = editMenu(fp, all_teams, &number_of_teams);
+
   printf("n: %d\n", number_of_teams);
+
+  /* Checker om der blev lavet ændringer. Hvis ikke, returnerer funktionen */
+  if (result == 1) {
+    return 0;
+  }
+
   /* Udregner antallet af kampe. */
   number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
 
   /* Opdaterer kampprogrammet. */
-  tournament = allocateMemoryMatches(number_of_matches);
+  tournament = allocateMemoryTournament(number_of_matches);
   number_of_fields = getNumberOfFields(fp);
   createTournament(all_teams, number_of_teams, tournament, number_of_matches, number_of_fields);
 
@@ -36,18 +42,16 @@ int updateTournament(FILE *fp) {
   printProgram(tournament, starting_time, number_of_rounds, number_of_fields);
 
   /* Frigører dynamisk lagerallokering. */
-  free(new_teams);
-  free(removed_teams);
   free(all_teams);
   free(tournament);
 
-  /* rewind fil pointeren. */
+  /* Sætter filpointeren tilbage til starten af filen */
   rewind(fp);
   return 0;
 }
 
 /* Tilføjer nye hold til all_teams arrayet. */
-void addTeams (FILE *fp, team *all_teams, int *number_of_teams) {
+void addTeams (FILE *fp, team *all_teams, int *number_of_teams, const int sentinel) {
   team *new_teams = NULL;
   int number_of_new_teams = 0;
 
@@ -57,18 +61,47 @@ void addTeams (FILE *fp, team *all_teams, int *number_of_teams) {
 
   /* Allokere plads til array med nye hold. */
   new_teams = allocateMemoryTeams(number_of_new_teams);
-  /* Scanner eksisterende kampprograms-fil og generere et array med de nuværende hold og plads til de nye. */
+
   *number_of_teams += number_of_new_teams;
-  all_teams = scanFileForTeams(fp, *number_of_teams);
+
+  /* Checker om det er første gang programmet kommer her til. Hvis det er anden gang eller mere, reallokeres hukommelsen */
+  if (sentinel != 1) {
+    /* Scanner eksisterende kampprograms-fil og generere et array med de nuværende hold og plads til de nye. */
+    all_teams = scanFileForTeams(fp, *number_of_teams);
+  }
+  else if (sentinel == 1) {
+    all_teams = (team *) realloc(all_teams, *number_of_teams * sizeof(team));
+    if (all_teams == NULL) {
+      printf("Fejl ved pladsallokering\n");
+      exit(EXIT_FAILURE);
+    }
+  }
+
 
   /* Printer de nuværende hold ud til terminalen. */
-  printTeams(all_teams, *number_of_teams);
+  printTeams(all_teams, *number_of_teams - number_of_new_teams);
 
   /* Prompter og scanner nye hold ind. */
   getNewTeams(all_teams, number_of_new_teams, new_teams);
 
   /* Sætter nye hold ind i all_teams arrayet. */
   copyTeams(new_teams, all_teams, number_of_new_teams, *number_of_teams);
+  free(new_teams);
+}
+
+/* Returnerer et array med alt data fra all_teams i et større array */
+team *updateTeams(team *all_teams, int number_of_teams) {
+  team *temp_teams;
+  int i = 0;
+
+  temp_teams = (team*) malloc(number_of_teams * sizeof(team));
+
+  for (i = 0; i < number_of_teams; i++) {
+    temp_teams[i] = all_teams[i];
+  }
+  /* free(all_teams); */
+
+  return temp_teams;
 }
 
 /* Prompter og scanner for nye hold som input for brugeren. */
@@ -118,7 +151,7 @@ void copyTeams(const team *new_teams, team *all_teams, const int number_of_new_t
 }
 
 /* Fjerner hold fra all_teams arrayet. */
-void removeTeams(FILE *fp, team *all_teams, int *number_of_teams) {
+void removeTeams(FILE *fp, team *all_teams, int *number_of_teams, const int sentinel) {
   int team_index = 0;
   int number_of_removed_teams = 0;
   team *removed_teams = NULL;
@@ -130,7 +163,9 @@ void removeTeams(FILE *fp, team *all_teams, int *number_of_teams) {
   /* Allokere plads til array med hold der skal fjernes. */
   removed_teams = allocateMemoryTeams(number_of_removed_teams);
   /* Scanner eksisterende kampprograms-fil og generere et array med de nuværende hold. */
-  all_teams = scanFileForTeams(fp, *number_of_teams);
+  if (sentinel != 1) {
+    all_teams = scanFileForTeams(fp, *number_of_teams);
+  }
 
   /* Printer all nuværende hold ud. */
   printTeams(all_teams, *number_of_teams);
@@ -141,6 +176,7 @@ void removeTeams(FILE *fp, team *all_teams, int *number_of_teams) {
   }
 
   deleteTeams(removed_teams, all_teams, number_of_removed_teams, *number_of_teams);
+  free(removed_teams);
 }
 
 

@@ -21,10 +21,10 @@ void resetGames(match *, team *, int, const int, const int);
 /* tournamentUpdate */
 int updateTournament(FILE *);
 
-void addTeams (FILE *, team *, int *);
+void addTeams (FILE *, team *, int *, const int);
 void getNewTeams(team *, int , team *);
 void getTeamNames(char *, int );
 void copyTeams(const team *, team *, const int , const int );
-
-void removeTeams(FILE *, team *, int *);
+team *updateTeams(team *, int);
+void removeTeams(FILE *, team *, int *, const int);
 void deleteTeams(const team *, team *, const int , const int);
