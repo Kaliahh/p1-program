@@ -129,7 +129,10 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
 }
 
 /* Finder hold, som kan sammensættes i en kamp.  */
-int createRound(match *tournament, team *all_teams, int *team_a, int *team_b, const int start_of_next_round, const int start_of_round, const int number_of_teams, const int number_of_fields) {
+int createRound(match *tournament, team *all_teams, int *team_a,
+                int *team_b, const int start_of_next_round, const int start_of_round,
+                const int number_of_teams, const int number_of_fields) {
+                  
   int tournament_index = 0;
   int i = 0;
 
