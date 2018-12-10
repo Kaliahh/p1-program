@@ -112,6 +112,9 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
     else if (sentinel_count == CHECK_NUM){
       return 1;
     }
+    else {
+      sentinel_count = 0;
+    }
   }
 
   return no_go_count;
