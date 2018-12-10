@@ -89,7 +89,7 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
   number_of_rounds = number_of_matches / number_of_fields;
 
   /* Kører igennem hver runde. */
-  for (round_count = 0; round_count < number_of_rounds; round_count++){
+  for (round_count = 0; round_count < number_of_rounds; round_count++) {
     start_of_round = round_count * number_of_fields;
     start_of_next_round = (round_count + 1) * number_of_fields;
 
@@ -99,9 +99,9 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
     no_go_count = evaluateRound(tournament, end_of_round, number_of_fields);
 
     /* Hvis reglerne ikke overholder reglerne sammensættes runden på ny. */
-    if (no_go_count > 0 && sentinel_count != CHECK_NUM){
+    if (no_go_count > 0 && sentinel_count < CHECK_NUM) {
       /* Sætter antallet af kampe tilbage til det den var før runden blev sammensat. */
-      for (i = 0; i < number_of_fields; i++){
+      for (i = 0; i < number_of_fields; i++) {
         all_teams[team_a[i]].games--;
         all_teams[team_b[i]].games--;
       }
@@ -109,7 +109,7 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
       round_count--;
       sentinel_count++;
     }
-    else if (sentinel_count == CHECK_NUM){
+    else if (sentinel_count >= CHECK_NUM) {
       return 1;
     }
     else {
@@ -125,7 +125,7 @@ int createRound(match *tournament, team *all_teams, int *team_a, int *team_b, co
   int tournament_index = 0;
   int i = 0;
 
-  for (tournament_index = start_of_round; tournament_index < start_of_next_round; tournament_index++){
+  for (tournament_index = start_of_round; tournament_index < start_of_next_round; tournament_index++) {
     team_a[i] = findFirstTeam(tournament_index, number_of_fields, number_of_teams, all_teams, tournament);
     team_b[i] = findSecondTeam(tournament_index, number_of_teams, all_teams, tournament);
 
@@ -169,6 +169,7 @@ int findSecondTeam(const int tournament_index, const int number_of_teams, team *
     if (strcmp(tournament[tournament_index].team_a.team, all_teams[team_index].team) != 0 &&
         all_teams[team_index].level == tournament[tournament_index].team_a.level &&
         all_teams[team_index].games < 6) {
+
       all_teams[team_index].games++;
       tournament[tournament_index].team_b = all_teams[team_index];
 
@@ -190,9 +191,9 @@ int evaluateRound(const match *tournament, const int tournament_index, const int
   round_count = tournament_index / number_of_fields;
 
   /* Kører igennem alle kampene i runden. */
-  for (i = tournament_index - number_of_fields; i < tournament_index; i++){
+  for (i = tournament_index - number_of_fields; i < tournament_index; i++) {
     /* Kører hvis kampen allerede er i samme runde. */
-    if (isAlreadyInRound(tournament, i, number_of_fields) == 1){
+    if (isAlreadyInRound(tournament, i, number_of_fields) == 1) {
       no_go_count++;
     }
     /* Kører hvis det ikke er den første runde. */

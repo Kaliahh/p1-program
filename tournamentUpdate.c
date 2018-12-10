@@ -21,7 +21,7 @@ int updateTournament(FILE *fp) {
 
   /* Prompter brugeren for ændringer der skal laves */
   editMenu(fp, all_teams, &number_of_teams);
-printf("n: %d\n", number_of_teams);
+  printf("n: %d\n", number_of_teams);
   /* Udregner antallet af kampe. */
   number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
 
