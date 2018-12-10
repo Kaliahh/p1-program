@@ -18,37 +18,33 @@ int main(void) {
 }
 
 /* Hovedmenuen til programmet.
-Tager input fra brugen og derefter kalder passende funktioner i forhold til brugerens valg. */
+   Tager input fra brugen og derefter kalder passende funktioner i forhold til brugerens valg. */
 int mainMenu(void) {
   int choice = -1;
   FILE *fp = NULL;
 
   /* Printer navn på programmet. */
-  printf("           ______ ___   ___  ___   ___   ___ \n");
-  printf("          /_  __// _ \\ |_  |/ _ \\ / _ \\ / _ \\\n");
-  printf("           / /  / ___// __// // // // // // /\n");
-  printf("          /_/  /_/   /____/\\___/ \\___/ \\___/\n");
-  printf("                      Working title\n\n");
-
-
+  /* (Teksten er genereret af http://patorjk.com/software/taag/ ) */
+  printf("           ______ ___   ___  ___   ___   ___ \n"      );
+  printf("          /_  __// _ \\ |_  |/ _ \\ / _ \\ / _ \\\n"  );
+  printf("           / /  / ___// __// // // // // // /\n"      );
+  printf("          /_/  /_/   /____/\\___/ \\___/ \\___/\n"    );
+  printf("                      Working title\n\n"              );
 
   while (choice != 0) {
     printMainMenu();
     scanf(" %d", &choice);
-
+    /* Laver en ny turneringsplan fra bunden */
     if (choice == 1) {
       printf("\n");
       createNewTournament();
     }
-
+    /* Opdaterer turneringsplanen */
     else if (choice == 2) {
       printf("\n");
-
       fp = fopen("turneringsplan.txt", "r");
       isFileOpen(fp);
-
       updateTournament(fp);
-
       fclose(fp);
     }
 
@@ -80,39 +76,38 @@ void printMainMenu(void) {
 }
 
 /* Redigerings menu over hvilke muligheder der kan vælges, til at redigere et eksisterende kampprogram.
-Tager input fra brugen og derefter kalder passende funktioner i forhold til brugerens valg. */
-int editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
+   Tager input fra brugen og derefter kalder passende funktioner i forhold til brugerens valg. */
+team *editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
   int choice = -1;
   int sentinel = 0;
 
-    printEditMenu();
-
     while (choice != 0) {
+      printEditMenu();
       scanf(" %d", &choice);
 
       if (choice == 1) {
-        addTeams(fp, all_teams, number_of_teams, sentinel);
+        all_teams = addTeams(fp, all_teams, number_of_teams, sentinel);
         sentinel = 1;
-        printEditMenu();
       }
       else if (choice == 2) {
-        removeTeams(fp, all_teams, number_of_teams, sentinel);
+        all_teams = removeTeams(fp, all_teams, number_of_teams, sentinel);
         sentinel = 1;
-        printEditMenu();
       }
       else if (choice == 3) {
-        return 0;
+        return all_teams;
       }
       else if (choice == 0) {
-        return 1;
+        if (all_teams != NULL) {
+          free(all_teams);
+        }
+        return NULL;
       }
       else {
         printf("Ugyldigt svar. Proev igen.\n");
-        printEditMenu();
       }
     }
 
-  return 0;
+  return NULL;
 }
 
 /* Printer valgmulighederne for redigerings menuen. */

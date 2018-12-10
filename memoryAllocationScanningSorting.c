@@ -137,7 +137,7 @@ team *scanFileForTeams(FILE *fp, int number_of_teams) {
 
   rewind(fp);
 
-  all_teams = (team*) malloc (number_of_teams * sizeof(team));
+  all_teams = (team*) malloc(number_of_teams * sizeof(team));
 
   while (fgets(temp, MAX_LINE_LEN, fp) != NULL) {
     if (strlen(temp) > MIN_LINE_LEN) {                              /* Hvis har en bestemt størrelse, må den indeholde en kamp. */

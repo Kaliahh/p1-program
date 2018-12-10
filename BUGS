@@ -1,17 +1,1 @@
-Når der fjernes et hold, går tilbage til hovedmenuen, fjerner et hold igen -> segmentation default
-
-
-Når der tilføjes et hold, går tilbage til hovedmenuen, tilføjes endnu et hold, går tilbage til hovedmenuen, tilføjes et hold igen -> segmentation default
-
-
 Når holdene bliver printet ud med printTeams, bliver det sidste holds niveau lidt indrykket
-
-
-Når der tilføjes et hold, går tilbage til hovedmenuen, og der tilføjes et hold igen, printes det forkert ud
-
-
-Når man i det kørende program vælger at tilføje et hold, og så tilføje et hold igen, kommer der denne fejl:
-a.out: malloc.c:2401: sysmalloc: Assertion `(old_top == initial_top (av) && old_size == 0) || ((unsigned long) (old_size) >= MINSIZE && prev_inuse (old_top) && ((unsigned long) old_end & (pagesize - 1)) == 0)' failed.
-Aborted (core dumped)
-
-Det samme sker hvis man vælger at tilføje et hold, og så lave et nyt kampprogram, bare et andet sted.

@@ -18,7 +18,6 @@ int createNewTournament(void) {
   team *all_teams = NULL;
   char file_name[MAX_NAME_LEN];
 
-
   /* Prompter brugeren for antallet af baner, startidspunkt og filnavn */
   number_of_fields = promptForFields();
   starting_time = promptForTime();
@@ -36,7 +35,7 @@ int createNewTournament(void) {
 
   /* Udregner antallet af kampe og antallet af runder */
   number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
-  
+
   /* Tjekker om der skal bruges en ekstra runde, i det tilfælde hvor den sidste runde ikke er fyldt helt ud */
   if (number_of_matches % number_of_fields == 0) {
     number_of_rounds = (number_of_matches / number_of_fields);
@@ -124,6 +123,8 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
     }
   }
 
+  free(team_a);
+  free(team_b);
   return no_go_count;
 }
 
