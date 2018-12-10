@@ -36,7 +36,14 @@ int createNewTournament(void) {
 
   /* Udregner antallet af kampe og antallet af runder */
   number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
-  number_of_rounds = (number_of_matches / number_of_fields) + 10;
+  
+  /* Tjekker om der skal bruges en ekstra runde, i det tilfælde hvor den sidste runde ikke er fyldt helt ud */
+  if (number_of_matches % number_of_fields == 0) {
+    number_of_rounds = (number_of_matches / number_of_fields);
+  }
+  else {
+    number_of_rounds = (number_of_matches / number_of_fields) + 1;
+  }
 
   /* Allokerer plads til teams arrayet og matches arrayet */
   all_teams = allocateMemoryTeams(number_of_teams);
