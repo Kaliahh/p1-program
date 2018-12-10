@@ -83,32 +83,45 @@ void printMainMenu(void) {
 Tager input fra brugen og derefter kalder passende funktioner i forhold til brugerens valg. */
 int editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
   int choice = -1;
+  int sentinel = 0;
 
     printEditMenu();
-    scanf(" %d", &choice);
 
-    if (choice == 1){
-      addTeams(fp, all_teams, number_of_teams);
+    while (choice != 0) {
+      scanf(" %d", &choice);
+
+      if (choice == 1) {
+        addTeams(fp, all_teams, number_of_teams, sentinel);
+        sentinel = 1;
+        printEditMenu();
+      }
+      else if (choice == 2) {
+        removeTeams(fp, all_teams, number_of_teams, sentinel);
+        sentinel = 1;
+        printEditMenu();
+      }
+      else if (choice == 3) {
+        return 0;
+      }
+      else if (choice == 0) {
+        return 1;
+      }
+      else {
+        printf("Ugyldigt svar. Proev igen.\n");
+        printEditMenu();
+      }
     }
-    else if (choice == 2){
-      removeTeams(fp, all_teams, number_of_teams);
-    }
-    else if (choice == 0){
-      return 0;
-    }
-    else {
-      printf("Ugyldigt svar. Proev igen.\n");
-      editMenu(fp, all_teams, number_of_teams);
-    }
+
   return 0;
 }
 
-/* Printer valgmulighederne for edit menu. */
-void printEditMenu(void){
+/* Printer valgmulighederne for redigerings menuen. */
+void printEditMenu(void) {
   printf("######################  REDIGER  ######################\n\n");
   printf("Hvad vil du gerne aendre?\n");
   printf("[1] Tilføj nyt hold\n"
          "[2] Slet eksisterende hold\n"
+         "[3] Lav nyt kampprogram\n"
          "[0] Gaa til hovedmenuen\n>> ");
 }
 
