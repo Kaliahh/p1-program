@@ -127,12 +127,14 @@ void fillArray(FILE *fp, team *all_teams, const char *file_name, const int numbe
 
 /* Scanner et kampprogram, returnerer et array af alle hold. */
 team *scanFileForTeams(FILE *fp, int number_of_teams) {
-  int scanres = 0, i = 0;
+  int scanres = 0;
+  int i = 0;
   char temp[MAX_LINE_LEN];
   char temp_teams[MAX_LINE_LEN];
-  match temp_match;
-  team temp_team_a, temp_team_b;
   char level;
+  match temp_match;
+  team temp_team_a;
+  team temp_team_b;
   team *all_teams = NULL;
 
   rewind(fp);
@@ -140,12 +142,19 @@ team *scanFileForTeams(FILE *fp, int number_of_teams) {
   all_teams = (team*) malloc(number_of_teams * sizeof(team));
 
   while (fgets(temp, MAX_LINE_LEN, fp) != NULL) {
-    if (strlen(temp) > MIN_LINE_LEN) {                              /* Hvis har en bestemt størrelse, må den indeholde en kamp. */
+
+    if (i == number_of_teams - 1) {
+      return all_teams;
+    }
+
+    else if (strlen(temp) > MIN_LINE_LEN) {                                          /* Hvis har en bestemt størrelse, må den indeholde en kamp. */
       scanres = sscanf(temp, " Bane %*d | %c | %[a-zA-Z0-9æøåÆØÅ ] ", &level, temp_teams);
       if (scanres != 2) {
         perror("Error scanning matches");
       }
       temp_match.level = getLevel(level);
+
+      printf("%d\n", i);
 
       sgetTeams(&temp_match, temp_teams);
       /* Kopier navne og niveau fra kampen, til holdene */
@@ -159,11 +168,13 @@ team *scanFileForTeams(FILE *fp, int number_of_teams) {
       if (doesTeamExist(temp_team_a, all_teams, i) == 0) {
         strcpy(all_teams[i].team, temp_team_a.team);
         all_teams[i].level = temp_team_a.level;
+        printf("%s\n", all_teams[i].team);
         i++;
       }
       if (doesTeamExist(temp_team_b, all_teams, i) == 0) {
         strcpy(all_teams[i].team, temp_team_b.team);
         all_teams[i].level = temp_team_b.level;
+        printf("%s\n", all_teams[i].team);
         i++;
       }
     }
@@ -175,22 +186,26 @@ team *scanFileForTeams(FILE *fp, int number_of_teams) {
 
 /* Læser og returnerer antallet af hold i en given fil. */
 int getNumberOfTeamsTournament(FILE *fp) {
-  int number_of_matches;
+  int number_of_teams = 0;
+  int number_of_matches = 0;
+
   number_of_matches = getNumberOfMatches(fp);
-  /* Tidligere: (number_of_matches - 1) / 3
-     Nu: */
-  return number_of_matches / 3; /* Forklar udregningen. */
+
+  number_of_teams = number_of_matches / 3; /* Forklar udregningen. */
+
+  return number_of_teams;
 }
 
 /* Chekker om et givent team allerede er indsat i et givent array. */
 int doesTeamExist(team temp_team, team *all_teams, const int index) {
-  int j = 0, exists = 0;
-  for (j = 0; j < index && exists == 0; j++) {
-    if (strcmp(temp_team.team, all_teams[j].team) == 0) {
-      exists++;
+  int i = 0;
+
+  for (i = 0; i < index; i++) {
+    if (strcmp(temp_team.team, all_teams[i].team) == 0) {
+      return 1;
     }
   }
-  return exists;
+  return 0;
 }
 
 /* Tæller og returnerer antallet af kampe i en given fil. */
@@ -212,14 +227,16 @@ int getNumberOfMatches(FILE *fp) {
    og assigner de enkelte holdnavne, til holdene i en given match */
 void sgetTeams(match* match, char* teams) {
   int sentinel = 0;
-  int length = strlen(teams), i = 0;
+  int length = strlen(teams);
+  int i = 0;
+
   while (sentinel == 0) {
-    if (teams[i] == 'v') {                                                /* Hvis der er et 'v'. */
-      if (teams[i-1] == ' ' && teams[i+1] == 's' && teams[i+2] == ' ') {  /* Check om det er en del af " vs ". */
-        strncpy((*match).team_a.team, teams, i - 1);                      /* Kopier første team navn, uden sidste mellemrum. */
-        (*match).team_a.team[i - 1] = '\0';                               /* Definer enden af strengen. */
-        strncpy((*match).team_b.team, teams + (i + 3), length - (i+2));   /* Kopier det andet team navn. */
-        (*match).team_b.team[length - (i+1)] = '\0';                      /* Definer enden af strengen. */
+    if (teams[i] == 'v') {                                                      /* Hvis der er et 'v'. */
+      if (teams[i-1] == ' ' && teams[i+1] == 's' && teams[i + 2] == ' ') {      /* Check om det er en del af " vs ". */
+        strncpy((*match).team_a.team, teams, i - 1);                            /* Kopier første team navn, uden sidste mellemrum. */
+        (*match).team_a.team[i - 1] = '\0';                                     /* Definer enden af strengen. */
+        strncpy((*match).team_b.team, teams + (i + 3), length - (i + 2));       /* Kopier det andet team navn. */
+        (*match).team_b.team[length - (i + 1)] = '\0';                          /* Definer enden af strengen. */
         sentinel = 1;
       }
     }
@@ -231,6 +248,7 @@ void sgetTeams(match* match, char* teams) {
 int getStartingTime(FILE *fp) {
   int hours = 0;
   int minutes = 0;
+
   rewind(fp);
 
   fscanf(fp, "Runde 1: %d:%d", &hours, &minutes);
@@ -241,12 +259,12 @@ int getStartingTime(FILE *fp) {
 
 /* Finder og returnerer antallet af baner der bruges i et givent kampprogram. */
 int getNumberOfFields(FILE *fp) {
-  char line[MAX_LINE_LEN];                                                               /* Navnet på en bane fylder 7 tegn, hvis der er under 10 baner. */
+  char line[MAX_LINE_LEN];                                                      /* Navnet på en bane fylder 7 tegn, hvis der er under 10 baner. */
   char test[7];                                                                 /* Strengen der testes om det er en bane. */
   int number_of_fields = 0, done = 0, field_number = 0;
   rewind(fp);
 
-  while (fgets (line, MAX_LINE_LEN, fp) != NULL && !done) {                              /* Læser indtil flag (done) er sand. */
+  while (fgets (line, MAX_LINE_LEN, fp) != NULL && !done) {                     /* Læser indtil flag (done) er sand. */
     sscanf(line, " %s %d ", test, &field_number);
     if (strcmp(test, "Bane") == 0 && field_number == number_of_fields + 1) {    /* Hvis der står "bane" betyder det at der er en kamp på linjen. */
       number_of_fields++;

@@ -16,6 +16,7 @@ int updateTournament(FILE *fp) {
 
   /* Finder antallet af hold. */
   number_of_teams = getNumberOfTeamsTournament(fp);
+  printf("%d\n", number_of_teams);
 
   /* Prompter brugeren for ændringer der skal laves */
   all_teams = editMenu(fp, all_teams, &number_of_teams);
@@ -58,7 +59,6 @@ team *addTeams (FILE *fp, team *all_teams, int *number_of_teams, const int senti
   printf("Antal hold der ønskes at tilføje\n>> ");
   scanf(" %d", &number_of_new_teams);
 
-  printf("Hey!\n");
   /* Allokere plads til array med nye hold. */
   new_teams = allocateMemoryTeams(number_of_new_teams);
 
@@ -70,18 +70,21 @@ team *addTeams (FILE *fp, team *all_teams, int *number_of_teams, const int senti
     all_teams = scanFileForTeams(fp, *number_of_teams);
   }
   else if (sentinel == 1) {
+    all_teams = updateTeams(all_teams, *number_of_teams);
+    /*
     all_teams = (team *) realloc(all_teams, *number_of_teams * sizeof(team));
     if (all_teams == NULL) {
       printf("Fejl ved pladsallokering\n");
       exit(EXIT_FAILURE);
     }
+    */
   }
 
   /* Printer de nuværende hold ud til terminalen. */
   printTeams(all_teams, *number_of_teams - number_of_new_teams);
 
   /* Prompter og scanner nye hold ind. */
-  getNewTeams(number_of_new_teams, new_teams);
+  getNewTeams(number_of_new_teams, *number_of_teams, new_teams, all_teams);
 
   /* Sætter nye hold ind i all_teams arrayet. */
   copyTeams(new_teams, all_teams, number_of_new_teams, *number_of_teams);
@@ -105,7 +108,7 @@ team *updateTeams(team *all_teams, int number_of_teams) {
 }
 
 /* Prompter og scanner for nye hold som input for brugeren. */
-void getNewTeams(int number_of_new_teams, team *new_teams) {
+void getNewTeams(int number_of_new_teams, int number_of_teams, team *new_teams, team *all_teams) {
   int team_index = 0;
   char level = '\0';
 
@@ -113,6 +116,12 @@ void getNewTeams(int number_of_new_teams, team *new_teams) {
   for (team_index = 0; team_index < number_of_new_teams; team_index++) {
     /* Prompter for holdnavn. */
     getTeamNames(new_teams[team_index].team, team_index);
+
+    /* Chekker om holdet allerede er i listen */
+    while (checkTeam(new_teams[team_index].team, all_teams, number_of_teams) == 1) {
+      printf("Holdet \"%s\" er allerede paa listen\n", new_teams[team_index].team);
+      getTeamNames(new_teams[team_index].team, team_index);
+    }
 
     /* Prompter for level. */
     printf("Indtast det %d. holds niveau (N, A, B eller C)\n>> ", team_index + 1);
@@ -129,6 +138,19 @@ void getNewTeams(int number_of_new_teams, team *new_teams) {
       new_teams[team_index].level = getLevel(level);
     }
   }
+}
+
+/* Checker om et givent hold allerede er i listen af alle hold */
+int checkTeam(char *temp_team, team *all_teams, int number_of_teams) {
+  int team_index = 0;
+
+  for (team_index = 0; team_index < number_of_teams; team_index++) {
+    if (strcmp(all_teams[team_index].team, temp_team) == 0) {
+      return 1;
+    }
+  }
+
+  return 0;
 }
 
 /* Prompt og scan nye holdnavne. */

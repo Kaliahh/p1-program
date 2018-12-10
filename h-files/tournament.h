@@ -23,8 +23,9 @@ int updateTournament(FILE *);
 
 team *addTeams (FILE *, team *, int *, const int);
 team *removeTeams(FILE *, team *, int *, const int);
-void getNewTeams(int , team *);
+void getNewTeams(int , int, team *, team *);
 void getTeamNames(char *, int );
 void copyTeams(const team *, team *, const int , const int );
 team *updateTeams(team *, int);
 void deleteTeams(const team *, team *, const int , const int);
+int checkTeam(char *, team *, int);
