@@ -61,7 +61,7 @@ int createNewTournament(void) {
       all_teams[i].games = 0;
     }
 
-    no_go_count = createTournament(all_teams, number_of_teams, tournament, number_of_matches, number_of_fields);
+    no_go_count = createTournament(all_teams, number_of_teams, tournament, number_of_matches, number_of_fields, number_of_rounds);
   }
 
   /* Printer det færdige kampprogram, enten til en fil eller til terminalen */
@@ -77,10 +77,9 @@ int createNewTournament(void) {
 }
 
 /* Laver en turneringsplan, som returnerer antallet af gange planen bryder med reglerne. */
-int createTournament(team *all_teams, const int number_of_teams, match *tournament, const int number_of_matches, const int number_of_fields) {
+int createTournament(team *all_teams, const int number_of_teams, match *tournament, const int number_of_matches, const int number_of_fields, const int number_of_rounds) {
   int i = 0;
   int round_count = 0;
-  int number_of_rounds = 0;
   int end_of_round = 0;
   int start_of_round = 0;
   int start_of_next_round = 0;
@@ -91,8 +90,6 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
 
   team_a = (int *) malloc (number_of_fields * sizeof(int));
   team_b = (int *) malloc (number_of_fields * sizeof(int));
-
-  number_of_rounds = number_of_matches / number_of_fields;
 
   /* Kører igennem hver runde. */
   for (round_count = 0; round_count < number_of_rounds; round_count++) {
@@ -132,7 +129,7 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
 int createRound(match *tournament, team *all_teams, int *team_a,
                 int *team_b, const int start_of_next_round, const int start_of_round,
                 const int number_of_teams, const int number_of_fields) {
-                  
+
   int tournament_index = 0;
   int i = 0;
 
@@ -153,7 +150,7 @@ int findFirstTeam(const int tournament_index, const int number_of_fields, const 
   while (sentinel_count < CHECK_NUM) {
     team_index = rand() % number_of_teams;
 
-    if (all_teams[team_index].games < 6 && all_teams[team_index].level < 4) {
+    if (all_teams[team_index].games < GAMES_PR_TEAM && all_teams[team_index].level < EMPTY) {
       tournament[tournament_index].team_a = all_teams[team_index];
       tournament[tournament_index].level = all_teams[team_index].level;
       tournament[tournament_index].field = tournament_index % number_of_fields;

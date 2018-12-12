@@ -3,7 +3,7 @@ int createNewTournament(void);
 
 /*void noget(match *, team *, const int, const int, const int);
 void copyTournament(match *, const int, const match *);*/
-int createTournament(team *, const int, match *, const int, const int);
+int createTournament(team *, const int, match *, const int, const int, const int);
 int evaluateRound(const match *, const int, const int);
 int isAlreadyInRound(const match *, const int, const int);
 int isInPreviousRound(const match *, const int, const int);
