@@ -69,10 +69,10 @@ int mainMenu(void) {
 /* Printer valgmulighederne for hovedmenuen. */
 void printMainMenu(void) {
   printf("#####################  HOVEDMENU  #####################\n\n");
-  printf("[1] Lav et nyt kampprogram\n");
-  printf("[2] Rediger et eksisterende kampprogram (!)\n");
-  printf("[3] Lav skabelon til liste af holdnavne (!)\n");
-  printf("[0] Afslut\n>> ");
+  printf("[1] Lav et nyt kampprogram\n"
+         "[2] Rediger et eksisterende kampprogram\n"
+         "[3] Lav skabelon til liste af holdnavne (!)\n"
+         "[0] Afslut\n>> ");
 }
 
 /* Redigerings menu over hvilke muligheder der kan vælges, til at redigere et eksisterende kampprogram.

@@ -1,5 +1,6 @@
 # include "../p1-program/h-files/main.h"
 # include "../p1-program/h-files/memoryAllocationScanningSorting.h"
+# include "../p1-program/h-files/tournament.h"
 # include "../p1-program/h-files/printPrompt.h"
 
 
