@@ -1,9 +1,9 @@
 /* Prototyper */
 int mainMenu(void);
-void printMainMenu(void);
+void showMainMenu(void);
 
 team *editMenu(FILE *, team *, int *);
-void printEditMenu(void);
+void showEditMenu(void);
 
 int printingMenu(const match *, const int, const int, const int);
-void showPrintOptions(void);
+void showPrintingMenu(void);

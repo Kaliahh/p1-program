@@ -32,7 +32,7 @@ int mainMenu(void) {
   printf("                      Working title\n\n"              );
 
   while (choice != 0) {
-    printMainMenu();
+    showMainMenu();
     scanf(" %d", &choice);
     /* Laver en ny turneringsplan fra bunden */
     if (choice == 1) {
@@ -67,7 +67,7 @@ int mainMenu(void) {
 }
 
 /* Printer valgmulighederne for hovedmenuen. */
-void printMainMenu(void) {
+void showMainMenu(void) {
   printf("#####################  HOVEDMENU  #####################\n\n");
   printf("[1] Lav et nyt kampprogram\n"
          "[2] Rediger et eksisterende kampprogram\n"
@@ -82,8 +82,7 @@ team *editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
   int sentinel = 0;
 
     while (choice != 0) {
-      /* printf("%d\n", *number_of_teams); */
-      printEditMenu();
+      showEditMenu();
       scanf(" %d", &choice);
 
       if (choice == 1) {
@@ -112,7 +111,7 @@ team *editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
 }
 
 /* Printer valgmulighederne for redigerings menuen. */
-void printEditMenu(void) {
+void showEditMenu(void) {
   printf("######################  REDIGER  ######################\n\n");
   printf("Hvad vil du gerne aendre?\n");
   printf("[1] Tilføj nyt hold\n"
@@ -128,7 +127,7 @@ int printingMenu(const match *tournament, const int starting_time, const int num
   int choice = -1;
 
   while (choice != 0) {
-    showPrintOptions();
+    showPrintingMenu();
     scanf(" %d", &choice);
 
     if (choice == 1) {  /* Se i terminalen */
@@ -155,7 +154,7 @@ int printingMenu(const match *tournament, const int starting_time, const int num
 }
 
 /* Viser valgmuligheder ved print i terminalen */
-void showPrintOptions(void) {
+void showPrintingMenu(void) {
   printf("\n#####################    PRINT    #####################\n\n");
   printf("[1] Se kampprogram i terminalen \n[2] Gem kampprogram\n[0] Gå til hovedmenuen\n>> ");
 }

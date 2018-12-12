@@ -21,8 +21,6 @@ int updateTournament(FILE *fp) {
   /* Prompter brugeren for ændringer der skal laves */
   all_teams = editMenu(fp, all_teams, &number_of_teams);
 
-  /* printf("n: %d\n", number_of_teams); */
-
   /* Checker om der blev lavet ændringer. Hvis ikke, returnerer funktionen */
   if (all_teams == NULL) {
     return 1;
