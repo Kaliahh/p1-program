@@ -21,5 +21,5 @@ team *updateTeams(const team *, const int);
 void getNewTeams(int , int, const team *, team *);
 int checkTeam(const char *, const team *, const int);
 void getTeamNames(const int, char *);
-void copyTeams(const team *, team *, const int, const int );
+void copyTeams(const team *, const int, const int, team *);
 void deleteTeams(const team *, const int, const int, team *);

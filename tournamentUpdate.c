@@ -78,7 +78,7 @@ team *addTeams (FILE *fp, const int sentinel, team *all_teams, int *number_of_te
   getNewTeams(number_of_new_teams, *number_of_teams, all_teams, new_teams);
 
   /* Sætter nye hold ind i all_teams arrayet. */
-  copyTeams(new_teams, all_teams, number_of_new_teams, *number_of_teams);
+  copyTeams(new_teams, number_of_new_teams, *number_of_teams, all_teams);
 
   free(new_teams);
   return all_teams;
@@ -182,7 +182,7 @@ void getTeamNames(const int team_index, char *team) {
 }
 
 /* Tilføjer nye hold til arrayet af eksisterende hold. */
-void copyTeams(const team *new_teams, team *all_teams, const int number_of_new_teams, const int number_of_teams) {
+void copyTeams(const team *new_teams, const int number_of_new_teams, const int number_of_teams, team *all_teams) {
   int i = 0;
   int j = 0;
 
