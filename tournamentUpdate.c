@@ -69,13 +69,6 @@ team *addTeams (FILE *fp, const int sentinel, team *all_teams, int *number_of_te
   }
   else if (sentinel == 1) {
     all_teams = updateTeams(all_teams, *number_of_teams);
-    /*
-    all_teams = (team *) realloc(all_teams, *number_of_teams * sizeof(team));
-    if (all_teams == NULL) {
-      printf("Fejl ved pladsallokering\n");
-      exit(EXIT_FAILURE);
-    }
-    */
   }
 
   /* Printer de nuværende hold ud til terminalen. */

@@ -136,9 +136,11 @@ team *scanFileForTeams(FILE *fp, const int number_of_teams) {
 
     else if (strlen(temp) > MIN_LINE_LEN) {                                          /* Hvis har en bestemt størrelse, må den indeholde en kamp. */
       scanres = sscanf(temp, " Bane %*d | %c | %[a-zA-Z0-9æøåÆØÅ ] ", &level, temp_teams);
+
       if (scanres != 2) {
         perror("Error scanning matches");
       }
+
       temp_match.level = getLevel(level);
 
       printf("%d\n", i);
@@ -155,13 +157,11 @@ team *scanFileForTeams(FILE *fp, const int number_of_teams) {
       if (doesTeamExist(temp_team_a, all_teams, i) == 0) {
         strcpy(all_teams[i].team, temp_team_a.team);
         all_teams[i].level = temp_team_a.level;
-        printf("%s\n", all_teams[i].team);
         i++;
       }
       if (doesTeamExist(temp_team_b, all_teams, i) == 0) {
         strcpy(all_teams[i].team, temp_team_b.team);
         all_teams[i].level = temp_team_b.level;
-        printf("%s\n", all_teams[i].team);
         i++;
       }
     }
