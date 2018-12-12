@@ -36,19 +36,14 @@ int createNewTournament(void) {
   /* Udregner antallet af kampe og antallet af runder */
   number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
 
-  /* Tjekker om der skal bruges en ekstra runde, i det tilfælde hvor den sidste runde ikke er fyldt helt ud */
-  if (number_of_matches % number_of_fields == 0) {
-    number_of_rounds = (number_of_matches / number_of_fields);
-  }
-  else {
-    number_of_rounds = (number_of_matches / number_of_fields) + 1;
-  }
+  /* Finder antallet af runder */
+  number_of_rounds = getNumberOfRounds(number_of_matches, number_of_fields);
 
   /* Allokerer plads til teams arrayet og matches arrayet */
   all_teams = allocateMemoryTeams(number_of_teams);
 
   /* Fylder teams arrayet med hold */
-  fillArray(fp, all_teams, file_name, number_of_teams);
+  fillArray(fp, file_name, number_of_teams, all_teams);
   /* Sorterer teams arrayet efter niveau */
   /*sortArrayByLevel(all_teams, number_of_teams);*/
 
@@ -61,11 +56,11 @@ int createNewTournament(void) {
       all_teams[i].games = 0;
     }
 
-    no_go_count = createTournament(all_teams, number_of_teams, tournament, number_of_matches, number_of_fields, number_of_rounds);
+    no_go_count = createTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, all_teams, tournament);
   }
 
   /* Printer det færdige kampprogram, enten til en fil eller til terminalen */
-  printProgram(tournament, starting_time, number_of_rounds, number_of_fields);
+  printingMenu(tournament, starting_time, number_of_rounds, number_of_fields);
 
   /* Frigør den hukommelse der er allokeret til de forskellige arrays */
   free(all_teams);
@@ -77,7 +72,7 @@ int createNewTournament(void) {
 }
 
 /* Laver en turneringsplan, som returnerer antallet af gange planen bryder med reglerne. */
-int createTournament(team *all_teams, const int number_of_teams, match *tournament, const int number_of_matches, const int number_of_fields, const int number_of_rounds) {
+int createTournament(const int number_of_teams, const int number_of_matches, const int number_of_fields, const int number_of_rounds, team *all_teams, match *tournament) {
   int i = 0;
   int round_count = 0;
   int end_of_round = 0;
@@ -96,7 +91,7 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
     start_of_round = round_count * number_of_fields;
     start_of_next_round = (round_count + 1) * number_of_fields;
 
-    end_of_round = createRound(tournament, all_teams, team_a, team_b, start_of_next_round, start_of_round, number_of_teams, number_of_fields);
+    end_of_round = createRound(start_of_next_round, start_of_round, number_of_teams, number_of_fields, team_a, team_b, all_teams, tournament);
 
     /* Tjekker om programmet overholder reglerne. */
     no_go_count = evaluateRound(tournament, end_of_round, number_of_fields);
@@ -126,9 +121,7 @@ int createTournament(team *all_teams, const int number_of_teams, match *tourname
 }
 
 /* Finder hold, som kan sammensættes i en kamp.  */
-int createRound(match *tournament, team *all_teams, int *team_a,
-                int *team_b, const int start_of_next_round, const int start_of_round,
-                const int number_of_teams, const int number_of_fields) {
+int createRound(const int start_of_next_round, const int start_of_round, const int number_of_teams, const int number_of_fields, int *team_a, int *team_b, team *all_teams, match *tournament) {
 
   int tournament_index = 0;
   int i = 0;
@@ -265,4 +258,24 @@ int compareTeams(const match *a, const match *b) {
   }
 
   return 0;
+}
+
+/* Finder antallet af runder
+   Tjekker om der skal bruges en ekstra runde,
+   i det tilfælde hvor den sidste runde ikke er fyldt helt ud */
+int getNumberOfRounds(const int number_of_matches, const int number_of_fields) {
+  if (number_of_matches % number_of_fields == 0) {
+    return (number_of_matches / number_of_fields);
+  }
+  else {
+    return (number_of_matches / number_of_fields) + 1;
+  }
+}
+
+/* Får en char, der er et niveau for et hold. Funktionen konverterer niveauet til heltal, og returner resultatet. */
+int getLevel(const char level) {
+  return (level == 'N') ? N :
+         (level == 'A') ? A :
+         (level == 'B') ? B :
+         (level == 'C') ? C : EMPTY;
 }

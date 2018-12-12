@@ -1,12 +1,9 @@
 /* Prototyper */
-void createTemplate(void);
+int printProgram(FILE *, const match *, const int, const int, const int);
+char translateToChar(const int);
 void printTeams(const team *, const int);
-int printToFile(FILE *, match *, int, int, int);
-int printProgram(match *, int, int, int);
-char translateToChar(int);
-int getLevel(const char);
+void createTemplate(void);
 int promptForFields(void);
 int promptForTime(void);
 void promptForFileName(char *);
-void showPrintOptions(void);
 void isFileOpen(FILE *);

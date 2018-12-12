@@ -74,7 +74,7 @@ int getNumberOfTeams(FILE *fp) {
 }
 
 /* Fylder et arrayet all_teams med holdnavne og niveau. */
-void fillArray(FILE *fp, team *all_teams, const char *file_name, const int number_of_teams) {
+void fillArray(FILE *fp, const char *file_name, const int number_of_teams, team *all_teams) {
   char level = ' ';
   int i, j, k;
 
@@ -126,7 +126,7 @@ void fillArray(FILE *fp, team *all_teams, const char *file_name, const int numbe
 
 
 /* Scanner et kampprogram, returnerer et array af alle hold. */
-team *scanFileForTeams(FILE *fp, int number_of_teams) {
+team *scanFileForTeams(FILE *fp, const int number_of_teams) {
   int scanres = 0;
   int i = 0;
   char temp[MAX_LINE_LEN];
@@ -143,7 +143,7 @@ team *scanFileForTeams(FILE *fp, int number_of_teams) {
 
   while (fgets(temp, MAX_LINE_LEN, fp) != NULL) {
 
-    if (i == number_of_teams - 1) {
+    if (i == number_of_teams) {
       return all_teams;
     }
 
@@ -156,7 +156,7 @@ team *scanFileForTeams(FILE *fp, int number_of_teams) {
 
       printf("%d\n", i);
 
-      sgetTeams(&temp_match, temp_teams);
+      sgetTeams(temp_teams, &temp_match);
       /* Kopier navne og niveau fra kampen, til holdene */
       temp_team_a = temp_match.team_a;
       temp_team_b = temp_match.team_b;
@@ -197,7 +197,7 @@ int getNumberOfTeamsTournament(FILE *fp) {
 }
 
 /* Chekker om et givent team allerede er indsat i et givent array. */
-int doesTeamExist(team temp_team, team *all_teams, const int index) {
+int doesTeamExist(const team temp_team, const team *all_teams, const int index) {
   int i = 0;
 
   for (i = 0; i < index; i++) {
@@ -225,7 +225,7 @@ int getNumberOfMatches(FILE *fp) {
 
 /* Deler en given string af formen "Hold_a vs Hold_b"
    og assigner de enkelte holdnavne, til holdene i en given match */
-void sgetTeams(match* match, char* teams) {
+void sgetTeams(const char* teams, match* match) {
   int sentinel = 0;
   int length = strlen(teams);
   int i = 0;

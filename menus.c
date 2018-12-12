@@ -82,15 +82,16 @@ team *editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
   int sentinel = 0;
 
     while (choice != 0) {
+      /* printf("%d\n", *number_of_teams); */
       printEditMenu();
       scanf(" %d", &choice);
 
       if (choice == 1) {
-        all_teams = addTeams(fp, all_teams, number_of_teams, sentinel);
+        all_teams = addTeams(fp, sentinel, all_teams, number_of_teams);
         sentinel = 1;
       }
       else if (choice == 2) {
-        all_teams = removeTeams(fp, all_teams, number_of_teams, sentinel);
+        all_teams = removeTeams(fp, sentinel, all_teams, number_of_teams);
         sentinel = 1;
       }
       else if (choice == 3) {
@@ -118,6 +119,45 @@ void printEditMenu(void) {
          "[2] Slet eksisterende hold\n"
          "[3] Lav nyt kampprogram\n"
          "[0] Gaa til hovedmenuen\n>> ");
+}
+
+/* Spørger brugeren om hvad der ønskes at gøre med turneringsplanen, og kalder relevante funktioner.
+   Parameterne er turneringen i form af en pointer til array af matches, en int med starttidspunkt for turneringen
+   en int med antallet af runder, og en int med antallet af baner */
+int printingMenu(const match *tournament, const int starting_time, const int number_of_rounds, const int number_of_fields) {
+  int choice = -1;
+
+  while (choice != 0) {
+    showPrintOptions();
+    scanf(" %d", &choice);
+
+    if (choice == 1) {  /* Se i terminalen */
+      printProgram(stdout, tournament, starting_time, number_of_rounds, number_of_fields);
+    }
+
+    else if (choice == 2) { /* Gem kampprogram */
+      FILE *fp;
+      fp = fopen("turneringsplan.txt", "w");
+      isFileOpen(fp);
+      printProgram(fp, tournament, starting_time, number_of_rounds, number_of_fields);
+      fclose(fp);
+    }
+
+    else if (choice == 0) { /* Gå til hovedmenu */
+      return 0;
+    }
+
+    else {
+      printf("Fejl ved indtastning. Tast 1 eller 2\n>> ");
+    }
+  }
+  return 0;
+}
+
+/* Viser valgmuligheder ved print i terminalen */
+void showPrintOptions(void) {
+  printf("\n#####################    PRINT    #####################\n\n");
+  printf("[1] Se kampprogram i terminalen \n[2] Gem kampprogram\n[0] Gå til hovedmenuen\n>> ");
 }
 
 
