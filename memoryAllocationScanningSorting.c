@@ -112,20 +112,6 @@ void fillArray(FILE *fp, const char *file_name, const int number_of_teams, team 
   rewind(fp);
 }
 
-/* Bruger qsort til at sortere arrayet af hold efter niveau. */
-/*void sortArrayByLevel(team *all_teams, const int number_of_teams) {
-  qsort(all_teams, number_of_teams, sizeof(team), levelComp);
-}
-*/
-/* Sammenligningsfunktion til qsort. Sammenligner to holds niveauer. */
-/*int levelComp(const void *a, const void*b) {
-  team *team_a = (team*) a;
-  team *team_b = (team*) b;
-
-  return team_a->level - team_b->level;
-}*/
-
-
 /* Scanner et kampprogram, returnerer et array af alle hold. */
 team *scanFileForTeams(FILE *fp, const int number_of_teams) {
   int scanres = 0;
@@ -276,3 +262,17 @@ int getNumberOfFields(FILE *fp) {
   }
   return number_of_fields;
 }
+
+/* Bruger qsort til at sortere arrayet af hold efter niveau. */
+/* void sortArrayByLevel(team *all_teams, const int number_of_teams) {
+  qsort(all_teams, number_of_teams, sizeof(team), levelComp);
+}
+*/
+
+/* Sammenligningsfunktion til qsort. Sammenligner to holds niveauer. */
+/* int levelComp(const void *a, const void*b) {
+  team *team_a = (team*) a;
+  team *team_b = (team*) b;
+
+  return team_a->level - team_b->level;
+}*/
