@@ -143,8 +143,6 @@ team *scanFileForTeams(FILE *fp, const int number_of_teams) {
 
       temp_match.level = getLevel(level);
 
-      printf("%d\n", i);
-
       sgetTeams(temp_teams, &temp_match);
       /* Kopier navne og niveau fra kampen, til holdene */
       temp_team_a = temp_match.team_a;
