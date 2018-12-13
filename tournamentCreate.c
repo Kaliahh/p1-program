@@ -24,7 +24,7 @@ int createNewTournament(void) {
   promptForFileName(file_name);
 
   fp = fopen(file_name, "r");
-  
+
   /* Check at filen er NULL */
   isFileOpen(fp);
 
@@ -167,7 +167,7 @@ int findSecondTeam(const int tournament_index, const int number_of_teams, team *
 
     if (strcmp(tournament[tournament_index].team_a.team, all_teams[team_index].team) != 0 &&
         all_teams[team_index].level == tournament[tournament_index].team_a.level &&
-        all_teams[team_index].games < 6) {
+        all_teams[team_index].games < GAMES_PR_TEAM) {
 
       all_teams[team_index].games++;
       tournament[tournament_index].team_b = all_teams[team_index];
