@@ -24,11 +24,9 @@ int createNewTournament(void) {
   promptForFileName(file_name);
 
   fp = fopen(file_name, "r");
-
-  if (fp == NULL) { /* Check at filen er NULL */
-    perror("Error opening file");
-    return -1;
-  }
+  
+  /* Check at filen er NULL */
+  isFileOpen(fp);
 
   /* Finder antallet af hold */
   number_of_teams = getNumberOfTeams(fp);
