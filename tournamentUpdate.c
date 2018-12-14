@@ -16,7 +16,6 @@ int updateTournament(FILE *fp) {
 
   /* Finder antallet af hold. */
   number_of_teams = getNumberOfTeamsTournament(fp);
-  printf("%d\n", number_of_teams);
 
   /* Prompter brugeren for ændringer der skal laves */
   all_teams = editMenu(fp, all_teams, &number_of_teams);
