@@ -29,7 +29,7 @@ int updateTournament(FILE *fp) {
   number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
 
   /* Opdaterer kampprogrammet. */
-  tournament = allocateMemoryTournament(number_of_matches);
+  tournament = allocateMemoryMatch(number_of_matches);
   number_of_fields = getNumberOfFields(fp);
   number_of_rounds = getNumberOfRounds(number_of_matches, number_of_fields);
   createTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, all_teams, tournament);
@@ -45,16 +45,6 @@ int updateTournament(FILE *fp) {
   /* Sætter filpointeren tilbage til starten af filen */
   rewind(fp);
   return 0;
-}
-
-/* Prompter og scanner for antal nye hold. */
-int promptForNumberOfTeams(const int modifier) {
-  int number_of_mod_teams = 0;
-
-  printf("Antal hold der ønskes at %s\n>> ", (modifier == ADD) ? "tilføjes" : "fjernes");
-  scanf(" %d", &number_of_mod_teams);
-
-  return number_of_mod_teams;
 }
 
 team *modifyTeams(FILE *fp, const int sentinel, const int modifier, team *all_teams, int *number_of_teams, void (*f)(const team *, const int, const int, team *)) {
