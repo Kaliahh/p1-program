@@ -69,10 +69,8 @@ void printTeams(const team *all_teams, const int number_of_teams) {
 
   printf("\nHold: \n- - - - - - - - - - - - - -\n");
   for (team_index = 0; team_index < number_of_teams; team_index++) {
-    if (all_teams[team_index].level > EMPTY) {
-      level = translateToChar(all_teams[team_index].level);
-      printf("%-20s | %c\n", all_teams[team_index].team, level);
-    }
+    level = translateToChar(all_teams[team_index].level);
+    printf("%2d | %-20s | %c\n", team_index + 1, all_teams[team_index].team, level);
   }
   printf("\n");
 }

@@ -249,10 +249,18 @@ void sortArrayByLevel(team *all_teams, const int number_of_teams) {
   qsort(all_teams, number_of_teams, sizeof(team), levelComp);
 }
 
-/* Sammenligningsfunktion til qsort. Sammenligner to holds niveauer. */
+/* Sammenligningsfunktion til qsort */
 int levelComp(const void *a, const void*b) {
   team *team_a = (team*) a;
   team *team_b = (team*) b;
 
-  return team_b->level - team_a->level;
+  if (team_a->level == EMPTY) {
+    return 1;
+  }
+
+  else if (team_b->level == EMPTY) {
+    return -1;
+  }
+
+  return 0;
 }
