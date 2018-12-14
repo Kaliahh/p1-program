@@ -2,7 +2,7 @@
 team* allocateMemoryTeams(const int);
 match* allocateMemoryTournament(const int);
 int getNumberOfTeams(FILE *);
-void fillArray(FILE *, const char *, const int, team *);
+void scanTeamFile(FILE *, const char *, const int, team *);
 void sortArrayByLevel(team *, const int);
 int levelComp(const void *a, const void*b);
 

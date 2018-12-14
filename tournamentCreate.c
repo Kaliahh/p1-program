@@ -38,10 +38,10 @@ int createNewTournament(void) {
   number_of_rounds = getNumberOfRounds(number_of_matches, number_of_fields);
 
   /* Allokerer plads til teams arrayet og matches arrayet */
-  all_teams = allocateMemoryTeams(number_of_teams);
+  all_teams = (team*) calloc(number_of_team, sizeof(team));
 
   /* Fylder teams arrayet med hold */
-  fillArray(fp, file_name, number_of_teams, all_teams);
+  scanTeamFile(fp, file_name, number_of_teams, all_teams);
   /* Sorterer teams arrayet efter niveau */
   /*sortArrayByLevel(all_teams, number_of_teams);*/
 

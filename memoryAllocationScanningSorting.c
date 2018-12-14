@@ -75,22 +75,9 @@ int getNumberOfTeams(FILE *fp) {
 }
 
 /* Fylder et arrayet all_teams med holdnavne og niveau. */
-void fillArray(FILE *fp, const char *file_name, const int number_of_teams, team *all_teams) {
+void scanTeamFile(FILE *fp, const char *file_name, const int number_of_teams, team *all_teams) {
   char level = ' ';
   int i, j, k;
-
-  /* Fylder alle teams med nul-tegn,
-     sætter alle niveauer til EMPTY
-     og antallet af spillede kampe til 0. */
-  for (k = 0; k < number_of_teams; k++) {
-    all_teams[k].level = EMPTY;
-    all_teams[k].games = 0;
-
-    for (j = 0; j < MAX_NAME_LEN; j++) {
-      all_teams[k].team[j] = '\0';
-    }
-  }
-
 
   /* Gennemgår filen med holdnavne, og kopierer holdnavn og niveau over på de rigtige pladser i et array af structs. */
   for (i = 0; i < number_of_teams; i++) {
