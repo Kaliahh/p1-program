@@ -5,6 +5,25 @@
 # include "../p1-program/h-files/menus.h"
 # include <time.h>
 
+/*
+  printf("   _____ _                            _____  _             _                                \n");
+  printf("  / ____| |                          |  __ \\| |           | |                               \n");
+  printf(" | (___ | |_ __ ______   ___ __   ___| |__) | | __ _ _ __ | | __ ____  __ _  __ _  ___ _ __ \n");
+  printf("  \\___ \\| __/ _`  _ \\ \\ / / '_ \\ / _ \\  ___/| |/ _` | '_ \\| |/ _`  _ \\/ _` |/ _` |/ _ \\ '__|\n");
+  printf("  ____) | || (_|  __/\\ V /| | | |  __/ |    | | (_| | | | | | (_|  __/ (_| | (_| |  __/ |   \n");
+  printf(" |_____/ \\__\\__,____| \\_/ |_| |_|\\___|_|    |_|\\__,_|_| |_|_|\\__,____|\\__, |\\__, |\\___|_|   \n");
+  printf("                                                                       __/ | __/ |          \n");
+  printf("                   Til Kidzliga Floorball                             |___/ |___/           \n\n");
+*/
+
+
+
+  /*printf("           ______ ___   ___  ___   ___   ___ \\n"      );
+  printf("          /_  __// _ \\ |_  |/ _ \\ / _ \\ / _ \\n"  );
+  printf("           / /  / ___// __// // // // // // /\n"      );
+  printf("          /_/  /_/   /____/\\___/ \\___/ \\___/\n"    );
+  printf("                      Working title\n\n"              );*/
+
 /* Tilføjer nye hold til all_teams arrayet. */
 team *addTeams(FILE *fp, const int sentinel, team *all_teams, int *number_of_teams) {
   team *new_teams = NULL;
