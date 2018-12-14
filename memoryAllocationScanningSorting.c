@@ -77,7 +77,7 @@ int getNumberOfTeams(FILE *fp) {
 /* Fylder et arrayet all_teams med holdnavne og niveau. */
 void scanTeamFile(FILE *fp, const char *file_name, const int number_of_teams, team *all_teams) {
   char level = ' ';
-  int i, j, k;
+  int i;
 
   /* Gennemgår filen med holdnavne, og kopierer holdnavn og niveau over på de rigtige pladser i et array af structs. */
   for (i = 0; i < number_of_teams; i++) {

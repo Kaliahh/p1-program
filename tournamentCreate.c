@@ -38,7 +38,7 @@ int createNewTournament(void) {
   number_of_rounds = getNumberOfRounds(number_of_matches, number_of_fields);
 
   /* Allokerer plads til teams arrayet og matches arrayet */
-  all_teams = (team*) calloc(number_of_team, sizeof(team));
+  all_teams = (team*) calloc(number_of_teams, sizeof(team));
 
   /* Fylder teams arrayet med hold */
   scanTeamFile(fp, file_name, number_of_teams, all_teams);
