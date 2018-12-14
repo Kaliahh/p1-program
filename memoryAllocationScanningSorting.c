@@ -193,18 +193,18 @@ int getNumberOfMatches(FILE *fp) {
 
 /* Deler en given string af formen "Hold_a vs Hold_b"
    og assigner de enkelte holdnavne, til holdene i en given match */
-void sgetTeams(const char* teams, match* match) {
+void sgetTeams(const char *teams, match *match) {
   int sentinel = 0;
   int length = strlen(teams);
   int i = 0;
 
   while (sentinel == 0) {
     if (teams[i] == 'v') {                                                      /* Hvis der er et 'v'. */
-      if (teams[i-1] == ' ' && teams[i+1] == 's' && teams[i + 2] == ' ') {      /* Check om det er en del af " vs ". */
-        strncpy((*match).team_a.team, teams, i - 1);                            /* Kopier første team navn, uden sidste mellemrum. */
-        (*match).team_a.team[i - 1] = '\0';                                     /* Definer enden af strengen. */
-        strncpy((*match).team_b.team, teams + (i + 3), length - (i + 2));       /* Kopier det andet team navn. */
-        (*match).team_b.team[length - (i + 1)] = '\0';                          /* Definer enden af strengen. */
+      if (teams[i - 1] == ' ' && teams[i + 1] == 's' && teams[i + 2] == ' ') {      /* Check om det er en del af " vs ". */
+        strncpy(match->team_a.team, teams, i - 1);                            /* Kopier første team navn, uden sidste mellemrum. */
+        match->team_a.team[i - 1] = '\0';                                     /* Definer enden af strengen. */
+        strncpy(match->team_b.team, teams + (i + 3), length - (i + 2));       /* Kopier det andet team navn. */
+        match->team_b.team[length - (i + 1)] = '\0';                          /* Definer enden af strengen. */
         sentinel = 1;
       }
     }
