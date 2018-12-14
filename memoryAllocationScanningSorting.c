@@ -126,25 +126,21 @@ team *scanFileForTeams(FILE *fp, const int number_of_teams) {
 
       temp_match.level = getLevel(level);
 
-      sgetTeams(temp_teams, &temp_match);
-      /* Kopier navne og niveau fra kampen, til holdene */
-      temp_team_a = temp_match.team_a;
-      temp_team_b = temp_match.team_b;
-      /* De enkelte teams i temp_match, har ikke korrekt niveau */
-      temp_team_a.level = temp_match.level;
-      temp_team_b.level = temp_match.level;
+      splitTeams(temp_teams, &temp_match);
 
       /* Indsæt hold, hvis de ikke er der allerede. */
-      if (doesTeamExist(temp_team_a, all_teams, i) == 0) {
-        strcpy(all_teams[i].team, temp_team_a.team);
-        all_teams[i].level = temp_team_a.level;
+      copyNonExistingTeam(all_teams, temp_match.team_a, temp_match.level, &i);
+      copyNonExistingTeam(all_teams, temp_match.team_b, temp_match.level, &i);
+      /*if (doesTeamExist(temp_match.team_a, all_teams, i) == 0) {
+        strcpy(all_teams[i].team, temp_match.team_a.team);
+        all_teams[i].level = temp_match.level;
         i++;
       }
-      if (doesTeamExist(temp_team_b, all_teams, i) == 0) {
-        strcpy(all_teams[i].team, temp_team_b.team);
-        all_teams[i].level = temp_team_b.level;
+      if (doesTeamExist(temp_match.team_b, all_teams, i) == 0) {
+        strcpy(all_teams[i].team, temp_match.team_b.team);
+        all_teams[i].level = temp_match.level;
         i++;
-      }
+      }*/
     }
   }
 
@@ -193,7 +189,7 @@ int getNumberOfMatches(FILE *fp) {
 
 /* Deler en given string af formen "Hold_a vs Hold_b"
    og assigner de enkelte holdnavne, til holdene i en given match */
-void sgetTeams(const char *teams, match *match) {
+void splitTeams(const char *teams, match *match) {
   int sentinel = 0;
   int length = strlen(teams);
   int i = 0;
@@ -209,6 +205,15 @@ void sgetTeams(const char *teams, match *match) {
       }
     }
     i++;
+  }
+}
+
+/* gør noget */
+void copyNonExistingTeam(team *all_teams, team temp_team, int level, int *i){
+  if (doesTeamExist(temp_team, all_teams, *i) == 0) {
+    strcpy(all_teams[*i].team, temp_team.team);
+    all_teams[*i].level = level;
+    (*i)++;
   }
 }
 

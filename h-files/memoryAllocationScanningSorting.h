@@ -11,6 +11,7 @@ team *scanFileForTeams(FILE *, const int);
 int getNumberOfTeamsTournament(FILE *);
 int doesTeamExist(const team, const team *, const int);
 int getNumberOfMatches(FILE *);
-void sgetTeams(const char *, match *);
+void splitTeams(const char *, match *);
+void copyNonExistingTeam(team *, team, int, int *);
 int getStartingTime(FILE *);
 int getNumberOfFields(FILE *);
