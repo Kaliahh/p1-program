@@ -35,3 +35,6 @@ typedef struct{
 
 /* Enumeration for niveauer */
 enum levels {EMPTY, N, A, B, C};
+
+/* Enumerationer for ændringer */
+enum modifiers {REMOVE, ADD};

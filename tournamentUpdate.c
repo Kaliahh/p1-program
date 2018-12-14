@@ -74,7 +74,7 @@ team *addTeams (FILE *fp, const int sentinel, team *all_teams, int *number_of_te
   printTeams(all_teams, *number_of_teams - number_of_new_teams);
 
   /* Prompter og scanner nye hold ind. */
-  getNewTeams(number_of_new_teams, *number_of_teams, all_teams, new_teams);
+  getTeams(number_of_new_teams, *number_of_teams, all_teams, "allerede", ADD, new_teams);
 
   /* Sætter nye hold ind i all_teams arrayet. */
   copyTeams(new_teams, number_of_new_teams, *number_of_teams, all_teams);
@@ -85,9 +85,8 @@ team *addTeams (FILE *fp, const int sentinel, team *all_teams, int *number_of_te
 
 /* Fjerner hold fra all_teams arrayet. */
 team *removeTeams(FILE *fp, const int sentinel, team *all_teams, int *number_of_teams) {
-  int team_index = 0;
-  int number_of_removed_teams = 0;
   team *removed_teams = NULL;
+  int number_of_removed_teams = 0;
 
   /* Prompter og scanner for antal af hold der skal fjernes. */
   printf("Antal hold der ønskes at fjernes\n>> ");
@@ -100,21 +99,14 @@ team *removeTeams(FILE *fp, const int sentinel, team *all_teams, int *number_of_
     all_teams = scanFileForTeams(fp, *number_of_teams);
   }
 
-
   /* Printer all nuværende hold ud. */
   printTeams(all_teams, *number_of_teams);
 
-  /* Prompt og scan nye holdnavne. */
-  for (team_index = 0; team_index < number_of_removed_teams; team_index++) {
-    getTeamNames(team_index, removed_teams[team_index].team);
-
-    while (checkTeam(removed_teams[team_index].team, all_teams, *number_of_teams) == 0) {
-      printf("Holdet \"%s\" er ikke paa listen\n", removed_teams[team_index].team);
-      getTeamNames(team_index, removed_teams[team_index].team);
-    }
-  }
+  /* Prompter brugeren for de hold der skal fjernes. Navnene på holdene gemmes i removed_teams */
+  getTeams(number_of_removed_teams, *number_of_teams, all_teams, "ikke", REMOVE, removed_teams);
 
   deleteTeams(removed_teams, number_of_removed_teams, *number_of_teams, all_teams);
+  /* Sorterer arrayet, så de fjernede hold kommer til sidst */
   sortArrayByLevel(all_teams, *number_of_teams);
   *number_of_teams -= number_of_removed_teams;
 
@@ -136,37 +128,44 @@ team *updateTeams(const team *all_teams, const int number_of_teams) {
   return temp_teams;
 }
 
-/* Prompter og scanner for nye hold som input for brugeren. */
-void getNewTeams(const int number_of_new_teams, const int number_of_teams, const team *all_teams, team *new_teams) {
+/* Prompter brugeren for de hold der skal modificeres, og foretager forskellige ændringer, alt efter hvilken modifier den får ind */
+void getTeams(const int number_of_modified_teams, const int number_of_teams, const team *all_teams, const char *string, const int modifier, team *temp_team_array) {
   int team_index = 0;
   char level = '\0';
 
-  /* Går igennem antallet af nye hold. */
-  for (team_index = 0; team_index < number_of_new_teams; team_index++) {
-    /* Prompter for holdnavn. */
-    getTeamNames(team_index, new_teams[team_index].team);
+  for (team_index = 0; team_index < number_of_modified_teams; team_index++) {
+    getTeamNames(team_index, temp_team_array[team_index].team);
 
-    /* Chekker om holdet allerede er i listen */
-    while (checkTeam(new_teams[team_index].team, all_teams, number_of_teams) == 1) {
-      printf("Holdet \"%s\" er allerede paa listen\n", new_teams[team_index].team);
-      getTeamNames(team_index, new_teams[team_index].team);
+    /* Checker om holdet enten er i listen eller ikke er det, alt efter om der tilføjes eller fjernes hold */
+    while (checkTeam(temp_team_array[team_index].team, all_teams, number_of_teams) == modifier) {
+      printf("Holdet \"%s\" er %s paa listen\n", temp_team_array[team_index].team, string);
+      getTeamNames(team_index, temp_team_array[team_index].team);
     }
 
-    /* Prompter for level. */
-    printf("Indtast det %d. holds niveau (N, A, B eller C)\n>> ", team_index + 1);
-    scanf(" %c", &level);
-
-    /* Oversætter char til enum værdi. */
-    new_teams[team_index].level = getLevel(level);
-
-    /* Køre så længe at der ikke er tastet et gyldigt niveau ind. */
-    while (new_teams[team_index].level == EMPTY) {
-      printf("\"%c\" er ikke et gyldigt niveau. Prøv igen.\n>> ", level);
+    /* Checker om der skal tilføjes hold */
+    if (modifier == ADD) {
+      /* Prompter for level. */
+      printf("Indtast det %d. holds niveau (N, A, B eller C)\n>> ", team_index + 1);
       scanf(" %c", &level);
 
-      new_teams[team_index].level = getLevel(level);
+      /* Oversætter char til enum værdi. */
+      temp_team_array[team_index].level = getLevel(level);
+
+      /* Køre så længe at der ikke er tastet et gyldigt niveau ind. */
+      while (temp_team_array[team_index].level == EMPTY) {
+        printf("\"%c\" er ikke et gyldigt niveau. Prøv igen.\n>> ", level);
+        scanf(" %c", &level);
+
+        temp_team_array[team_index].level = getLevel(level);
+      }
     }
   }
+}
+
+/* Prompt og scan nye holdnavne. */
+void getTeamNames(const int team_index, char *team) {
+  printf("Indtast det %d. holdnavn\n>> ", team_index + 1);
+  scanf(" %[-':.,?!a-zA-Z0-9 ]", team);
 }
 
 /* Checker om et givent hold allerede er i listen af alle hold */
@@ -180,12 +179,6 @@ int checkTeam(const char *temp_team, const team *all_teams, const int number_of_
   }
 
   return 0;
-}
-
-/* Prompt og scan nye holdnavne. */
-void getTeamNames(const int team_index, char *team) {
-  printf("Indtast det %d. holdnavn\n>> ", team_index + 1);
-  scanf(" %[-':.,?!a-zA-Z0-9 ]", team);
 }
 
 /* Tilføjer nye hold til arrayet af eksisterende hold. */
