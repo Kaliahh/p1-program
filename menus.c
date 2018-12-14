@@ -30,7 +30,8 @@ int mainMenu(void) {
   printf("            \\__ \\/ /_/ /_/ / / / / / / / / / /     \n");
   printf("           ___/ / ____/ __/ /_/ / /_/ / /_/ /        \n");
   printf("          /____/_/   /____|____/\\____/\\____/       \n");
-  printf("                Til Kidzliga Floorball\n             \n");
+  printf("\n");
+  printf("        Stævneplanlægning til Kidzliga Floorball\n   \n");
 
   while (choice != 0) {
     showMainMenu();
