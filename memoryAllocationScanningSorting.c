@@ -107,8 +107,6 @@ team *scanFileForTeams(FILE *fp, const int number_of_teams) {
   char temp_teams[MAX_LINE_LEN];
   char level;
   match temp_match;
-  team temp_team_a;
-  team temp_team_b;
   team *all_teams = NULL;
 
   rewind(fp);
