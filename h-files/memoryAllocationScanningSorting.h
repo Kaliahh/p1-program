@@ -1,6 +1,6 @@
 /* Prototyper */
 team* allocateMemoryTeams(const int);
-match* allocateMemoryTournament(const int);
+match* allocateMemoryMatch(const int);
 int getNumberOfTeams(FILE *);
 void scanTeamFile(FILE *, const char *, const int, team *);
 void sortArrayByLevel(team *, const int);
