@@ -141,7 +141,7 @@ int findFirstTeam(const int tournament_index, const int number_of_fields, const 
   while (sentinel_count < CHECK_NUM) {
     team_index = rand() % number_of_teams;
 
-    if (all_teams[team_index].games < GAMES_PR_TEAM && all_teams[team_index].level < EMPTY) {
+    if (all_teams[team_index].games < GAMES_PR_TEAM && all_teams[team_index].level > EMPTY) {
       tournament[tournament_index].team_a = all_teams[team_index];
       tournament[tournament_index].level = all_teams[team_index].level;
       tournament[tournament_index].field = tournament_index % number_of_fields;

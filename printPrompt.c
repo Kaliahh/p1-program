@@ -47,13 +47,13 @@ int printProgram(FILE *fp, const match *tournament, const int starting_time, con
 /* Oversætter level fra int til tilsvarende char */
 char translateToChar(const int level) {
   switch(level) {
-    case 0:
-      return 'N';
     case 1:
-      return 'A';
+      return 'N';
     case 2:
-      return 'B';
+      return 'A';
     case 3:
+      return 'B';
+    case 4:
       return 'C';
     default:
       printf("Fejl i print funktion\n");
@@ -69,7 +69,7 @@ void printTeams(const team *all_teams, const int number_of_teams) {
 
   printf("\nHold: \n- - - - - - - - - - - - - -\n");
   for (team_index = 0; team_index < number_of_teams; team_index++) {
-    if (all_teams[team_index].level < EMPTY) {
+    if (all_teams[team_index].level > EMPTY) {
       level = translateToChar(all_teams[team_index].level);
       printf("%-20s | %c\n", all_teams[team_index].team, level);
     }

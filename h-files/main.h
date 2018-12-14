@@ -34,4 +34,4 @@ typedef struct{
 } match;
 
 /* Enumeration for niveauer */
-enum levels {N, A, B, C, EMPTY};
+enum levels {EMPTY, N, A, B, C};

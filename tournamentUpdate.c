@@ -107,9 +107,17 @@ team *removeTeams(FILE *fp, const int sentinel, team *all_teams, int *number_of_
   /* Prompt og scan nye holdnavne. */
   for (team_index = 0; team_index < number_of_removed_teams; team_index++) {
     getTeamNames(team_index, removed_teams[team_index].team);
+
+    while (checkTeam(removed_teams[team_index].team, all_teams, *number_of_teams) == 0) {
+      printf("Holdet \"%s\" er ikke paa listen\n", removed_teams[team_index].team);
+      getTeamNames(team_index, removed_teams[team_index].team);
+    }
   }
 
   deleteTeams(removed_teams, number_of_removed_teams, *number_of_teams, all_teams);
+  sortArrayByLevel(all_teams, *number_of_teams);
+  *number_of_teams -= number_of_removed_teams;
+
   free(removed_teams);
   return all_teams;
 }
@@ -153,7 +161,7 @@ void getNewTeams(const int number_of_new_teams, const int number_of_teams, const
 
     /* Køre så længe at der ikke er tastet et gyldigt niveau ind. */
     while (new_teams[team_index].level == EMPTY) {
-      printf("%d. holds niveau er ikke gyldigt. Prøv igen.\n>> ", team_index + 1);
+      printf("\"%c\" er ikke et gyldigt niveau. Prøv igen.\n>> ", level);
       scanf(" %c", &level);
 
       new_teams[team_index].level = getLevel(level);
