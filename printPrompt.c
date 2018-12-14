@@ -111,6 +111,16 @@ void promptForFileName(char *file_name) {
   scanf(" %s", file_name);
 }
 
+/* Prompter og scanner for antal nye hold. */
+int promptForNumberOfTeams(const int modifier) {
+  int number_of_mod_teams = 0;
+
+  printf("Antal hold der ønskes at %s\n>> ", (modifier == ADD) ? "tilføjes" : "fjernes");
+  scanf(" %d", &number_of_mod_teams);
+
+  return number_of_mod_teams;
+}
+
 /* Undersøger om filen blev åbnet, hvis ikke skrives en fejl og programmet lukkes
    Ellers sker der intet */
 void isFileOpen(FILE *fp) {

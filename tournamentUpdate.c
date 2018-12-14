@@ -47,70 +47,54 @@ int updateTournament(FILE *fp) {
   return 0;
 }
 
-/* Tilføjer nye hold til all_teams arrayet. */
-team *addTeams (FILE *fp, const int sentinel, team *all_teams, int *number_of_teams) {
-  team *new_teams = NULL;
-  int number_of_new_teams = 0;
+/* Prompter og scanner for antal nye hold. */
+int promptForNumberOfTeams(const int modifier) {
+  int number_of_mod_teams = 0;
 
-  /* Prompter og scanner for antal nye hold. */
-  printf("Antal hold der ønskes at tilføje\n>> ");
-  scanf(" %d", &number_of_new_teams);
+  printf("Antal hold der ønskes at %s\n>> ", (modifier == ADD) ? "tilføjes" : "fjernes");
+  scanf(" %d", &number_of_mod_teams);
 
-  /* Allokere plads til array med nye hold. */
-  new_teams = allocateMemoryTeams(number_of_new_teams);
+  return number_of_mod_teams;
+}
 
-  *number_of_teams += number_of_new_teams;
+team *modifyTeams(FILE *fp, const int sentinel, const int modifier, team *all_teams, int *number_of_teams, void (*f)(const team *, const int, const int, team *)) {
+  team *temp_team_array = NULL;
+  int number_of_mod_teams = 0;
 
-  /* Checker om det er første gang programmet kommer her til. Hvis det er anden gang eller mere, reallokeres hukommelsen */
-  if (sentinel != 1) {
-    /* Scanner eksisterende kampprograms-fil og generere et array med de nuværende hold og plads til de nye. */
+  number_of_mod_teams = promptForNumberOfTeams(modifier);
+
+  temp_team_array = allocateMemoryTeams(number_of_mod_teams);
+
+  /* Checker om number_of_teams skal tælles op */
+  if (modifier == ADD) {
+    *number_of_teams += number_of_mod_teams;
+  }
+
+  /* Tjekker om det er første gang funktionen bliver kaldt */
+  if (sentinel == FIRST) {
     all_teams = scanFileForTeams(fp, *number_of_teams);
   }
-  else if (sentinel == 1) {
+  /* Hvis funktionen allerede har været kaldt, og der skal tilføjes hold,
+     udvides all_teams */
+  else if (sentinel != FIRST && modifier == ADD) {
     all_teams = updateTeams(all_teams, *number_of_teams);
   }
 
-  /* Printer de nuværende hold ud til terminalen. */
-  printTeams(all_teams, *number_of_teams - number_of_new_teams);
+  /* Printer de nuværende hold til terminalen */
+  printTeams(all_teams, (modifier == ADD) ? *number_of_teams - number_of_mod_teams : *number_of_teams);
 
   /* Prompter og scanner nye hold ind. */
-  getTeams(number_of_new_teams, *number_of_teams, all_teams, "allerede", ADD, new_teams);
+  getTeams(number_of_mod_teams, *number_of_teams, all_teams, (modifier == ADD) ? "allerede" : "ikke", modifier, temp_team_array);
 
-  /* Sætter nye hold ind i all_teams arrayet. */
-  copyTeams(new_teams, number_of_new_teams, *number_of_teams, all_teams);
+  /* Fjerner eller tilføjer hold, alt efter hvor modifyTeams blev kaldt */
+  (*f)(temp_team_array, number_of_mod_teams, *number_of_teams, all_teams);
 
-  free(new_teams);
-  return all_teams;
-}
-
-/* Fjerner hold fra all_teams arrayet. */
-team *removeTeams(FILE *fp, const int sentinel, team *all_teams, int *number_of_teams) {
-  team *removed_teams = NULL;
-  int number_of_removed_teams = 0;
-
-  /* Prompter og scanner for antal af hold der skal fjernes. */
-  printf("Antal hold der ønskes at fjernes\n>> ");
-  scanf(" %d", &number_of_removed_teams);
-
-  /* Allokere plads til array med hold der skal fjernes. */
-  removed_teams = allocateMemoryTeams(number_of_removed_teams);
-  if (sentinel != 1) {
-    /* Scanner eksisterende kampprograms-fil og generere et array med de nuværende hold. */
-    all_teams = scanFileForTeams(fp, *number_of_teams);
+  if (modifier == REMOVE) {
+    /* Flytter de fjernede hold til sidst i all_teams */
+    sortArrayByLevel(all_teams, *number_of_teams);
+    *number_of_teams -= number_of_mod_teams;
   }
 
-  /* Printer all nuværende hold ud. */
-  printTeams(all_teams, *number_of_teams);
-
-  /* Prompter brugeren for de hold der skal fjernes. Navnene på holdene gemmes i removed_teams */
-  getTeams(number_of_removed_teams, *number_of_teams, all_teams, "ikke", REMOVE, removed_teams);
-
-  deleteTeams(removed_teams, number_of_removed_teams, *number_of_teams, all_teams);
-  /* Sorterer arrayet, så de fjernede hold kommer til sidst */
-  sortArrayByLevel(all_teams, *number_of_teams);
-  *number_of_teams -= number_of_removed_teams;
-
-  free(removed_teams);
   return all_teams;
 }
 
@@ -142,7 +126,7 @@ void getTeams(const int number_of_modified_teams, const int number_of_teams, con
       getTeamNames(team_index, temp_team_array[team_index].team);
     }
 
-    /* Checker om der skal tilføjes hold */
+    /* Checker om der skal tilføjes niveau */
     if (modifier == ADD) {
       /* Prompter for level. */
       printf("Indtast det %d. holds niveau (N, A, B eller C)\n>> ", team_index + 1);

@@ -6,4 +6,5 @@ void createTemplate(void);
 int promptForFields(void);
 int promptForTime(void);
 void promptForFileName(char *);
+int promptForNumberOfTeams(const int);
 void isFileOpen(FILE *);

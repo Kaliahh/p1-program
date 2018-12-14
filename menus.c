@@ -86,15 +86,19 @@ team *editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
       scanf(" %d", &choice);
 
       if (choice == 1) {
-        all_teams = addTeams(fp, sentinel, all_teams, number_of_teams);
+        all_teams = modifyTeams(fp, sentinel, ADD, all_teams, number_of_teams, copyTeams);
         sentinel = 1;
       }
       else if (choice == 2) {
-        all_teams = removeTeams(fp, sentinel, all_teams, number_of_teams);
+        all_teams = modifyTeams(fp, sentinel, REMOVE, all_teams, number_of_teams, deleteTeams);
         sentinel = 1;
       }
       else if (choice == 3) {
         return all_teams;
+      }
+
+      else if (choice == 9) {
+        printTeams(all_teams, *number_of_teams);
       }
       else if (choice == 0) {
         if (all_teams != NULL) {
