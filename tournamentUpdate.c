@@ -47,12 +47,17 @@ int updateTournament(FILE *fp) {
   return 0;
 }
 
+/* Ændrer på all_teams, baseret på funktionen *f og konstanten modifier */
 team *modifyTeams(FILE *fp, const int sentinel, const int modifier, team *all_teams, int *number_of_teams, void (*f)(const team *, const int, const int, team *)) {
   team *temp_team_array = NULL;
   int number_of_mod_teams = 0;
 
+  /* Prompter brugeren for antallet af hold der skal fjernes eller tilføjes.
+     modifier bestemmer om der bliver printet "tilføjes" eller "fjernes"
+     til terminalen */
   number_of_mod_teams = promptForNumberOfTeams(modifier);
 
+  /* Allokerer plads til et array med plads til de hold der skal fjernes eller tilføjes */
   temp_team_array = allocateMemoryTeams(number_of_mod_teams);
 
   /* Checker om number_of_teams skal tælles op */
@@ -74,7 +79,7 @@ team *modifyTeams(FILE *fp, const int sentinel, const int modifier, team *all_te
   printTeams(all_teams, (modifier == ADD) ? *number_of_teams - number_of_mod_teams : *number_of_teams);
 
   /* Prompter og scanner nye hold ind. */
-  getTeams(number_of_mod_teams, *number_of_teams, all_teams, (modifier == ADD) ? "allerede" : "ikke", modifier, temp_team_array);
+  getTeams(number_of_mod_teams, *number_of_teams, all_teams, modifier, temp_team_array);
 
   /* Fjerner eller tilføjer hold, alt efter hvor modifyTeams blev kaldt */
   (*f)(temp_team_array, number_of_mod_teams, *number_of_teams, all_teams);
@@ -103,7 +108,7 @@ team *updateTeams(const team *all_teams, const int number_of_teams) {
 }
 
 /* Prompter brugeren for de hold der skal modificeres, og foretager forskellige ændringer, alt efter hvilken modifier den får ind */
-void getTeams(const int number_of_modified_teams, const int number_of_teams, const team *all_teams, const char *string, const int modifier, team *temp_team_array) {
+void getTeams(const int number_of_modified_teams, const int number_of_teams, const team *all_teams, const int modifier, team *temp_team_array) {
   int team_index = 0;
   char level = '\0';
 
@@ -112,7 +117,7 @@ void getTeams(const int number_of_modified_teams, const int number_of_teams, con
 
     /* Checker om holdet enten er i listen eller ikke er det, alt efter om der tilføjes eller fjernes hold */
     while (checkTeam(temp_team_array[team_index].team, all_teams, number_of_teams) == modifier) {
-      printf("Holdet \"%s\" er %s paa listen\n", temp_team_array[team_index].team, string);
+      printf("Holdet \"%s\" er %s paa listen\n", temp_team_array[team_index].team, (modifier == ADD) ? "allerede" : "ikke");
       getTeamNames(team_index, temp_team_array[team_index].team);
     }
 
@@ -125,7 +130,7 @@ void getTeams(const int number_of_modified_teams, const int number_of_teams, con
       /* Oversætter char til enum værdi. */
       temp_team_array[team_index].level = getLevel(level);
 
-      /* Køre så længe at der ikke er tastet et gyldigt niveau ind. */
+      /* Kører så længe at der ikke er tastet et gyldigt niveau ind. */
       while (temp_team_array[team_index].level == EMPTY) {
         printf("\"%c\" er ikke et gyldigt niveau. Prøv igen.\n>> ", level);
         scanf(" %c", &level);
