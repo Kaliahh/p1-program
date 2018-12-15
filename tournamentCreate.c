@@ -57,7 +57,7 @@ int createNewTournament(const int choice) {
     while (no_go_count != 0);
   }
   else {
-    while (!(no_go_count == 0 && grade > 40000)) {
+    while (!(no_go_count == 0 && grade > 70000)) {
       grade = 0;
 
       no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &grade);        
@@ -221,6 +221,8 @@ int evaluateRound(const match *tournament, const int tournament_index, const int
 
       no_go_count += playedInARow(tournament, tournament[i].team_a.team, i, number_of_fields, grade);
       no_go_count += playedInARow(tournament, tournament[i].team_b.team, i, number_of_fields, grade);
+      
+      *grade += isDifferentMatch(tournament[i - number_of_fields], tournament[i]);
     }
   }
 
@@ -305,13 +307,22 @@ int playedInARow(const match *tournament, const char *current_team, const int ma
 }
 
 int isDifferentTeam(const match compare_team, const char *current_team) {
-  if (strcmp(current_team, compare_team.team_a.team) == 0 ||
-      strcmp(current_team, compare_team.team_b.team) == 0) {
+  if (strcmp(compare_team.team_a.team, current_team) == 0 ||
+      strcmp(compare_team.team_b.team, current_team) == 0) {
     return 0;
   } 
   else {
     return 1;
   }
+}
+
+int isDifferentMatch(const match compare_team, const match current_team) {
+  if(isDifferentTeam(compare_team, current_team.team_a.team) == 0 && 
+     isDifferentTeam(compare_team, current_team.team_b.team) == 0){
+    return 0;
+  }
+
+    return 1;
 }
 
 /* Finder antallet af runder
