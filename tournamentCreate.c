@@ -57,13 +57,15 @@ int createNewTournament(const int choice) {
     while (no_go_count != 0);
   }
   else {
-    for (i = 0; i < 100; i++) {
+    for (i = 0; i < 1000; i++) {
       grade_temp = 0;
 
       no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament_temp, all_teams, &grade_temp);
 
       if (no_go_count == 0 && grade_temp > grade) {
         grade = grade_temp;
+
+        printf("%d\n", grade);
         
         copyTournament(tournament_temp, number_of_matches, tournament);
       }
@@ -225,7 +227,8 @@ int evaluateRound(const match *tournament, const int tournament_index, const int
     if (round_count != 0){
       no_go_count += isInPreviousRound(tournament, i, number_of_fields, grade);
 
-      *grade += playedInARow(tournament, i, number_of_fields, &no_go_count);
+      no_go_count += playedInARow(tournament, tournament[i].team_a.team, i, number_of_fields, grade);
+      no_go_count += playedInARow(tournament, tournament[i].team_b.team, i, number_of_fields, grade);
     }
   }
 
@@ -288,33 +291,25 @@ int compareTeams(const match *a, const match *b) {
   return 0;
 }
 
-int playedInARow(const match *tournament, const int match_index, int number_of_fields, int *no_go_count){
+/* Tæller antallet af gang et hold spiller i træk */
+int playedInARow(const match *tournament, const char *current_team, const int match_index, int number_of_fields, int *grade){
   int i = 1;
-  int grade = 0;
+  int grade_temp = 0;
 
-  while (!isDifferentTeam(tournament[match_index - number_of_fields], tournament[match_index].team_a.team)) {
+  while (!isDifferentTeam(tournament[match_index - number_of_fields], current_team)) {
     i++;
-    grade--;
+    grade_temp--;
 
     number_of_fields *= i;
   }
 
-  if (grade < -2) {
-    *no_go_count += 1;
+  if (grade_temp < -1) {
+    return 1;
   }
 
-  while (!isDifferentTeam(tournament[match_index - number_of_fields], tournament[match_index].team_b.team)) {
-    i++;
-    grade--;
+  *grade += grade_temp;
 
-    number_of_fields *= i;
-  }
-
-  if (grade < -2) {
-    *no_go_count += 1;
-  }
-
-  return grade;
+  return 0;
 }
 
 int isDifferentTeam(const match compare_team, const char *current_team) {

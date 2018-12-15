@@ -11,7 +11,7 @@ int evaluateRound(const match *, const int, const int, int *);
 int isAlreadyInRound(const match *, const int, const int);
 int isInPreviousRound(const match *, const int, const int, int *);
 int compareTeams(const match *, const match *);
-int playedInARow(const match *, const int, int, int *);
+int playedInARow(const match *, const char *, const int, int, int *);
 int isDifferentTeam(const match, const char *);
 int getNumberOfRounds(const int, const int);
 int getLevel(const char);
