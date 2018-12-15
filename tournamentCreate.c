@@ -59,7 +59,7 @@ int createNewTournament(const int choice) {
   else {
     for (i = 0; i < 10000; i++) {
       no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament_temp, all_teams, &grade_temp);
-      
+
       if (no_go_count == 0 && grade_temp > grade) {
         copyTournament(tournament_temp, number_of_matches, tournament);
       }
@@ -221,7 +221,7 @@ int evaluateRound(const match *tournament, const int tournament_index, const int
     if (round_count != 0){
       no_go_count += isInPreviousRound(tournament, i, number_of_fields, grade);
 
-      *grade += playedInARow(tournament, i, number_of_fields);
+      *grade += playedInARow(tournament, i, number_of_fields, &no_go_count);
     }
 
   }
@@ -285,7 +285,7 @@ int compareTeams(const match *a, const match *b) {
   return 0;
 }
 
-int playedInARow(const match *tournament, const int match_index, int number_of_fields){
+int playedInARow(const match *tournament, const int match_index, int number_of_fields, int *no_go_count){
   int i = 1;
   int grade = 0;
 
@@ -294,6 +294,10 @@ int playedInARow(const match *tournament, const int match_index, int number_of_f
     grade--;
 
     number_of_fields *= i;
+  }
+
+  if (grade < -2) {
+    *no_go_count += 1;
   }
 
   return grade;
