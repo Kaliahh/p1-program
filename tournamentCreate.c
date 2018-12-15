@@ -57,18 +57,10 @@ int createNewTournament(const int choice) {
     while (no_go_count != 0);
   }
   else {
-    for (i = 0; i < 1000; i++) {
-      grade_temp = 0;
+    while (!(no_go_count == 0 && grade > 40000)) {
+      grade = 0;
 
-      no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament_temp, all_teams, &grade_temp);
-
-      if (no_go_count == 0 && grade_temp > grade) {
-        grade = grade_temp;
-
-        printf("%d\n", grade);
-        
-        copyTournament(tournament_temp, number_of_matches, tournament);
-      }
+      no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &grade);        
     }
   }
 
