@@ -58,9 +58,15 @@ int createNewTournament(const int choice) {
   }
   else {
     for (i = 0; i < 10000; i++) {
+      grade_temp = 0;
+
       no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament_temp, all_teams, &grade_temp);
 
       if (no_go_count == 0 && grade_temp > grade) {
+        printf("%d\n", grade);
+
+        grade = grade_temp;
+        
         copyTournament(tournament_temp, number_of_matches, tournament);
       }
     }
