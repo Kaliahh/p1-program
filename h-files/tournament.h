@@ -15,7 +15,7 @@ int getLevel(const char);
 
 /* tournamentUpdate */
 int updateTournament(FILE *);
-team *modifyTeams(FILE *, const int, const int, team *, int *, void (*)(const team *, const int, const int, team *));
+team *modifyTeams(void (*)(const team *, const int, const int, team *), const int, team *, int *);
 team *updateTeams(const team *, const int);
 void getTeams(const int, const int, const team *, const int, team *);
 void getTeamNames(const int, char *);

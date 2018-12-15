@@ -48,7 +48,7 @@ int updateTournament(FILE *fp) {
 }
 
 /* Ændrer på all_teams, baseret på funktionen *f og konstanten modifier */
-team *modifyTeams(FILE *fp, const int sentinel, const int modifier, team *all_teams, int *number_of_teams, void (*f)(const team *, const int, const int, team *)) {
+team *modifyTeams(void (*f)(const team *, const int, const int, team *), const int modifier, team *all_teams, int *number_of_teams) {
   team *temp_team_array = NULL;
   int number_of_mod_teams = 0;
 
@@ -60,18 +60,9 @@ team *modifyTeams(FILE *fp, const int sentinel, const int modifier, team *all_te
   /* Allokerer plads til et array med plads til de hold der skal fjernes eller tilføjes */
   temp_team_array = allocateMemoryTeams(number_of_mod_teams);
 
-  /* Checker om number_of_teams skal tælles op */
+  /* Checker om all_teams skal udvides */
   if (modifier == ADD) {
     *number_of_teams += number_of_mod_teams;
-  }
-
-  /* Tjekker om det er første gang funktionen bliver kaldt */
-  if (sentinel == FIRST) {
-    all_teams = scanFileForTeams(fp, *number_of_teams);
-  }
-  /* Hvis funktionen allerede har været kaldt, og der skal tilføjes hold,
-     udvides all_teams */
-  else if (sentinel != FIRST && modifier == ADD) {
     all_teams = updateTeams(all_teams, *number_of_teams);
   }
 

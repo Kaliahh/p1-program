@@ -81,19 +81,19 @@ void showMainMenu(void) {
    Tager input fra brugen og derefter kalder passende funktioner i forhold til brugerens valg. */
 team *editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
   int choice = -1;
-  int sentinel = 0;
+
+  /* Scanner holdnavne og niveau ind fra filen med stævneplanen */
+  all_teams = scanFileForTeams(fp, *number_of_teams);
 
     while (choice != 0) {
       showEditMenu();
       scanf(" %d", &choice);
 
       if (choice == 1) {
-        all_teams = modifyTeams(fp, sentinel, ADD, all_teams, number_of_teams, copyTeams);
-        sentinel = 1;
+        all_teams = modifyTeams(copyTeams, ADD, all_teams, number_of_teams);
       }
       else if (choice == 2) {
-        all_teams = modifyTeams(fp, sentinel, REMOVE, all_teams, number_of_teams, deleteTeams);
-        sentinel = 1;
+        all_teams = modifyTeams(deleteTeams, REMOVE, all_teams, number_of_teams);
       }
       else if (choice == 3) {
         return all_teams;
