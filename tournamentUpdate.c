@@ -6,6 +6,7 @@
 
 /* Opdaterer en eksisterende turneringsplan. Modtager en filpointer som er placeret i starten af filen. Filpointer bliver rewinded i bunden. */
 int updateTournament(FILE *fp) {
+  int make_fast = 0;
   int number_of_teams = 0;
   int number_of_matches = 0;
   int number_of_rounds = 0;
@@ -20,6 +21,9 @@ int updateTournament(FILE *fp) {
 
   /* Prompter brugeren for ændringer der skal laves */
   all_teams = editMenu(fp, all_teams, &number_of_teams);
+
+  makeChoiceMenu();
+  scanf(" %d", &make_fast);
 
   /* Checker om der blev lavet ændringer. Hvis ikke, returnerer funktionen */
   if (all_teams == NULL) {
