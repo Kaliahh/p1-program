@@ -57,7 +57,7 @@ int createNewTournament(const int choice) {
     while (no_go_count != 0);
   }
   else {
-    for (i = 0; i < 10000; i++) {
+    for (i = 0; i < 100; i++) {
       grade_temp = 0;
 
       no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament_temp, all_teams, &grade_temp);
@@ -227,7 +227,6 @@ int evaluateRound(const match *tournament, const int tournament_index, const int
 
       *grade += playedInARow(tournament, i, number_of_fields, &no_go_count);
     }
-
   }
 
   return no_go_count;
@@ -294,6 +293,17 @@ int playedInARow(const match *tournament, const int match_index, int number_of_f
   int grade = 0;
 
   while (!isDifferentTeam(tournament[match_index - number_of_fields], tournament[match_index].team_a.team)) {
+    i++;
+    grade--;
+
+    number_of_fields *= i;
+  }
+
+  if (grade < -2) {
+    *no_go_count += 1;
+  }
+
+  while (!isDifferentTeam(tournament[match_index - number_of_fields], tournament[match_index].team_b.team)) {
     i++;
     grade--;
 
