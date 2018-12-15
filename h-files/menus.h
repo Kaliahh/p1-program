@@ -1,6 +1,7 @@
 /* Prototyper */
 int mainMenu(void);
 void showMainMenu(void);
+void makeChoiceMenu(void);
 
 team *editMenu(FILE *, team *, int *);
 void showEditMenu(void);

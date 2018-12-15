@@ -11,6 +11,7 @@ int updateTournament(FILE *fp) {
   int number_of_rounds = 0;
   int number_of_fields = 0;
   int starting_time = 0;
+  int grade = 0;
   team *all_teams = NULL;
   match *tournament = NULL;
 
@@ -32,7 +33,7 @@ int updateTournament(FILE *fp) {
   tournament = allocateMemoryMatch(number_of_matches);
   number_of_fields = getNumberOfFields(fp);
   number_of_rounds = getNumberOfRounds(number_of_matches, number_of_fields);
-  createTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, all_teams, tournament);
+  createTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, all_teams, tournament, &grade);
 
   /* Printer det færdige kampprogram, enten til en fil eller til terminalen */
   starting_time = getStartingTime(fp);

@@ -1,17 +1,21 @@
 /* Prototyper */
 
 /* tournamentCreate */
-int createNewTournament(void);
-int createTournament(const int, const int, const int, const int, team *, match *);
+int createNewTournament(const int);
+int checkTournament(const int, const int, const int, const int, match *, team *, int *);
+int createTournament(const int, const int, const int, const int, team *, match *, int *);
 int createRound(const int, const int, const int, const int, int *, int *, team *, match *);
 int findFirstTeam(const int, const int, const int, team *, match *);
 int findSecondTeam(const int, const int, team *, match *);
-int evaluateRound(const match *, const int, const int);
+int evaluateRound(const match *, const int, const int, int *);
 int isAlreadyInRound(const match *, const int, const int);
-int isInPreviousRound(const match *, const int, const int);
+int isInPreviousRound(const match *, const int, const int, int *);
 int compareTeams(const match *, const match *);
+int playedInARow(const match *, const int, int);
+int isDifferentTeam(const match, const char *);
 int getNumberOfRounds(const int, const int);
 int getLevel(const char);
+void copyTournament(const match *, const int, match *);
 
 /* tournamentUpdate */
 int updateTournament(FILE *);
