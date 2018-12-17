@@ -12,11 +12,8 @@ int createNewTournament(const int choice) {
   int number_of_teams = 0;
   int number_of_matches = 0;
   int starting_time = 0;
-  int i = 0;
   int no_go_count = 0;
-  int grade_temp = 0;
-  int grade = 0;
-  match *tournament_temp = NULL;
+  int point = 0;
   match *tournament = NULL;
   team *all_teams = NULL;
   char file_name[MAX_NAME_LEN];
@@ -47,20 +44,19 @@ int createNewTournament(const int choice) {
   scanTeamFile(fp, file_name, number_of_teams, all_teams);
 
   /* Laver et turneringsarray ud fra kampene i all_matches */
-  tournament_temp = allocateMemoryMatch(number_of_matches);
   tournament = allocateMemoryMatch(number_of_matches);
 
   if (choice == 1) {
     do {
-      no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &grade);
+      no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &point);
     }
     while (no_go_count != 0);
   }
   else {
-    while (!(no_go_count == 0 && grade > 70000)) {
-      grade = 0;
+    while (!(no_go_count == 0 && point > 345)) {
+      point = 0;
 
-      no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &grade);        
+      no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &point);  
     }
   }
 
@@ -76,7 +72,8 @@ int createNewTournament(const int choice) {
   return 0;
 }
 
-int checkTournament(const int number_of_teams, const int number_of_matches, const int number_of_fields, const int number_of_rounds, match *tournament, team *all_teams, int *grade) {
+/*  */
+int checkTournament(const int number_of_teams, const int number_of_matches, const int number_of_fields, const int number_of_rounds, match *tournament, team *all_teams, int *point) {
   int i = 0;
   int no_go_count = 0;
 
@@ -84,13 +81,13 @@ int checkTournament(const int number_of_teams, const int number_of_matches, cons
     all_teams[i].games = 0;
   }
 
-  no_go_count = createTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, all_teams, tournament, grade);
+  no_go_count = createTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, all_teams, tournament, point);
 
   return no_go_count;
 }
 
 /* Laver en turneringsplan, som returnerer antallet af gange planen bryder med reglerne. */
-int createTournament(const int number_of_teams, const int number_of_matches, const int number_of_fields, const int number_of_rounds, team *all_teams, match *tournament, int *grade) {
+int createTournament(const int number_of_teams, const int number_of_matches, const int number_of_fields, const int number_of_rounds, team *all_teams, match *tournament, int *point) {
   int i = 0;
   int round_count = 0;
   int end_of_round = 0;
@@ -98,6 +95,7 @@ int createTournament(const int number_of_teams, const int number_of_matches, con
   int start_of_next_round = 0;
   int sentinel_count = 0;
   int no_go_count = 0;
+  int temp_point = 0;
   int *team_a;
   int *team_b;
 
@@ -112,7 +110,7 @@ int createTournament(const int number_of_teams, const int number_of_matches, con
     end_of_round = createRound(start_of_next_round, start_of_round, number_of_teams, number_of_fields, team_a, team_b, all_teams, tournament);
 
     /* Tjekker om programmet overholder reglerne. */
-    no_go_count = evaluateRound(tournament, end_of_round, number_of_fields, grade);
+    no_go_count = evaluateRound(tournament, end_of_round, number_of_fields, &temp_point);
 
     /* Hvis reglerne ikke overholder reglerne sammensættes runden på ny. */
     if (no_go_count > 0 && sentinel_count < CHECK_NUM) {
@@ -124,17 +122,23 @@ int createTournament(const int number_of_teams, const int number_of_matches, con
 
       round_count--;
       sentinel_count++;
+
+      temp_point = 0;
     }
     else if (sentinel_count >= CHECK_NUM) {
       return 1;
     }
     else {
+      *point += temp_point;
+
+      temp_point = 0;
       sentinel_count = 0;
     }
   }
 
   free(team_a);
   free(team_b);
+  
   return no_go_count;
 }
 
@@ -154,6 +158,7 @@ int createRound(const int start_of_next_round, const int start_of_round, const i
   return tournament_index;
 }
 
+/* Finder det første hold til en kamp. */
 int findFirstTeam(const int tournament_index, const int number_of_fields, const int number_of_teams, team *all_teams, match *tournament) {
   int sentinel_count = 0;
   int team_index = 0;
@@ -177,7 +182,7 @@ int findFirstTeam(const int tournament_index, const int number_of_fields, const 
   return team_index;
 }
 
-/* Finder det andet hold til en kamp, baseret på det første hold */
+/* Finder det andet hold til en kamp, baseret på det første hold. */
 int findSecondTeam(const int tournament_index, const int number_of_teams, team *all_teams, match *tournament) {
   int sentinel_count = 0;
   int team_index = 0;
@@ -202,7 +207,7 @@ int findSecondTeam(const int tournament_index, const int number_of_teams, team *
 }
 
 /* Tjekker reglerne igennem og returnerer antallet af fejl. */
-int evaluateRound(const match *tournament, const int tournament_index, const int number_of_fields, int *grade) {
+int evaluateRound(const match *tournament, const int tournament_index, const int number_of_fields, int *temp_point) {
   int i = 0;
   int no_go_count = 0;
   int round_count = 0;
@@ -217,12 +222,12 @@ int evaluateRound(const match *tournament, const int tournament_index, const int
     }
     /* Kører hvis det ikke er den første runde. */
     if (round_count != 0){
-      no_go_count += isInPreviousRound(tournament, i, number_of_fields, grade);
+      no_go_count += isInPreviousRound(tournament, i, number_of_fields, temp_point);
 
-      no_go_count += playedInARow(tournament, tournament[i].team_a.team, i, number_of_fields, grade);
-      no_go_count += playedInARow(tournament, tournament[i].team_b.team, i, number_of_fields, grade);
+      no_go_count += playedInARow(tournament, tournament[i].team_a.team, i, number_of_fields, temp_point);
+      no_go_count += playedInARow(tournament, tournament[i].team_b.team, i, number_of_fields, temp_point);
       
-      *grade += isDifferentMatch(tournament[i - number_of_fields], tournament[i]);
+      *temp_point += isDifferentMatch(tournament[i - number_of_fields], tournament[i]);
     }
   }
 
@@ -247,7 +252,7 @@ int isAlreadyInRound(const match *tournament, const int tournament_index, const 
 }
 
 /* Tjekker om et af holdene i en kamp har spillet i forrige runde. */
-int isInPreviousRound(const match *tournament, const int match_index, const int number_of_fields, int *grade) {
+int isInPreviousRound(const match *tournament, const int match_index, const int number_of_fields, int *point) {
   int i = 0;
   int no_go_count = 0;
   int start_of_previous_round = 0;
@@ -266,7 +271,7 @@ int isInPreviousRound(const match *tournament, const int match_index, const int 
       }
     }
     else {
-      *grade += 1;
+      *point += 1;
     }
   }
 
@@ -285,37 +290,39 @@ int compareTeams(const match *a, const match *b) {
   return 0;
 }
 
-/* Tæller antallet af gang et hold spiller i træk */
-int playedInARow(const match *tournament, const char *current_team, const int match_index, int number_of_fields, int *grade){
+/* Tæller antallet af gang et hold spiller i træk, og giver karakter derudfra. */
+int playedInARow(const match *tournament, const char *current_team, const int match_index, int number_of_fields, int *point){
   int i = 1;
-  int grade_temp = 0;
+  int point_temp = 1;
 
   while (!isDifferentTeam(tournament[match_index - number_of_fields], current_team)) {
     i++;
-    grade_temp--;
+    point_temp--;
 
     number_of_fields *= i;
   }
 
-  if (grade_temp < -1) {
+  if (point_temp < 0) {
     return 1;
   }
 
-  *grade += grade_temp;
+  *point += point_temp;
 
   return 0;
 }
 
+/* Sammenligner hold, og ser om to hold er ens. */
 int isDifferentTeam(const match compare_team, const char *current_team) {
   if (strcmp(compare_team.team_a.team, current_team) == 0 ||
       strcmp(compare_team.team_b.team, current_team) == 0) {
     return 0;
   } 
   else {
-    return 1;
+    return 5;
   }
 }
 
+/* Sammenligner kampe. */
 int isDifferentMatch(const match compare_team, const match current_team) {
   if(isDifferentTeam(compare_team, current_team.team_a.team) == 0 && 
      isDifferentTeam(compare_team, current_team.team_b.team) == 0){
@@ -344,15 +351,6 @@ int getLevel(const char level) {
          (level == 'B') ? B :
          (level == 'C') ? C : EMPTY;
 }
-
-void copyTournament(const match *tournament_temp, const int number_of_matches, match *tournament) {
-  int i = 0;
-
-  for (i = 0; i < number_of_matches; i++) {
-    tournament[i] = tournament_temp[i];
-  }
-}
-
 
 
 

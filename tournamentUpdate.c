@@ -22,7 +22,6 @@ int updateTournament(FILE *fp) {
   /* Prompter brugeren for ændringer der skal laves */
   all_teams = editMenu(fp, all_teams, &number_of_teams);
 
-  makeChoiceMenu();
   scanf(" %d", &make_fast);
 
   /* Checker om der blev lavet ændringer. Hvis ikke, returnerer funktionen */

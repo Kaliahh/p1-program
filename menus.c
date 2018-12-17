@@ -106,6 +106,7 @@ team *editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
         all_teams = modifyTeams(deleteTeams, REMOVE, all_teams, number_of_teams);
       }
       else if (choice == 3) { /* Generer nyt kampprogram */
+        makeChoiceMenu();
         return all_teams;
       }
       else if (choice == 999) { /* Debug */

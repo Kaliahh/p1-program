@@ -13,9 +13,9 @@ int isInPreviousRound(const match *, const int, const int, int *);
 int compareTeams(const match *, const match *);
 int playedInARow(const match *, const char *, const int, int, int *);
 int isDifferentTeam(const match, const char *);
+int isDifferentMatch(const match, const match);
 int getNumberOfRounds(const int, const int);
 int getLevel(const char);
-void copyTournament(const match *, const int, match *);
 
 /* tournamentUpdate */
 int updateTournament(FILE *);
