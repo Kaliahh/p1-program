@@ -1,14 +1,14 @@
 # p1-program
 P1 projekt
 Dette program er lavet i forbindelse med p1 forløbet på første semester, på softwareuddannelsen på Aaalborg universitet.
-Forfatterne er:
+Forfatterne er:  
 Ane Jørgensen  
 Jakob Kristensen  
 Lena Said  
 Liv Holm  
 Michelle Terpling  
 
-Programmet besår af filerne:
+Programmet besår af filerne:  
 main.h  
 memoryAllocationScanningSorting.c  
 memoryAllocationScanningSorting.h	 
@@ -26,7 +26,7 @@ h-filerne indeholder funktionernes prototyper, inkluderede biblioteker, symbolsk
 For at lave en .exe fil, skal alle c-filerne compileres sammen.
 Programmet er skrevet i Ansi C eller C89.
 
-Derudover medfølger der også følgende filer:
+Derudover medfølger der også følgende filer:  
 holdnavne.txt  
 turneringsplan.txt  
 
