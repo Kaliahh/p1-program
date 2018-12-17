@@ -5,7 +5,7 @@
 # include "../p1-program/h-files/menus.h"
 
 /* Laver og printer en ny turneringsplan */
-int createNewTournament(const int choice) {
+int createNewTournament(void) {
   FILE *fp = NULL;
   int number_of_fields = 0;
   int number_of_rounds = 0;
@@ -14,6 +14,7 @@ int createNewTournament(const int choice) {
   int starting_time = 0;
   int no_go_count = 0;
   int point = 0;
+  int make_fast = 0;
   match *tournament = NULL;
   team *all_teams = NULL;
   char file_name[MAX_NAME_LEN];
@@ -46,18 +47,23 @@ int createNewTournament(const int choice) {
   /* Laver et turneringsarray ud fra kampene i all_matches */
   tournament = allocateMemoryMatch(number_of_matches);
 
-  if (choice == 1) {
+  make_fast = createMenu();
+
+  if (make_fast == 1) {
     do {
       no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &point);
     }
     while (no_go_count != 0);
   }
-  else {
+  else if (make_fast == 2) {
     while (!(no_go_count == 0 && point > 345)) {
       point = 0;
 
       no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &point);
     }
+  }
+  else {
+    return 1;
   }
 
   /* Printer det færdige kampprogram, enten til en fil eller til terminalen */

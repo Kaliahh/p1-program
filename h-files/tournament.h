@@ -1,7 +1,7 @@
 /* Prototyper */
 
 /* tournamentCreate */
-int createNewTournament(const int);
+int createNewTournament(void);
 int checkTournament(const int, const int, const int, const int, match *, team *, int *);
 int createTournament(const int, const int, const int, const int, team *, match *, int *);
 int createRound(const int, const int, const int, const int, int *, int *, team *, match *);

@@ -12,7 +12,8 @@ int updateTournament(FILE *fp) {
   int number_of_rounds = 0;
   int number_of_fields = 0;
   int starting_time = 0;
-  int grade = 0;
+  int no_go_count = 0;
+  int point = 0;
   team *all_teams = NULL;
   match *tournament = NULL;
 
@@ -22,13 +23,6 @@ int updateTournament(FILE *fp) {
   /* Prompter brugeren for ændringer der skal laves */
   all_teams = editMenu(fp, all_teams, &number_of_teams);
 
-  scanf(" %d", &make_fast);
-
-  /* Checker om der blev lavet ændringer. Hvis ikke, returnerer funktionen */
-  if (all_teams == NULL) {
-    return 1;
-  }
-
   /* Udregner antallet af kampe. */
   number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
 
@@ -36,7 +30,25 @@ int updateTournament(FILE *fp) {
   tournament = allocateMemoryMatch(number_of_matches);
   number_of_fields = getNumberOfFields(fp);
   number_of_rounds = getNumberOfRounds(number_of_matches, number_of_fields);
-  createTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, all_teams, tournament, &grade);
+
+  make_fast = createMenu();
+
+  if (make_fast == 1) {
+    do {
+      no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &point);
+    }
+    while (no_go_count != 0);
+  }
+  else if (make_fast == 2) {
+    while (!(no_go_count == 0 && point > 345)) {
+      point = 0;
+
+      no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &point);
+    }
+  }
+  else {
+    return 1;
+  }
 
   /* Printer det færdige kampprogram, enten til en fil eller til terminalen */
   starting_time = getStartingTime(fp);

@@ -21,7 +21,6 @@ int main(void) {
    Tager input fra brugen og derefter kalder passende funktioner i forhold til brugerens valg. */
 int mainMenu(void) {
   int choice = -1;
-  int make_fast = 0;
   FILE *fp = NULL;
 
   /* Printer navn på programmet. */
@@ -40,9 +39,7 @@ int mainMenu(void) {
     /* Laver en ny turneringsplan fra bunden */
     if (choice == 1) {
       printf("\n");
-      makeChoiceMenu();
-      scanf(" %d", &make_fast);
-      createNewTournament(make_fast);
+      createNewTournament();
     }
     /* Opdaterer turneringsplanen */
     else if (choice == 2) {
@@ -80,7 +77,31 @@ void showMainMenu(void) {
          "[0] Afslut\n>> ");
 }
 
-void makeChoiceMenu(void) {
+int createMenu(void) {
+  int choice = -1;
+
+  while (choice != 0) {
+    showCreateMenu();
+    scanf(" %d", &choice);
+
+    if (choice == 1) { /* Hurtigt plan */
+      return 1;
+    }
+    else if (choice == 2) { /* Fejlfri plan */
+      return 2;
+    }
+    else if (choice == 0) { /* Tilbage til hovedmenuen */
+      return 0;
+    }
+    else {
+      printf("\nUgyldigt input, proev igen\n");
+    }
+  }
+
+  return 0;
+}
+
+void showCreateMenu(void) {
   printf("###############  LAV ET NYT KAMPPROGRAM  ##############\n\n");
   printf("[1] Hurtig kampprogram\n"
          "[2] Bedste kampprogram\n"
@@ -106,7 +127,6 @@ team *editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
         all_teams = modifyTeams(deleteTeams, REMOVE, all_teams, number_of_teams);
       }
       else if (choice == 3) { /* Generer nyt kampprogram */
-        makeChoiceMenu();
         return all_teams;
       }
       else if (choice == 999) { /* Debug */
@@ -119,7 +139,7 @@ team *editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
         return NULL;
       }
       else {
-        printf("Ugyldigt svar. Proev igen.\n");
+        printf("\nUgyldigt input, proev igen\n");
       }
     }
 
