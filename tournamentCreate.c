@@ -38,7 +38,7 @@ int createNewTournament(const int choice) {
   number_of_rounds = getNumberOfRounds(number_of_matches, number_of_fields);
 
   /* Allokerer plads til teams arrayet og matches arrayet */
-  all_teams = (team*) calloc(number_of_teams, sizeof(team));
+  all_teams = calloc(number_of_teams, sizeof(team));
 
   /* Fylder teams arrayet med hold */
   scanTeamFile(fp, file_name, number_of_teams, all_teams);
@@ -56,7 +56,7 @@ int createNewTournament(const int choice) {
     while (!(no_go_count == 0 && point > 345)) {
       point = 0;
 
-      no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &point);  
+      no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &point);
     }
   }
 
@@ -99,8 +99,8 @@ int createTournament(const int number_of_teams, const int number_of_matches, con
   int *team_a;
   int *team_b;
 
-  team_a = (int *) malloc (number_of_fields * sizeof(int));
-  team_b = (int *) malloc (number_of_fields * sizeof(int));
+  team_a = malloc (number_of_fields * sizeof(int));
+  team_b = malloc (number_of_fields * sizeof(int));
 
   /* Kører igennem hver runde. */
   for (round_count = 0; round_count < number_of_rounds; round_count++) {
@@ -138,7 +138,7 @@ int createTournament(const int number_of_teams, const int number_of_matches, con
 
   free(team_a);
   free(team_b);
-  
+
   return no_go_count;
 }
 
@@ -226,7 +226,7 @@ int evaluateRound(const match *tournament, const int tournament_index, const int
 
       no_go_count += playedInARow(tournament, tournament[i].team_a.team, i, number_of_fields, temp_point);
       no_go_count += playedInARow(tournament, tournament[i].team_b.team, i, number_of_fields, temp_point);
-      
+
       *temp_point += isDifferentMatch(tournament[i - number_of_fields], tournament[i]);
     }
   }
@@ -266,7 +266,7 @@ int isInPreviousRound(const match *tournament, const int match_index, const int 
     /* Køres hvis der er et hold som også har spillet i runden før. */
     if (compareTeams(tournament + i, tournament + match_index) == 1) {
       /* Køres hvis holdet ikke spiller på samme bane. */
-      if (tournament[i].field != tournament[match_index].field){
+      if (tournament[i].field != tournament[match_index].field) {
         no_go_count++;
       }
     }
@@ -291,7 +291,7 @@ int compareTeams(const match *a, const match *b) {
 }
 
 /* Tæller antallet af gang et hold spiller i træk, og giver karakter derudfra. */
-int playedInARow(const match *tournament, const char *current_team, const int match_index, int number_of_fields, int *point){
+int playedInARow(const match *tournament, const char *current_team, const int match_index, int number_of_fields, int *point) {
   int i = 1;
   int point_temp = 1;
 
@@ -316,7 +316,7 @@ int isDifferentTeam(const match compare_team, const char *current_team) {
   if (strcmp(compare_team.team_a.team, current_team) == 0 ||
       strcmp(compare_team.team_b.team, current_team) == 0) {
     return 0;
-  } 
+  }
   else {
     return 5;
   }
@@ -324,8 +324,8 @@ int isDifferentTeam(const match compare_team, const char *current_team) {
 
 /* Sammenligner kampe. */
 int isDifferentMatch(const match compare_team, const match current_team) {
-  if(isDifferentTeam(compare_team, current_team.team_a.team) == 0 && 
-     isDifferentTeam(compare_team, current_team.team_b.team) == 0){
+  if(isDifferentTeam(compare_team, current_team.team_a.team) == 0 &&
+     isDifferentTeam(compare_team, current_team.team_b.team) == 0) {
     return 0;
   }
 
@@ -351,6 +351,3 @@ int getLevel(const char level) {
          (level == 'B') ? B :
          (level == 'C') ? C : EMPTY;
 }
-
-
-

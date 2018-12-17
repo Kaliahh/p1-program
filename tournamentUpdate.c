@@ -93,7 +93,7 @@ team *updateTeams(const team *all_teams, const int number_of_teams) {
   team *temp_teams;
   int i = 0;
 
-  temp_teams = (team*) malloc(number_of_teams * sizeof(team));
+  temp_teams = malloc(number_of_teams * sizeof(team));
 
   for (i = 0; i < number_of_teams; i++) {
     temp_teams[i] = all_teams[i];
