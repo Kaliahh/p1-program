@@ -12,6 +12,7 @@
 # define MAX_LINE_LEN 200
 # define CHECK_NUM 100000
 # define FIRST 0
+# define MAX_POINTS 345
 
 # define LOWERCASE "abcdefghijklmnopqrstuvwxzyæøå"
 # define UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXZYÆØÅ"
@@ -40,3 +41,6 @@ enum levels {EMPTY, N, A, B, C};
 
 /* Enumerationer for ændringer */
 enum modifiers {REMOVE, ADD};
+
+/* Enumerationer for kvaliteten af stævneplanen */
+enum quality {FAST = 1, BEST};

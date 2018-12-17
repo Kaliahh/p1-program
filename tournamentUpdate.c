@@ -33,14 +33,14 @@ int updateTournament(FILE *fp) {
 
   make_fast = createMenu();
 
-  if (make_fast == 1) {
+  if (make_fast == FAST) {
     do {
       no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &point);
     }
     while (no_go_count != 0);
   }
-  else if (make_fast == 2) {
-    while (!(no_go_count == 0 && point > 345)) {
+  else if (make_fast == BEST) {
+    while (!(no_go_count == 0 && point > MAX_POINTS)) {
       point = 0;
 
       no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &point);
