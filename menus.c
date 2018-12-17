@@ -81,6 +81,7 @@ int createMenu(void) {
   int choice = -1;
 
   while (choice != 0) {
+    printf("\n");
     showCreateMenu();
     scanf(" %d", &choice);
 
