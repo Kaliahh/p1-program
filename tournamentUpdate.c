@@ -113,7 +113,7 @@ team *updateTeams(const team *all_teams, const int number_of_teams) {
   team *temp_teams;
   int i = 0;
 
-  temp_teams = malloc(number_of_teams * sizeof(team));
+  temp_teams = allocateMemoryTeams(number_of_teams);
 
   for (i = 0; i < number_of_teams; i++) {
     temp_teams[i] = all_teams[i];
@@ -201,25 +201,3 @@ void deleteTeams(const team *removed_teams, const int number_of_removed_teams, c
     }
   }
 }
-
-/* Ændre starttidspunktet for et hold. */
-/*void changeStartingTime(team *all_teams, const char *team, const int number_of_teams, int time) {
-  int i = 0;
-
-  for (i = 0; i < number_of_teams; i++) {
-    if (strcmp(team, all_teams[i].team) == 0) {
-      all_teams[i].starting_time = time;
-    }
-  }
-}*/
-
-/* Ændre sluttidspunktet for et hold. */
-/*void changeEndingTime(team *all_teams, const char *team, const int number_of_teams, int time) {
-  int i = 0;
-
-  for (i = 0; i < number_of_teams; i++) {
-    if (strcmp(team, all_teams[i].team) == 0) {
-      all_teams[i].ending_time = time;
-    }
-  }
-}*/

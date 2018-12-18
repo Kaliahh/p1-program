@@ -1,5 +1,16 @@
 
 
+/*if (doesTeamExist(temp_match.team_a, all_teams, i) == 0) {
+  strcpy(all_teams[i].team, temp_match.team_a.team);
+  all_teams[i].level = temp_match.level;
+  i++;
+}
+if (doesTeamExist(temp_match.team_b, all_teams, i) == 0) {
+  strcpy(all_teams[i].team, temp_match.team_b.team);
+  all_teams[i].level = temp_match.level;
+  i++;
+}*/
+
 
   /*int team_index = 0;
   int time = 0;

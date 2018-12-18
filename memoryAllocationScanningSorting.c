@@ -8,10 +8,10 @@
    Tager int med antallet af teams, dvs, antallet af elementer
    Returnerer pointer til arrayet. */
 team* allocateMemoryTeams(const int number_of_teams) {
-  team *all_teams = malloc(number_of_teams * sizeof(team));         /* Allokerer plads. */
+  team *teams = malloc(number_of_teams * sizeof(team));             /* Allokerer plads. */
 
-  if (all_teams != NULL) {                                          /* Returner pointer, hvis der kunne allokeres plads. */
-    return all_teams;
+  if (teams != NULL) {                                              /* Returner pointer, hvis der kunne allokeres plads. */
+    return teams;
   }
   else {                                                            /* Fejlhåndtering, hvis der ikke kunne allokeres plads. */
     perror("Der skete en fejl under pladsallokeringen");
@@ -25,9 +25,9 @@ team* allocateMemoryTeams(const int number_of_teams) {
 match* allocateMemoryMatch(const int number_of_matches) {
   match *tournament = NULL;
 
-  tournament = malloc(number_of_matches * sizeof(match));   /* Allokerer plads. */
+  tournament = malloc(number_of_matches * sizeof(match));           /* Allokerer plads. */
 
-  if (tournament != NULL) {                                        /* Returner pointer, hvis der kunne allokeres plads. */
+  if (tournament != NULL) {                                         /* Returner pointer, hvis der kunne allokeres plads. */
     return tournament;
   }
   else {                                                            /* Fejlhåndtering, hvis der ikke kunne allokeres plads. */
@@ -129,16 +129,6 @@ team *scanFileForTeams(FILE *fp, const int number_of_teams) {
       /* Indsæt hold, hvis de ikke er der allerede. */
       copyNonExistingTeam(all_teams, temp_match.team_a, temp_match.level, &i);
       copyNonExistingTeam(all_teams, temp_match.team_b, temp_match.level, &i);
-      /*if (doesTeamExist(temp_match.team_a, all_teams, i) == 0) {
-        strcpy(all_teams[i].team, temp_match.team_a.team);
-        all_teams[i].level = temp_match.level;
-        i++;
-      }
-      if (doesTeamExist(temp_match.team_b, all_teams, i) == 0) {
-        strcpy(all_teams[i].team, temp_match.team_b.team);
-        all_teams[i].level = temp_match.level;
-        i++;
-      }*/
     }
   }
 
@@ -175,10 +165,13 @@ int getNumberOfMatches(FILE *fp) {
   char dump[5];
   int number_of_matches = 0;
 
-  rewind(fp);                                                       /* Gå til starten af filen. */
+  /* Gå til starten af filen. */
+  rewind(fp);
 
-  while (fgets (dump, 5, fp) != NULL) {                             /* Læser indtil der ikke er mere at læse (EOF). */
-    if (strcmp(dump, "Bane") == 0) {                                /* Hvis der står "bane" betyder det at der er en kamp på linjen.*/
+  /* Læser indtil der ikke er mere at læse (EOF). */
+  while (fgets (dump, 5, fp) != NULL) {
+    /* Hvis der står "bane" betyder det at der er en kamp på linjen.*/
+    if (strcmp(dump, "Bane") == 0) {
       number_of_matches += 1;
     }
   }
@@ -194,11 +187,11 @@ void splitTeams(const char *teams, match *match) {
 
   while (sentinel == 0) {
     if (teams[i] == 'v') {                                                      /* Hvis der er et 'v'. */
-      if (teams[i - 1] == ' ' && teams[i + 1] == 's' && teams[i + 2] == ' ') {      /* Check om det er en del af " vs ". */
-        strncpy(match->team_a.team, teams, i - 1);                            /* Kopier første team navn, uden sidste mellemrum. */
-        match->team_a.team[i - 1] = '\0';                                     /* Definer enden af strengen. */
-        strncpy(match->team_b.team, teams + (i + 3), length - (i + 2));       /* Kopier det andet team navn. */
-        match->team_b.team[length - (i + 1)] = '\0';                          /* Definer enden af strengen. */
+      if (teams[i - 1] == ' ' && teams[i + 1] == 's' && teams[i + 2] == ' ') {  /* Check om det er en del af " vs ". */
+        strncpy(match->team_a.team, teams, i - 1);                              /* Kopier første team navn, uden sidste mellemrum. */
+        match->team_a.team[i - 1] = '\0';                                       /* Definer enden af strengen. */
+        strncpy(match->team_b.team, teams + (i + 3), length - (i + 2));         /* Kopier det andet team navn. */
+        match->team_b.team[length - (i + 1)] = '\0';                            /* Definer enden af strengen. */
         sentinel = 1;
       }
     }
