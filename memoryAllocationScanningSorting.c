@@ -45,7 +45,7 @@ int getNumberOfTeams(FILE *fp) {
   int number_of_teams = 0;
   int has_content = 0;
   int sentinel = 0;
-  int i = 0;
+  int char_index = 0;
 
   /* Gennemgå hver linje i en fil.
      Returner antallet af linjer der indeholder andet end whitespace.
@@ -54,8 +54,8 @@ int getNumberOfTeams(FILE *fp) {
     if (fgets(tmp, MAX_NAME_LEN, fp) != NULL) {
       has_content = 0;
 
-      for (i = 0; i < strlen(tmp); i++) {                           /* Check om linjen er tom. (Kun whitespace) */
-        if (!isspace(tmp[i]) && !has_content) {
+      for (char_index = 0; char_index < strlen(tmp); char_index++) {                           /* Check om linjen er tom. (Kun whitespace) */
+        if (!isspace(tmp[char_index]) && !has_content) {
           has_content = 1;
         }
       }
@@ -77,10 +77,10 @@ int getNumberOfTeams(FILE *fp) {
 /* Fylder et arrayet all_teams med holdnavne og niveau. */
 void scanTeamFile(FILE *fp, const char *file_name, const int number_of_teams, team *all_teams) {
   char level = ' ';
-  int i;
+  int team_index = 0;
 
   /* Gennemgår filen med holdnavne, og kopierer holdnavn og niveau over på de rigtige pladser i et array af structs. */
-  for (i = 0; i < number_of_teams; i++) {
+  for (team_index = 0; team_index < number_of_teams; team_index++) {
     /* Checker om filpointeren er kommet til slutningen af filen,
        og stopper hvis det er sandt. */
     if (feof(fp)) {
@@ -88,12 +88,12 @@ void scanTeamFile(FILE *fp, const char *file_name, const int number_of_teams, te
       break;
     }
 
-    fscanf(fp, " %[a-zA-Z0-9 ] %*c %c", all_teams[i].team, &level);
+    fscanf(fp, " %[a-zA-Z0-9 ] %*c %c", all_teams[team_index].team, &level);
 
     /* Sætter niveauet til stort. */
     level = toupper(level);
     /* Oversætter level fra char til enuem typen 'level'. */
-    all_teams[i].level = getLevel(level);
+    all_teams[team_index].level = getLevel(level);
   }
 
   rewind(fp);
@@ -102,7 +102,7 @@ void scanTeamFile(FILE *fp, const char *file_name, const int number_of_teams, te
 /* Scanner en stævneplan, returnerer et array af alle hold. */
 team *scanFileForTeams(FILE *fp, const int number_of_teams) {
   int scanres = 0;
-  int i = 0;
+  int team_index = 0;
   char temp[MAX_LINE_LEN];
   char temp_teams[MAX_LINE_LEN];
   char level;
@@ -127,13 +127,22 @@ team *scanFileForTeams(FILE *fp, const int number_of_teams) {
       splitTeams(temp_teams, &temp_match);
 
       /* Indsæt hold, hvis de ikke er der allerede. */
-      copyNonExistingTeam(all_teams, temp_match.team_a, temp_match.level, &i);
-      copyNonExistingTeam(all_teams, temp_match.team_b, temp_match.level, &i);
+      copyNonExistingTeam(all_teams, temp_match.team_a, temp_match.level, &team_index);
+      copyNonExistingTeam(all_teams, temp_match.team_b, temp_match.level, &team_index);
     }
   }
 
   rewind(fp);
   return all_teams;
+}
+
+/* gør noget */
+void copyNonExistingTeam(team *all_teams, team temp_team, int level, int *team_index){
+  if (doesTeamExist(temp_team, all_teams, *team_index) == 0) {
+    strcpy(all_teams[*team_index].team, temp_team.team);
+    all_teams[*team_index].level = level;
+    (*team_index)++;
+  }
 }
 
 /* Læser og returnerer antallet af hold i en given fil. */
@@ -143,17 +152,20 @@ int getNumberOfTeamsTournament(FILE *fp) {
 
   number_of_matches = getNumberOfMatches(fp);
 
-  number_of_teams = number_of_matches / 3; /* Forklar udregningen. */
+  /* Antallet af hold udregnes på denne måde, da hvert hold skal have 6 kampe,
+     og der indgår 2 hold i hver kamp. Derfor ganges der med 2 hold, divideres med 6 kampe,
+     som forkortes til dette */
+  number_of_teams = number_of_matches / 3;
 
   return number_of_teams;
 }
 
 /* Chekker om et givent team allerede er indsat i et givent array. */
-int doesTeamExist(const team temp_team, const team *all_teams, const int index) {
-  int i = 0;
+int doesTeamExist(const team temp_team, const team *all_teams, const int team_index) {
+  int comp_index = 0;
 
-  for (i = 0; i < index; i++) {
-    if (strcmp(temp_team.team, all_teams[i].team) == 0) {
+  for (comp_index = 0; comp_index < team_index; comp_index++) {
+    if (strcmp(temp_team.team, all_teams[comp_index].team) == 0) {
       return 1;
     }
   }
@@ -162,16 +174,16 @@ int doesTeamExist(const team temp_team, const team *all_teams, const int index) 
 
 /* Tæller og returnerer antallet af kampe i en given fil. */
 int getNumberOfMatches(FILE *fp) {
-  char dump[5];
+  char temp[5];
   int number_of_matches = 0;
 
   /* Gå til starten af filen. */
   rewind(fp);
 
   /* Læser indtil der ikke er mere at læse (EOF). */
-  while (fgets (dump, 5, fp) != NULL) {
+  while (fgets (temp, 5, fp) != NULL) {
     /* Hvis der står "bane" betyder det at der er en kamp på linjen.*/
-    if (strcmp(dump, "Bane") == 0) {
+    if (strcmp(temp, "Bane") == 0) {
       number_of_matches += 1;
     }
   }
@@ -185,6 +197,8 @@ void splitTeams(const char *teams, match *match) {
   int length = strlen(teams);
   int i = 0;
 
+  /* i er indekset for et tegn i teams arrayet,
+     som er en streng på denne form: Bane x | Y | Hold s vs Hold t */
   while (sentinel == 0) {
     if (teams[i] == 'v') {                                                      /* Hvis der er et 'v'. */
       if (teams[i - 1] == ' ' && teams[i + 1] == 's' && teams[i + 2] == ' ') {  /* Check om det er en del af " vs ". */
@@ -196,15 +210,6 @@ void splitTeams(const char *teams, match *match) {
       }
     }
     i++;
-  }
-}
-
-/* gør noget */
-void copyNonExistingTeam(team *all_teams, team temp_team, int level, int *i){
-  if (doesTeamExist(temp_team, all_teams, *i) == 0) {
-    strcpy(all_teams[*i].team, temp_team.team);
-    all_teams[*i].level = level;
-    (*i)++;
   }
 }
 
@@ -224,28 +229,31 @@ int getStartingTime(FILE *fp) {
 /* Finder og returnerer antallet af baner der bruges i en given stævneplan. */
 int getNumberOfFields(FILE *fp) {
   char line[MAX_LINE_LEN];                                                      /* Navnet på en bane fylder 7 tegn, hvis der er under 10 baner. */
-  char test[7];                                                                 /* Strengen der testes om det er en bane. */
-  int number_of_fields = 0, done = 0, field_number = 0;
+  char temp[7];                                                                 /* Strengen der testes om det er en bane. */
+  int number_of_fields = 0;
+  int done = 0;
+  int field_number = 0;
   rewind(fp);
 
   while (fgets (line, MAX_LINE_LEN, fp) != NULL && !done) {                     /* Læser indtil flag (done) er sand. */
-    sscanf(line, " %s %d ", test, &field_number);
-    if (strcmp(test, "Bane") == 0 && field_number == number_of_fields + 1) {    /* Hvis der står "bane" betyder det at der er en kamp på linjen. */
+    sscanf(line, " %s %d ", temp, &field_number);
+    if (strcmp(temp, "Bane") == 0 && field_number == number_of_fields + 1) {    /* Hvis der står "bane" betyder det at der er en kamp på linjen. */
       number_of_fields++;
     }
-    else if((strcmp(test, "Runde") == 0) && field_number == 2) {                /* Hvis scanningen er nået runde 2, afslut. */
+    else if((strcmp(temp, "Runde") == 0) && field_number == 2) {                /* Hvis scanningen er nået runde 2, afslut. */
       done = 1;
     }
   }
   return number_of_fields;
 }
 
-/* Bruger qsort til at sortere arrayet af hold efter niveau. */
+/* Bruger qsort til at sortere hold med niveauet EMPTY til bunden af all_teams. */
 void sortArrayByLevel(team *all_teams, const int number_of_teams) {
   qsort(all_teams, number_of_teams, sizeof(team), levelComp);
 }
 
-/* Sammenligningsfunktion til qsort */
+/* Sammenligningsfunktion til qsort.
+   Sorterer EMPTY til bunden af all_teams */
 int levelComp(const void *a, const void*b) {
   team *team_a = (team*) a;
   team *team_b = (team*) b;
@@ -257,6 +265,5 @@ int levelComp(const void *a, const void*b) {
   else if (team_b->level == EMPTY) {
     return -1;
   }
-
   return 0;
 }

@@ -3,7 +3,7 @@
 /* tournamentCreate */
 int createNewTournament(void);
 void generateTournament(const int, const int, const int, const int, match *, team *);
-int checkTournament(const int, const int, const int, const int, match *, team *, int *);
+void resetGamesPlayed(const int, team *);
 int createTournament(const int, const int, const int, const int, team *, match *, int *);
 int createRound(const int, const int, const int, const int, int *, int *, team *, match *);
 int findFirstTeam(const int, const int, const int, team *, match *);

@@ -46,19 +46,10 @@ int printProgram(FILE *fp, const match *tournament, const int starting_time, con
 
 /* Oversætter level fra int til tilsvarende char */
 char translateToChar(const int level) {
-  switch(level) {
-    case 1:
-      return 'N';
-    case 2:
-      return 'A';
-    case 3:
-      return 'B';
-    case 4:
-      return 'C';
-    default:
-      printf("Fejl i print funktion\n");
-      return 'F';
-  }
+  return (level == N) ? 'N' :
+         (level == A) ? 'A' :
+         (level == B) ? 'B' :
+         (level == C) ? 'C' : 'F';
 }
 
 /* Printer alle hold til terminalen
