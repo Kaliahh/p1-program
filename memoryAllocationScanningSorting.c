@@ -99,7 +99,7 @@ void scanTeamFile(FILE *fp, const char *file_name, const int number_of_teams, te
   rewind(fp);
 }
 
-/* Scanner et kampprogram, returnerer et array af alle hold. */
+/* Scanner en stævneplan, returnerer et array af alle hold. */
 team *scanFileForTeams(FILE *fp, const int number_of_teams) {
   int scanres = 0;
   int i = 0;
@@ -215,7 +215,7 @@ void copyNonExistingTeam(team *all_teams, team temp_team, int level, int *i){
   }
 }
 
-/* Finder starttidspunktet for en eksisterende turneringsplan. */
+/* Finder starttidspunktet for en eksisterende stævneplan. */
 int getStartingTime(FILE *fp) {
   int hours = 0;
   int minutes = 0;
@@ -228,7 +228,7 @@ int getStartingTime(FILE *fp) {
   return hours * 60 + minutes;
 }
 
-/* Finder og returnerer antallet af baner der bruges i et givent kampprogram. */
+/* Finder og returnerer antallet af baner der bruges i en given stævneplan. */
 int getNumberOfFields(FILE *fp) {
   char line[MAX_LINE_LEN];                                                      /* Navnet på en bane fylder 7 tegn, hvis der er under 10 baner. */
   char test[7];                                                                 /* Strengen der testes om det er en bane. */

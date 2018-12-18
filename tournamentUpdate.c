@@ -4,7 +4,7 @@
 # include "../p1-program/h-files/tournament.h"
 # include "../p1-program/h-files/menus.h"
 
-/* Opdaterer en eksisterende turneringsplan. Modtager en filpointer som er placeret i starten af filen. Filpointer bliver rewinded i bunden. */
+/* Opdaterer en eksisterende stævneplan. Modtager en filpointer som er placeret i starten af filen. Filpointer bliver rewinded i bunden. */
 int updateTournament(FILE *fp) {
   int make_fast = 0;
   int number_of_teams = 0;
@@ -32,7 +32,7 @@ int updateTournament(FILE *fp) {
   /* Udregner antallet af kampe. */
   number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
 
-  /* Opdaterer kampprogrammet. */
+  /* Opdaterer stævnenen. */
   tournament = allocateMemoryMatch(number_of_matches);
   number_of_fields = getNumberOfFields(fp);
   number_of_rounds = getNumberOfRounds(number_of_matches, number_of_fields);
@@ -58,7 +58,7 @@ int updateTournament(FILE *fp) {
     return 1;
   }
 
-  /* Printer det færdige kampprogram, enten til en fil eller til terminalen */
+  /* Printer den færdige stævneplan, enten til en fil eller til terminalen */
   starting_time = getStartingTime(fp);
   printingMenu(tournament, starting_time, number_of_rounds, number_of_fields);
 

@@ -4,7 +4,7 @@
 # include "../p1-program/h-files/tournament.h"
 # include "../p1-program/h-files/menus.h"
 
-/* Laver og printer en ny turneringsplan */
+/* Laver og printer en ny stævneplan */
 int createNewTournament(void) {
   FILE *fp = NULL;
   int number_of_fields = 0;
@@ -69,7 +69,7 @@ int createNewTournament(void) {
     return 1;
   }
 
-  /* Printer det færdige kampprogram, enten til en fil eller til terminalen */
+  /* Printer den færdige stævneplan, enten til en fil eller til terminalen */
   printingMenu(tournament, starting_time, number_of_rounds, number_of_fields);
 
   /* Frigør den hukommelse der er allokeret til de forskellige arrays */
@@ -95,7 +95,7 @@ int checkTournament(const int number_of_teams, const int number_of_matches, cons
   return no_go_count;
 }
 
-/* Laver en turneringsplan, som returnerer antallet af gange planen bryder med reglerne. */
+/* Laver en stævneplan, og returnerer antallet af gange planen bryder med reglerne. */
 int createTournament(const int number_of_teams, const int number_of_matches, const int number_of_fields, const int number_of_rounds, team *all_teams, match *tournament, int *point) {
   int i = 0;
   int round_count = 0;
@@ -152,7 +152,7 @@ int createTournament(const int number_of_teams, const int number_of_matches, con
 }
 
 /* Finder hold, som kan sammensættes i en kamp.  */
-int createRound(const int start_of_next_round, const int start_of_round, const int number_of_teams, 
+int createRound(const int start_of_next_round, const int start_of_round, const int number_of_teams,
                 const int number_of_fields, int *team_a, int *team_b, team *all_teams, match *tournament) {
 
   int tournament_index = 0;

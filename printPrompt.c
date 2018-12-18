@@ -1,7 +1,7 @@
 # include "../p1-program/h-files/main.h"
 # include "../p1-program/h-files/printPrompt.h"
 
-/* Printer turneringsplan til fil
+/* Printer stævneplan til fil
    Parameterne er en fil-pointer, enten filen der skal skrives til, eller stdout hvis der skal printes til terminalen,
    en turnering i form af en pointer til array af matches, en int med starttidspunkt for turneringen
    en int med antallet af runder, og en int med antallet af baner  */

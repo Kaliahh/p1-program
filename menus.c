@@ -1,4 +1,4 @@
-/* Menu der spørger om brugeren vil redigere et eksisterende kampprogram, eller lave et nyt kampprogram */
+/* Menu der spørger om brugeren vil redigere en eksisterende stævneplan, eller lave en ny stævneplan */
 # include "../p1-program/h-files/main.h"
 # include "../p1-program/h-files/tournament.h"
 # include "../p1-program/h-files/menus.h"
@@ -30,21 +30,21 @@ int mainMenu(void) {
   printf("            \\__ \\/ /_/ /_/ / / / / / / / / / /     \n");
   printf("           ___/ / ____/ __/ /_/ / /_/ / /_/ /        \n");
   printf("          /____/_/   /____|____/\\____/\\____/       \n");
-  printf("\n");
+  printf("                                                     \n");
   printf("        Stævneplanlægning til Kidzliga Floorball\n   \n");
 
   while (choice != 0) {
     showMainMenu();
     scanf(" %d", &choice);
-    /* Laver en ny turneringsplan fra bunden */
+    /* Laver en ny stævneplan fra bunden */
     if (choice == 1) {
       printf("\n");
       createNewTournament();
     }
-    /* Opdaterer turneringsplanen */
+    /* Opdaterer stævneplanen */
     else if (choice == 2) {
       printf("\n");
-      fp = fopen("turneringsplan.txt", "r");
+      fp = fopen("staevneplan.txt", "r");
       isFileOpen(fp);
       updateTournament(fp);
       fclose(fp);
@@ -71,8 +71,8 @@ int mainMenu(void) {
 /* Printer valgmulighederne for hovedmenuen. */
 void showMainMenu(void) {
   printf("#####################  HOVEDMENU  #####################\n\n");
-  printf("[1] Lav et nyt kampprogram\n"
-         "[2] Rediger et eksisterende kampprogram\n"
+  printf("[1] Lav en ny staevneplan\n"
+         "[2] Rediger en eksisterende staevneplan\n"
          "[3] Lav skabelon til liste af holdnavne (!)\n"
          "[0] Afslut\n>> ");
 }
@@ -103,13 +103,13 @@ int createMenu(void) {
 }
 
 void showCreateMenu(void) {
-  printf("###############  LAV ET NYT KAMPPROGRAM  ##############\n\n");
-  printf("[1] Hurtig kampprogram\n"
-         "[2] Bedste kampprogram\n"
+  printf("################  LAV NY STAEVNEPLAN  #################\n\n");
+  printf("[1] Hurtig staevneplan\n"
+         "[2] Bedste staevneplan\n"
          "[0] Afslut\n>> ");
 }
 
-/* Redigerings menu over hvilke muligheder der kan vælges, til at redigere et eksisterende kampprogram.
+/* Redigerings menu over hvilke muligheder der kan vælges, til at redigere en eksisterende stævneplan.
    Tager input fra brugen og derefter kalder passende funktioner i forhold til brugerens valg. */
 team *editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
   int choice = -1;
@@ -127,7 +127,7 @@ team *editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
       else if (choice == 2) { /* Fjern hold */
         all_teams = modifyTeams(deleteTeams, REMOVE, all_teams, number_of_teams);
       }
-      else if (choice == 3) { /* Generer nyt kampprogram */
+      else if (choice == 3) { /* Generer ny stævneplan */
         return all_teams;
       }
       else if (choice == 999) { /* Debug */
@@ -151,13 +151,13 @@ team *editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
 void showEditMenu(void) {
   printf("######################  REDIGER  ######################\n\n");
   printf("Hvad vil du gerne aendre?\n");
-  printf("[1] Tilføj nyt hold\n"
+  printf("[1] Tilføj hold\n"
          "[2] Slet eksisterende hold\n"
-         "[3] Lav nyt kampprogram\n"
+         "[3] Lav ny staevneplan\n"
          "[0] Gaa til hovedmenuen\n>> ");
 }
 
-/* Spørger brugeren om hvad der ønskes at gøre med turneringsplanen, og kalder relevante funktioner.
+/* Spørger brugeren om hvad der ønskes at gøre med stævneplanen, og kalder relevante funktioner.
    Parameterne er turneringen i form af en pointer til array af matches, en int med starttidspunkt for turneringen
    en int med antallet af runder, og en int med antallet af baner */
 int printingMenu(const match *tournament, const int starting_time, const int number_of_rounds, const int number_of_fields) {
@@ -171,9 +171,9 @@ int printingMenu(const match *tournament, const int starting_time, const int num
       printProgram(stdout, tournament, starting_time, number_of_rounds, number_of_fields);
     }
 
-    else if (choice == 2) { /* Gem kampprogram */
+    else if (choice == 2) { /* Gem stævneplan */
       FILE *fp;
-      fp = fopen("turneringsplan.txt", "w");
+      fp = fopen("staevneplan.txt", "w");
       isFileOpen(fp);
       printProgram(fp, tournament, starting_time, number_of_rounds, number_of_fields);
       fclose(fp);
@@ -192,6 +192,6 @@ int printingMenu(const match *tournament, const int starting_time, const int num
 
 /* Viser valgmuligheder ved print i terminalen */
 void showPrintingMenu(void) {
-  printf("\n#####################    PRINT    #####################\n\n");
-  printf("[1] Se kampprogram i terminalen \n[2] Gem kampprogram\n[0] Gå til hovedmenuen\n>> ");
+  printf("\n######################  PRINT  ######################\n\n");
+  printf("[1] Se staevneplan i terminalen \n[2] Gem staevneplan\n[0] Gå til hovedmenuen\n>> ");
 }
