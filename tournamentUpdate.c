@@ -24,6 +24,11 @@ int updateTournament(FILE *fp) {
   /* Prompter brugeren for ændringer der skal laves */
   all_teams = editMenu(fp, all_teams, &number_of_teams);
 
+  /* Checker om brugeren vil tilbage til hovedmenuen */
+  if (all_teams == NULL) {
+    return 1;
+  }
+
   /* Udregner antallet af kampe. */
   number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
 
