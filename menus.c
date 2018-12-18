@@ -18,7 +18,7 @@ int main(void) {
 }
 
 /* Hovedmenuen til programmet.
-   Tager input fra brugen og derefter kalder passende funktioner i forhold til brugerens valg. */
+   Tager input fra brugen og kalder derefter funktioner i forhold til brugerens valg. */
 int mainMenu(void) {
   int choice = -1;
   FILE *fp = NULL;
@@ -36,30 +36,22 @@ int mainMenu(void) {
   while (choice != 0) {
     showMainMenu();
     scanf(" %d", &choice);
-    /* Laver en ny stævneplan fra bunden */
-    if (choice == 1) {
+
+    if (choice == 1) { /* Lav stævneplan fra bunden */
       printf("\n");
       createNewTournament();
     }
-    /* Opdaterer stævneplanen */
-    else if (choice == 2) {
+    else if (choice == 2) { /* Opdater eksisterende stævneplan */
       printf("\n");
       fp = fopen("staevneplan.txt", "r");
       isFileOpen(fp);
       updateTournament(fp);
       fclose(fp);
     }
-
-    else if (choice == 3) {
-      printf("\n");
-      createTemplate();
-    }
-
-    else if (choice == 0) {
+    else if (choice == 0) { /* Gå tilbage til hovedmenuen */
       printf("\n");
       printf("Farvel!\n");
     }
-
     else {
       printf("\nUgyldigt input, proev igen\n");
     }
@@ -77,6 +69,7 @@ void showMainMenu(void) {
          "[0] Afslut\n>> ");
 }
 
+/* Menu til valg af metode til generering af stævneplan */
 int createMenu(void) {
   int choice = -1;
 
@@ -99,14 +92,15 @@ int createMenu(void) {
   return 0;
 }
 
+/* Printer valgmulighederne af metoder */
 void showCreateMenu(void) {
   printf("################  LAV NY STAEVNEPLAN  #################\n\n");
   printf("[1] Hurtig staevneplan\n"
          "[2] Bedste staevneplan\n>> ");
 }
 
-/* Redigerings menu over hvilke muligheder der kan vælges, til at redigere en eksisterende stævneplan.
-   Tager input fra brugen og derefter kalder passende funktioner i forhold til brugerens valg. */
+/* Redigerings menu. Brugeren vælger om der skal tilføjes eller fjernes hold fra en eksisterende stævneplan.
+   Tager input fra brugen og kalder funktioner i forhold til brugerens valg. */
 team *editMenu(FILE *fp, team *all_teams, int *number_of_teams) {
   int choice = -1;
 
@@ -153,22 +147,21 @@ void showEditMenu(void) {
          "[0] Gaa til hovedmenuen\n>> ");
 }
 
-/* Spørger brugeren om hvad der ønskes at gøre med stævneplanen, og kalder relevante funktioner.
-   Parameterne er turneringen i form af en pointer til array af matches, en int med starttidspunkt for turneringen
-   en int med antallet af runder, og en int med antallet af baner */
+/* Print menu. Brugeren vælger om stævneplanen skal printes i terminalen,
+   eller gemmes i "staevneplan.txt" */
 int printingMenu(const match *tournament, const int starting_time, const int number_of_rounds, const int number_of_fields) {
   int choice = -1;
+  FILE *fp = NULL;
 
   while (choice != 0) {
     showPrintingMenu();
     scanf(" %d", &choice);
 
-    if (choice == 1) {  /* Se i terminalen */
+    if (choice == 1) {  /* Se stævneplan i terminalen */
       printProgram(stdout, tournament, starting_time, number_of_rounds, number_of_fields);
     }
 
     else if (choice == 2) { /* Gem stævneplan */
-      FILE *fp;
       fp = fopen("staevneplan.txt", "w");
       isFileOpen(fp);
       printProgram(fp, tournament, starting_time, number_of_rounds, number_of_fields);
@@ -180,7 +173,7 @@ int printingMenu(const match *tournament, const int starting_time, const int num
     }
 
     else {
-      printf("Fejl ved indtastning. Tast 1 eller 2\n>> ");
+      printf("\nUgyldigt input, proev igen\n");
     }
   }
   return 0;
@@ -189,5 +182,7 @@ int printingMenu(const match *tournament, const int starting_time, const int num
 /* Viser valgmuligheder ved print i terminalen */
 void showPrintingMenu(void) {
   printf("\n######################  PRINT  ######################\n\n");
-  printf("[1] Se staevneplan i terminalen \n[2] Gem staevneplan\n[0] Gå til hovedmenuen\n>> ");
+  printf("[1] Se staevneplan i terminalen\n"
+         "[2] Gem staevneplan\n"
+         "[0] Gå til hovedmenuen\n>> ");
 }

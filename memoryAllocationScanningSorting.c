@@ -4,9 +4,8 @@
 # include "../p1-program/h-files/printPrompt.h"
 
 
-/* Allokerer plads til et array af structs med hold.
-   Tager int med antallet af teams, dvs, antallet af elementer
-   Returnerer pointer til arrayet. */
+/* Allokerer plads til et array af team structs med hold.
+   Returnerer pointer til dette array. */
 team* allocateMemoryTeams(const int number_of_teams) {
   team *teams = malloc(number_of_teams * sizeof(team));             /* Allokerer plads. */
 
@@ -19,9 +18,8 @@ team* allocateMemoryTeams(const int number_of_teams) {
   }
 }
 
-/* Allokerer plads til et array af structs med kampe.
-   Tager int med antallet af matches, dvs, antallet af elementer
-   Returnerer pointer til arrayet. */
+/* Allokerer plads til et array af match structs med kampe.
+   Returnerer pointer til dette array. */
 match* allocateMemoryMatch(const int number_of_matches) {
   match *tournament = NULL;
 
@@ -36,10 +34,8 @@ match* allocateMemoryMatch(const int number_of_matches) {
   }
 }
 
-/* Find og returner antallet af linjer med indhold i en fil.
-   Returner -1 hvis der sker en fejl.
-   Der antages at fil position er i starten af filen,
-   og når funktionen er kørt ender den i slutningen af filen. */
+/* Finder og returner antallet af hold, ud fra antallet af linjer i filen med holdlisten.
+   Returner -1 hvis der sker en fejl. */
 int getNumberOfTeams(FILE *fp) {
   char tmp[MAX_NAME_LEN];
   int number_of_teams = 0;
@@ -79,7 +75,7 @@ void scanTeamFile(FILE *fp, const char *file_name, const int number_of_teams, te
   char level = ' ';
   int team_index = 0;
 
-  /* Gennemgår filen med holdnavne, og kopierer holdnavn og niveau over på de rigtige pladser i et array af structs. */
+  /* Gennemgår filen med holdnavne, og kopierer holdnavn og niveau over på de rigtige pladser i all_teams. */
   for (team_index = 0; team_index < number_of_teams; team_index++) {
     /* Checker om filpointeren er kommet til slutningen af filen,
        og stopper hvis det er sandt. */
@@ -90,16 +86,17 @@ void scanTeamFile(FILE *fp, const char *file_name, const int number_of_teams, te
 
     fscanf(fp, " %[a-zA-Z0-9 ] %*c %c", all_teams[team_index].team, &level);
 
-    /* Sætter niveauet til stort. */
+    /* Ændrer niveauet til stort bogstav. */
     level = toupper(level);
-    /* Oversætter level fra char til enuem typen 'level'. */
+    /* Oversætter level fra char til int, og gemmer denne i holdets level member */
     all_teams[team_index].level = getLevel(level);
   }
 
+  /* Sætter filpointeren til starten af stævneplanen */
   rewind(fp);
 }
 
-/* Scanner en stævneplan, returnerer et array af alle hold. */
+/* Scanner en stævneplan, returnerer et array med alle holdene. */
 team *scanFileForTeams(FILE *fp, const int number_of_teams) {
   int scanres = 0;
   int team_index = 0;
@@ -109,34 +106,38 @@ team *scanFileForTeams(FILE *fp, const int number_of_teams) {
   match temp_match;
   team *all_teams = NULL;
 
-  rewind(fp);
-
+  /* Allokerer plads til et array med alle hold */
   all_teams = allocateMemoryTeams(number_of_teams);
 
   while (fgets(temp, MAX_LINE_LEN, fp) != NULL) {
 
-    if (strlen(temp) > MIN_LINE_LEN) {                                          /* Hvis har en bestemt størrelse, må den indeholde en kamp. */
+    /* Hvis linjen er længere end MIN_LINE_LEN, må den indeholde en kamp. */
+    if (strlen(temp) > MIN_LINE_LEN) {
       scanres = sscanf(temp, " Bane %*d | %c | %[a-zA-Z0-9æøåÆØÅ ] ", &level, temp_teams);
 
+      /* Hvis der ikke blev fundet et nivaeu og to hold i linjen */
       if (scanres != 2) {
         perror("Error scanning matches");
       }
 
+      /* Konverterer niveauet fra char til int */
       temp_match.level = getLevel(level);
 
+      /* Splitter holdene i strengen til to forskellige hold */
       splitTeams(temp_teams, &temp_match);
 
-      /* Indsæt hold, hvis de ikke er der allerede. */
+      /* Indsæt hold, hvis de ikke er i all_teams allerede. */
       copyNonExistingTeam(all_teams, temp_match.team_a, temp_match.level, &team_index);
       copyNonExistingTeam(all_teams, temp_match.team_b, temp_match.level, &team_index);
     }
   }
 
+  /* Sætter filpointeren tilbage til starten af stævneplanen */
   rewind(fp);
   return all_teams;
 }
 
-/* gør noget */
+/* Kopierer et hold fra over i all_teams, hvis det ikke er der i forvejen */
 void copyNonExistingTeam(team *all_teams, team temp_team, int level, int *team_index){
   if (doesTeamExist(temp_team, all_teams, *team_index) == 0) {
     strcpy(all_teams[*team_index].team, temp_team.team);
@@ -145,22 +146,7 @@ void copyNonExistingTeam(team *all_teams, team temp_team, int level, int *team_i
   }
 }
 
-/* Læser og returnerer antallet af hold i en given fil. */
-int getNumberOfTeamsTournament(FILE *fp) {
-  int number_of_teams = 0;
-  int number_of_matches = 0;
-
-  number_of_matches = getNumberOfMatches(fp);
-
-  /* Antallet af hold udregnes på denne måde, da hvert hold skal have 6 kampe,
-     og der indgår 2 hold i hver kamp. Derfor ganges der med 2 hold, divideres med 6 kampe,
-     som forkortes til dette */
-  number_of_teams = number_of_matches / 3;
-
-  return number_of_teams;
-}
-
-/* Chekker om et givent team allerede er indsat i et givent array. */
+/* Chekker om et givent hold allerede er i all_teams. Returnerer 1 hvis det er */
 int doesTeamExist(const team temp_team, const team *all_teams, const int team_index) {
   int comp_index = 0;
 
@@ -172,26 +158,44 @@ int doesTeamExist(const team temp_team, const team *all_teams, const int team_in
   return 0;
 }
 
-/* Tæller og returnerer antallet af kampe i en given fil. */
+/* Læser og returnerer antallet af hold i en fil med en stævneplan. */
+int getNumberOfTeamsTournament(FILE *fp) {
+  int number_of_teams = 0;
+  int number_of_matches = 0;
+
+  number_of_matches = getNumberOfMatches(fp);
+
+  /* Antallet af hold udregnes på denne måde, da hvert hold skal have 6 kampe,
+     og der indgår 2 hold i hver kamp. Derfor ganges der med 2 hold, divideres med 6 kampe,
+     som forkortes til dette */
+  number_of_teams = number_of_matches / 3;
+
+  /* Sætter filpointeren til starten af stævneplanen */
+  rewind(fp);
+
+  return number_of_teams;
+}
+
+/* Tæller og returnerer antallet af kampe i en stævneplan */
 int getNumberOfMatches(FILE *fp) {
   char temp[5];
   int number_of_matches = 0;
 
-  /* Gå til starten af filen. */
-  rewind(fp);
-
   /* Læser indtil der ikke er mere at læse (EOF). */
   while (fgets (temp, 5, fp) != NULL) {
-    /* Hvis der står "bane" betyder det at der er en kamp på linjen.*/
+    /* Hvis der står "Bane", betyder det at der er en kamp på linjen.*/
     if (strcmp(temp, "Bane") == 0) {
       number_of_matches += 1;
     }
   }
+  /* Sætter filpointeren til starten af stævneplanen */
+  rewind(fp);
   return number_of_matches;
 }
 
-/* Deler en given string af formen "Hold_a vs Hold_b"
-   og assigner de enkelte holdnavne, til holdene i en given match */
+/* Deler en given streng og lægger de enkelte holdnavne,
+   over i en midlertidig match struct,
+   der bruges til at returnere holdene tilbage til kaldstedet */
 void splitTeams(const char *teams, match *match) {
   int sentinel = 0;
   int length = strlen(teams);
@@ -203,9 +207,9 @@ void splitTeams(const char *teams, match *match) {
     if (teams[i] == 'v') {                                                      /* Hvis der er et 'v'. */
       if (teams[i - 1] == ' ' && teams[i + 1] == 's' && teams[i + 2] == ' ') {  /* Check om det er en del af " vs ". */
         strncpy(match->team_a.team, teams, i - 1);                              /* Kopier første team navn, uden sidste mellemrum. */
-        match->team_a.team[i - 1] = '\0';                                       /* Definer enden af strengen. */
+        match->team_a.team[i - 1] = '\0';                                       /* Definer enden af strengen med nultegnet. */
         strncpy(match->team_b.team, teams + (i + 3), length - (i + 2));         /* Kopier det andet team navn. */
-        match->team_b.team[length - (i + 1)] = '\0';                            /* Definer enden af strengen. */
+        match->team_b.team[length - (i + 1)] = '\0';                            /* Definer enden af strengen med nultegnet. */
         sentinel = 1;
       }
     }
@@ -218,32 +222,37 @@ int getStartingTime(FILE *fp) {
   int hours = 0;
   int minutes = 0;
 
-  rewind(fp);
-
   fscanf(fp, "Runde 1: %d:%d", &hours, &minutes);
 
+  /* Sætter filpointeren til starten af stævneplanen */
   rewind(fp);
   return hours * 60 + minutes;
 }
 
 /* Finder og returnerer antallet af baner der bruges i en given stævneplan. */
 int getNumberOfFields(FILE *fp) {
-  char line[MAX_LINE_LEN];                                                      /* Navnet på en bane fylder 7 tegn, hvis der er under 10 baner. */
-  char temp[7];                                                                 /* Strengen der testes om det er en bane. */
+  char line[MAX_LINE_LEN];      /* Navnet på en bane fylder 7 tegn, hvis der er højest 9 baner. */
+  char temp[7];                 /* Strengen der bruges til at teste om der er en bane. */
   int number_of_fields = 0;
-  int done = 0;
+  int sentinel = 0;
   int field_number = 0;
-  rewind(fp);
 
-  while (fgets (line, MAX_LINE_LEN, fp) != NULL && !done) {                     /* Læser indtil flag (done) er sand. */
+  /* Læser fra filen indtil flaget sentinel er sand,
+  eller filpointeren kommer til enden af filen*/
+  while (fgets (line, MAX_LINE_LEN, fp) != NULL && !sentinel) {
     sscanf(line, " %s %d ", temp, &field_number);
-    if (strcmp(temp, "Bane") == 0 && field_number == number_of_fields + 1) {    /* Hvis der står "bane" betyder det at der er en kamp på linjen. */
+
+    /* Hvis der står "bane" betyder det at der er en kamp på linjen. */
+    if (strcmp(temp, "Bane") == 0 && field_number == number_of_fields + 1) {
       number_of_fields++;
     }
-    else if((strcmp(temp, "Runde") == 0) && field_number == 2) {                /* Hvis scanningen er nået runde 2, afslut. */
-      done = 1;
+    /* Hvis scanningen er nået runde 2, afslut. */
+    else if((strcmp(temp, "Runde") == 0) && field_number == 2) {
+      sentinel = 1;
     }
   }
+  /* Sætter filpointeren til starten af stævneplanen */
+  rewind(fp);
   return number_of_fields;
 }
 

@@ -1,7 +1,9 @@
 # include "../p1-program/h-files/main.h"
 # include "../p1-program/h-files/printPrompt.h"
 
-/* Printer stævneplan til fil
+/* Printer stævneplanen. Ud fra brugerens valg ved kaldet af funktionen,
+   printes stævneplanen enten til "staevneplan.txt" eller til skærmen, stdout */
+   /*
    Parameterne er en fil-pointer, enten filen der skal skrives til, eller stdout hvis der skal printes til terminalen,
    en turnering i form af en pointer til array af matches, en int med starttidspunkt for turneringen
    en int med antallet af runder, og en int med antallet af baner  */
@@ -12,8 +14,9 @@ int printProgram(FILE *fp, const match *tournament, const int starting_time, con
   int minute = 0;
   int time = starting_time;
 
-  /* Chekker om et givent index i turnerings arrayet indeholder gyldige hold. Afgjort ved at navnet starter med stort bogstav */
+  /* Chekker om et givent index i turnerings arrayet indeholder gyldige hold. Afgjort ved at navnet starter med bogstav */
   while (isalpha(tournament[match_index].team_a.team[0]) != 0 && isalpha(tournament[match_index].team_b.team[0]) != 0) {
+    /* Udregner starttidspunktet for den nuværende runde */
     hour = time / 60;
     minute = time % 60;
 
@@ -24,6 +27,8 @@ int printProgram(FILE *fp, const match *tournament, const int starting_time, con
       /* Printer banenummer, niveau og holdene der skal spille mod hinanden */
       fprintf(fp, "Bane %2d | %c | %s vs %s\n", tournament[match_index].field + 1, translateToChar(tournament[match_index].level),
                                                 tournament[match_index].team_a.team, tournament[match_index].team_b.team);
+
+      /* Tidspunktet for den næste runde tælles op med længden af én runde */
       time += ROUND_LEN;
       round_index++;
     }
@@ -35,12 +40,15 @@ int printProgram(FILE *fp, const match *tournament, const int starting_time, con
       fprintf(fp, "\n");
     }
 
+    /* Hvis det hverken er den sidste eller den første kamp i runden */
     else {
       fprintf(fp, "Bane %2d | %c | %s vs %s\n", tournament[match_index].field + 1, translateToChar(tournament[match_index].level),
                                                 tournament[match_index].team_a.team, tournament[match_index].team_b.team);
     }
     match_index++;
   }
+  /* Sætter filpointeren til starten af stævneplanen */
+  rewind(fp);
   return 0;
 }
 
@@ -52,8 +60,7 @@ char translateToChar(const int level) {
          (level == C) ? 'C' : 'F';
 }
 
-/* Printer alle hold til terminalen
-   Tager en pointer til et array af teams, og en int med antallet af elementer i arrayet */
+/* Printer alle hold i all_teams til terminalen */
 void printTeams(const team *all_teams, const int number_of_teams) {
   int team_index = 0;
   char level = ' ';
@@ -66,17 +73,6 @@ void printTeams(const team *all_teams, const int number_of_teams) {
   printf("\n");
 }
 
-/* Laver en template til holdnavne.txt. WIP */
-void createTemplate(void) {
-  FILE *fp = NULL;
-
-  fp = fopen("holdnavne.txt", "w");
-  isFileOpen(fp);
-  fprintf(fp, "%s\n", "# Holdnavn, NIVEAU");
-
-  fclose(fp);
-}
-
 /* Prompter brugeren for antallet af baner.
    Returnerer antallet af baner */
 int promptForFields(void) {
@@ -87,7 +83,7 @@ int promptForFields(void) {
 }
 
 /* Prompter brugeren for starttidspunkt.
-   Returnerer starttidspunktet i minutter, fra midnat */
+   Returnerer starttidspunktet i minutter, talt fra midnat */
 int promptForTime(void) {
   int minutes = 0;
   int hours = 0;
@@ -96,24 +92,25 @@ int promptForTime(void) {
   return hours * 60 + minutes;
 }
 
-/* Prompter brugere for et filnavn */
+/* Prompter brugere for et navn på filen med holdlisten */
 void promptForFileName(char *file_name) {
-  printf("Indtast filnavn (afslut med .txt)\n>> ");
+  printf("Indtast navn på fil med holdliste (afslut med .txt)\n>> ");
   scanf(" %s", file_name);
 }
 
-/* Prompter og scanner for antal nye hold. */
+/* Prompter for antallet nye hold. */
 int promptForNumberOfTeams(const int modifier) {
   int number_of_mod_teams = 0;
 
+  /* Teksten der printes til terminalen, er baseret på om der skal tilføjes eller fjernes hold ved kaldstedet */
   printf("Antal hold der ønskes at %s\n>> ", (modifier == ADD) ? "tilføjes" : "fjernes");
   scanf(" %d", &number_of_mod_teams);
 
   return number_of_mod_teams;
 }
 
-/* Undersøger om filen blev åbnet, hvis ikke skrives en fejl og programmet lukkes
-   Ellers sker der intet */
+/* Undersøger om filen blev åbnet.
+   Hvis ikke skrives en fejl og programmet stoppes */
 void isFileOpen(FILE *fp) {
   if(fp == NULL) {
     perror("FEJL: Filen kunne ikke åbnes");

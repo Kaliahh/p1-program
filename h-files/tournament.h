@@ -1,7 +1,7 @@
 /* Prototyper */
 
 /* tournamentCreate */
-int createNewTournament(void);
+void createNewTournament(void);
 void generateTournament(const int, const int, const int, const int, match *, team *);
 void resetGamesPlayed(const int, team *);
 int createTournament(const int, const int, const int, const int, team *, match *, int *);
@@ -19,7 +19,7 @@ int getNumberOfRounds(const int, const int);
 int getLevel(const char);
 
 /* tournamentUpdate */
-int updateTournament(FILE *);
+void updateTournament(FILE *);
 team *modifyTeams(void (*)(const team *, const int, const int, team *), const int, team *, int *);
 team *updateTeams(const team *, const int);
 void getTeams(const int, const int, const team *, const int, team *);

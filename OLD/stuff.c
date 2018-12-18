@@ -1,4 +1,13 @@
+/* Laver en template til holdnavne.txt. WIP */
+void createTemplate(void) {
+  FILE *fp = NULL;
 
+  fp = fopen("holdnavne.txt", "w");
+  isFileOpen(fp);
+  fprintf(fp, "%s\n", "# Holdnavn, NIVEAU");
+
+  fclose(fp);
+}
 
 /*if (doesTeamExist(temp_match.team_a, all_teams, i) == 0) {
   strcpy(all_teams[i].team, temp_match.team_a.team);

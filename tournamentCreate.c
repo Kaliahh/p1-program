@@ -4,8 +4,8 @@
 # include "../p1-program/h-files/tournament.h"
 # include "../p1-program/h-files/menus.h"
 
-/* Sammensætter og printer en ny stævneplan */
-int createNewTournament(void) {
+/* Sammensætter og printer en ny stævneplan fra bunden */
+void createNewTournament(void) {
   FILE *fp = NULL;
   int number_of_fields = 0;
   int number_of_rounds = 0;
@@ -23,22 +23,23 @@ int createNewTournament(void) {
 
   fp = fopen(file_name, "r");
 
-  /* Check at filen er NULL */
+  /* Check at filen blev fundet */
   isFileOpen(fp);
 
   /* Finder antallet af hold */
   number_of_teams = getNumberOfTeams(fp);
 
-  /* Udregner antallet af kampe og antallet af runder */
+  /* Udregner antallet af kampe */
   number_of_matches = (number_of_teams * GAMES_PR_TEAM) / 2;
 
   /* Finder antallet af runder */
   number_of_rounds = getNumberOfRounds(number_of_matches, number_of_fields);
 
-  /* Allokerer plads til teams arrayet og matches arrayet */
+  /* Allokerer plads til et array af alle hold */
   all_teams = calloc(number_of_teams, sizeof(team));
 
-  /* Fylder teams arrayet med hold */
+  /* Finder holdnavne og niveau i den åbne fil,
+     og lægger dem over i all_teams */
   scanTeamFile(fp, file_name, number_of_teams, all_teams);
 
   /* Allokerer plads til et array med plads til alle kampe der skal spilles */
@@ -56,12 +57,12 @@ int createNewTournament(void) {
 
   fclose(fp);
 
-  return 0;
+  return;
 }
 
 /* Sammensætter og evaluerer stævneplaner, indtil der findes en der er acceptabel
    Der bruges enten en hurtig metode, som bare kigger på om floorball regler bliver brudt
-   eller den bedre metode som også giver point alt efter hvor god stævneplanen er */
+   eller den bedre metode som yderligere giver point alt efter hvor god stævneplanen er */
 void generateTournament(const int number_of_teams, const int number_of_matches, const int number_of_fields, const int number_of_rounds, match *tournament, team *all_teams) {
   int points = 0;
   int max_points = 0;
@@ -91,8 +92,8 @@ void generateTournament(const int number_of_teams, const int number_of_matches, 
   }
 }
 
-/* Laver en stævneplan, og returnerer antallet af gange planen bryder med reglerne. */
-int createTournament(const int number_of_teams, const int number_of_matches, const int number_of_fields, const int number_of_rounds, team *all_teams, match *tournament, int *point) {
+/* Sammensætter en stævneplan, og returnerer antallet af gange planen bryder med floorball reglerne. */
+int createTournament(const int number_of_teams, const int number_of_matches, const int number_of_fields, const int number_of_rounds, team *all_teams, match *tournament, int *points) {
   int field_index = 0;
   int round_count = 0;
   int end_of_round = 0;
@@ -100,7 +101,7 @@ int createTournament(const int number_of_teams, const int number_of_matches, con
   int start_of_next_round = 0;
   int sentinel_count = 0;
   int no_go_count = 0;
-  int temp_point = 0;
+  int temp_points = 0;
   int *team_a;
   int *team_b;
 
@@ -109,21 +110,24 @@ int createTournament(const int number_of_teams, const int number_of_matches, con
   team_a = malloc (number_of_fields * sizeof(int));
   team_b = malloc (number_of_fields * sizeof(int));
 
-  /* Nulstiller antallet af kampe hver hold har spillet,
+  /* Nulstiller antallet af kampe hvert hold har spillet,
      hvis det allerede er forsøgt at generere en stævneplan */
   resetGamesPlayed(number_of_teams, all_teams);
 
-  /* Kører igennem hver runde. */
+  /* Sammensætter alle runder, en af gangen,
+     og tjekker om de har brudt med regler, og hvor mange point de får */
   for (round_count = 0; round_count < number_of_rounds; round_count++) {
     start_of_round = round_count * number_of_fields;
     start_of_next_round = (round_count + 1) * number_of_fields;
 
+    /* Sammensætter en enkelt runder, og returnerer indekset for den sidste kamp i runden */
     end_of_round = createRound(start_of_next_round, start_of_round, number_of_teams, number_of_fields, team_a, team_b, all_teams, tournament);
 
-    /* Tjekker om programmet overholder reglerne. */
-    no_go_count = evaluateRound(tournament, end_of_round, number_of_fields, &temp_point);
+    /* Tjekker om runder overholder reglerne. */
+    no_go_count = evaluateRound(tournament, end_of_round, number_of_fields, &temp_points);
 
-    /* Hvis reglerne ikke overholder reglerne sammensættes runden på ny. */
+    /* Hvis runden ikke overholder reglerne sammensættes den på ny,
+       indtil det er blevet forsøgt mere end CHECK_NUM gange */
     if (no_go_count > 0 && sentinel_count < CHECK_NUM) {
       /* Sætter antallet af kampe tilbage til det den var før runden blev sammensat. */
       for (field_index = 0; field_index < number_of_fields; field_index++) {
@@ -131,18 +135,24 @@ int createTournament(const int number_of_teams, const int number_of_matches, con
         all_teams[team_b[field_index]].games--;
       }
 
+      /* Går én runde tilbage, og tæller flaget,
+         der holder øje med antallet af forsøg, op med én */
       round_count--;
       sentinel_count++;
 
-      temp_point = 0;
+      /* Pointene runden fik, sættes tilbage til nul */
+      temp_points = 0;
     }
+    /* Hvis det er forsøgt tilstrækkeligt mange gange, at sætte runden sammen,
+       returneres 1, så der prøves igen fra starten */
     else if (sentinel_count >= CHECK_NUM) {
       return 1;
     }
+    /* Eller må det betyde at runden er gået igennem,
+       og antallet af point den nuværende stævneplan har fået, tælles op */
     else {
-      *point += temp_point;
-
-      temp_point = 0;
+      *points += temp_points;
+      temp_points = 0;
       sentinel_count = 0;
     }
   }
@@ -150,10 +160,11 @@ int createTournament(const int number_of_teams, const int number_of_matches, con
   free(team_a);
   free(team_b);
 
+  /* Til sidst returners antallet af gange, en floorball regel blev brudt */
   return no_go_count;
 }
 
-/* Nulstiller antallet af kampe hvert hold har spillet */
+/* Nulstiller antallet af kampe hvert hold i all_teams har spillet */
 void resetGamesPlayed(const int number_of_teams, team *all_teams) {
   int team_index = 0;
 
@@ -162,11 +173,12 @@ void resetGamesPlayed(const int number_of_teams, team *all_teams) {
   }
 }
 
-/* Finder hold, som kan sammensættes i en kamp.  */
+/* Sammensætter en runde  */
 int createRound(const int start_of_next_round, const int start_of_round, const int number_of_teams, const int number_of_fields, int *team_a, int *team_b, team *all_teams, match *tournament) {
   int tournament_index = 0;
   int match_index = 0;
 
+  /* Gennemgår de kampe der skal være i runden, og finder to hold der passer ind */
   for (tournament_index = start_of_round; tournament_index < start_of_next_round; tournament_index++) {
     team_a[match_index] = findFirstTeam(tournament_index, number_of_fields, number_of_teams, all_teams, tournament);
     team_b[match_index] = findSecondTeam(tournament_index, number_of_teams, all_teams, tournament);
@@ -174,6 +186,7 @@ int createRound(const int start_of_next_round, const int start_of_round, const i
     match_index++;
   }
 
+  /* Returnerer det indeks runden stoppede ved */
   return tournament_index;
 }
 
@@ -182,22 +195,27 @@ int findFirstTeam(const int tournament_index, const int number_of_fields, const 
   int sentinel_count = 0;
   int team_index = 0;
 
+  /* Bliver ved med at lede efter et hold, indtil det er sikkert
+     at der ikke kan findes et hold der passer med kriterierne */
   while (sentinel_count < CHECK_NUM) {
+    /* Finder indekset til et tilfældigt hold i all_teams */
     team_index = rand() % number_of_teams;
 
+    /* Tjekker om holdet der er fundet, har spillet under 6 kampe
+       og dets niveau ikke er EMPTY, altså fjernet */
     if (all_teams[team_index].games < GAMES_PR_TEAM && all_teams[team_index].level > EMPTY) {
+      /* Hvis dette er sandt, kopieres det over i kampen, og dets indeks returneres */
       tournament[tournament_index].team_a = all_teams[team_index];
       tournament[tournament_index].level = all_teams[team_index].level;
       tournament[tournament_index].field = tournament_index % number_of_fields;
-
-      sentinel_count = CHECK_NUM;
-
       all_teams[team_index].games++;
+      return team_index;
     }
-
     sentinel_count++;
   }
 
+  /* Hvis det ikke var muligt at finde et hold der passede,
+     returneres indekset for det hold der nu er */
   return team_index;
 }
 
@@ -206,26 +224,31 @@ int findSecondTeam(const int tournament_index, const int number_of_teams, team *
   int sentinel_count = 0;
   int team_index = 0;
 
+  /* Bliver ved med at lede efter et hold, indtil det er sikkert
+     at der ikke kan findes et hold der passer med kriterierne */
   while (sentinel_count < CHECK_NUM) {
+    /* Finder indekset til et tilfældigt hold i all_teams */
     team_index = rand() % number_of_teams;
 
+    /* Tjekker om holdet er det samme som det første hold der blev fundet,
+       om holdene er samme niveau, og om holdet har spillet under 6 kampe */
     if (strcmp(tournament[tournament_index].team_a.team, all_teams[team_index].team) != 0 &&
         all_teams[team_index].level == tournament[tournament_index].team_a.level &&
         all_teams[team_index].games < GAMES_PR_TEAM) {
-
+      /* Hvis dette er sandt, kopieres holdnavnet over i kampen */
       all_teams[team_index].games++;
       tournament[tournament_index].team_b = all_teams[team_index];
 
-      sentinel_count = CHECK_NUM;
+      return team_index;
     }
-
     sentinel_count++;
   }
-
+  /* Hvis det ikke var muligt at finde et hold der passede,
+     returneres indekset for det hold der nu er */
   return team_index;
 }
 
-/* Tjekker reglerne igennem og returnerer antallet af fejl. */
+/* Tjekker reglerne igennem, og returnerer antallet af fejl. */
 int evaluateRound(const match *tournament, const int end_of_round, const int number_of_fields, int *temp_point) {
   int field_index = 0;
   int no_go_count = 0;
@@ -247,6 +270,7 @@ int evaluateRound(const match *tournament, const int end_of_round, const int num
       no_go_count += playedInARow(tournament, tournament[field_index].team_a.team, field_index, number_of_fields, temp_point);
       no_go_count += playedInARow(tournament, tournament[field_index].team_b.team, field_index, number_of_fields, temp_point);
 
+      /* Giver point for at kampen der blev spillet i sidste runde er forskellig */
       *temp_point += isDifferentMatch(tournament[field_index - number_of_fields], tournament[field_index]);
     }
   }
@@ -259,10 +283,12 @@ int isAlreadyInRound(const match *tournament, const int field_index, const int n
   int comp_index = 0;
   int start_of_round = 0;
 
+  /* Indekset for starten af runden udregnes */
   start_of_round = field_index - (field_index % number_of_fields);
 
   /* Kører igennem alle de forrige kampe i runden. */
   for (comp_index = start_of_round; comp_index < field_index; comp_index++) {
+    /* Hvis holdet allerede har spillet i runden, returneres en fejl */
     if (compareTeams(tournament + comp_index, tournament + field_index) == 1) {
       return 1;
     }
@@ -272,33 +298,36 @@ int isAlreadyInRound(const match *tournament, const int field_index, const int n
 }
 
 /* Tjekker om et af holdene i en kamp har spillet i forrige runde. */
-int isInPreviousRound(const match *tournament, const int field_index, const int number_of_fields, int *point) {
+int isInPreviousRound(const match *tournament, const int field_index, const int number_of_fields, int *points) {
   int comp_index = 0;
   int no_go_count = 0;
   int start_of_previous_round = 0;
   int start_of_current_round = 0;
 
+  /* Udregner indekser for starten på den forrige runde, og starten på den nuværende runde */
   start_of_previous_round = field_index - ((field_index % number_of_fields) + number_of_fields);
   start_of_current_round = field_index - (field_index % number_of_fields);
 
-  /* Kører igennem for hver kamp i runden før. */
+  /* Gennemgår hver kamp i runden før. */
   for (comp_index = start_of_previous_round; comp_index < start_of_current_round; comp_index++) {
-    /* Køres hvis der er et hold som også har spillet i runden før. */
+    /* Tjekker om der er et hold i kampen der har spillet i runden før. */
     if (compareTeams(tournament + comp_index, tournament + field_index) == 1) {
-      /* Køres hvis holdet ikke spiller på samme bane. */
+      /* Tjekker om holdet spillede på den samme bane. */
       if (tournament[comp_index].field != tournament[field_index].field) {
+        /* Hvis dette ikke er sandt, returneres en fejl */
         no_go_count++;
       }
     }
+    /* Hvis ingen af holdene spillede i runden før, gives der point */
     else {
-      *point += 1;
+      *points += 1;
     }
   }
 
   return no_go_count;
 }
 
-/* Sammenligner holdnavne */
+/* Sammenligner holdnavne. Returnerer 1 hvis der er nogen der er ens */
 int compareTeams(const match *a, const match *b) {
   if (strcmp(a->team_a.team, b->team_a.team) == 0 ||
       strcmp(a->team_a.team, b->team_b.team) == 0 ||
@@ -309,8 +338,8 @@ int compareTeams(const match *a, const match *b) {
   return 0;
 }
 
-/* Tæller antallet af gang et hold spiller i træk, og giver karakter derudfra. */
-int playedInARow(const match *tournament, const char *current_team, const int field_index, int number_of_fields, int *point) {
+/* Tæller antallet af gang et hold spiller i træk, og giver point derudfra. */
+int playedInARow(const match *tournament, const char *current_team, const int field_index, int number_of_fields, int *points) {
   int field_multiplier = 1;
   int point_temp = 1;
 
@@ -325,12 +354,12 @@ int playedInARow(const match *tournament, const char *current_team, const int fi
     return 1;
   }
 
-  *point += point_temp;
+  *points += point_temp;
 
   return 0;
 }
 
-/* Sammenligner hold, og ser om to hold er ens. */
+/* Sammenligner hold, og ser om de er ens. */
 int isDifferentTeam(const match compare_team, const char *current_team) {
   if (strcmp(compare_team.team_a.team, current_team) == 0 ||
       strcmp(compare_team.team_b.team, current_team) == 0) {
@@ -362,7 +391,7 @@ int getNumberOfRounds(const int number_of_matches, const int number_of_fields) {
   }
 }
 
-/* Får en char, der er et niveau for et hold. Funktionen konverterer niveauet til heltal, og returner resultatet. */
+/* Konverterer niveauet til fra char til int. */
 int getLevel(const char level) {
   return (level == 'N') ? N :
          (level == 'A') ? A :
