@@ -12,7 +12,6 @@
 # define MAX_LINE_LEN 200
 # define CHECK_NUM 100000
 # define FIRST 0
-# define MAX_POINTS 345
 
 # define LOWERCASE "abcdefghijklmnopqrstuvwxzyæøå"
 # define UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXZYÆØÅ"

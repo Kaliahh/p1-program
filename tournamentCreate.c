@@ -15,6 +15,7 @@ int createNewTournament(void) {
   int no_go_count = 0;
   int point = 0;
   int make_fast = 0;
+  int max_point = 0;
   match *tournament = NULL;
   team *all_teams = NULL;
   char file_name[MAX_NAME_LEN];
@@ -38,6 +39,8 @@ int createNewTournament(void) {
   /* Finder antallet af runder */
   number_of_rounds = getNumberOfRounds(number_of_matches, number_of_fields);
 
+  max_point = number_of_matches * 6;
+
   /* Allokerer plads til teams arrayet og matches arrayet */
   all_teams = calloc(number_of_teams, sizeof(team));
 
@@ -56,7 +59,7 @@ int createNewTournament(void) {
     while (no_go_count != 0);
   }
   else if (make_fast == BEST) {
-    while (!(no_go_count == 0 && point > MAX_POINTS)) {
+    while (!(no_go_count == 0 && point > max_point - 18)) {
       point = 0;
 
       no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &point);
@@ -149,7 +152,8 @@ int createTournament(const int number_of_teams, const int number_of_matches, con
 }
 
 /* Finder hold, som kan sammensættes i en kamp.  */
-int createRound(const int start_of_next_round, const int start_of_round, const int number_of_teams, const int number_of_fields, int *team_a, int *team_b, team *all_teams, match *tournament) {
+int createRound(const int start_of_next_round, const int start_of_round, const int number_of_teams, 
+                const int number_of_fields, int *team_a, int *team_b, team *all_teams, match *tournament) {
 
   int tournament_index = 0;
   int i = 0;
