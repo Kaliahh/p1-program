@@ -80,7 +80,7 @@ void showMainMenu(void) {
 int createMenu(void) {
   int choice = -1;
 
-  while (choice != 0) {
+  while (choice != 1 && choice != 2) {
     printf("\n");
     showCreateMenu();
     scanf(" %d", &choice);
@@ -90,9 +90,6 @@ int createMenu(void) {
     }
     else if (choice == 2) { /* Fejlfri plan */
       return 2;
-    }
-    else if (choice == 0) { /* Tilbage til hovedmenuen */
-      return 0;
     }
     else {
       printf("\nUgyldigt input, proev igen\n");
@@ -105,8 +102,7 @@ int createMenu(void) {
 void showCreateMenu(void) {
   printf("################  LAV NY STAEVNEPLAN  #################\n\n");
   printf("[1] Hurtig staevneplan\n"
-         "[2] Bedste staevneplan\n"
-         "[0] Afslut\n>> ");
+         "[2] Bedste staevneplan\n>> ");
 }
 
 /* Redigerings menu over hvilke muligheder der kan vælges, til at redigere en eksisterende stævneplan.

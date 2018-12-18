@@ -6,15 +6,11 @@
 
 /* Opdaterer en eksisterende stævneplan. Modtager en filpointer som er placeret i starten af filen. Filpointer bliver rewinded i bunden. */
 int updateTournament(FILE *fp) {
-  int make_fast = 0;
   int number_of_teams = 0;
   int number_of_matches = 0;
   int number_of_rounds = 0;
   int number_of_fields = 0;
   int starting_time = 0;
-  int no_go_count = 0;
-  int point = 0;
-  int max_points = 0;
   team *all_teams = NULL;
   match *tournament = NULL;
 
@@ -37,26 +33,8 @@ int updateTournament(FILE *fp) {
   number_of_fields = getNumberOfFields(fp);
   number_of_rounds = getNumberOfRounds(number_of_matches, number_of_fields);
 
-  max_points = number_of_matches * 6;
-
-  make_fast = createMenu();
-
-  if (make_fast == FAST) {
-    do {
-      no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &point);
-    }
-    while (no_go_count != 0);
-  }
-  else if (make_fast == BEST) {
-    while (!(no_go_count == 0 && point > max_points - 18)) {
-      point = 0;
-
-      no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &point);
-    }
-  }
-  else {
-    return 1;
-  }
+  /* Sammensætter og evaluerer stævneplaner, indtil der findes en der er acceptabel */
+  generateTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams);
 
   /* Printer den færdige stævneplan, enten til en fil eller til terminalen */
   starting_time = getStartingTime(fp);

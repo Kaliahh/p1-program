@@ -12,10 +12,6 @@ int createNewTournament(void) {
   int number_of_teams = 0;
   int number_of_matches = 0;
   int starting_time = 0;
-  int no_go_count = 0;
-  int point = 0;
-  int make_fast = 0;
-  int max_point = 0;
   match *tournament = NULL;
   team *all_teams = NULL;
   char file_name[MAX_NAME_LEN];
@@ -39,35 +35,17 @@ int createNewTournament(void) {
   /* Finder antallet af runder */
   number_of_rounds = getNumberOfRounds(number_of_matches, number_of_fields);
 
-  max_point = number_of_matches * 6;
-
   /* Allokerer plads til teams arrayet og matches arrayet */
   all_teams = calloc(number_of_teams, sizeof(team));
 
   /* Fylder teams arrayet med hold */
   scanTeamFile(fp, file_name, number_of_teams, all_teams);
 
-  /* Laver et turneringsarray ud fra kampene i all_matches */
+  /* Allokerer plads til et array med plads til alle kampe der skal spilles */
   tournament = allocateMemoryMatch(number_of_matches);
 
-  make_fast = createMenu();
-
-  if (make_fast == FAST) {
-    do {
-      no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &point);
-    }
-    while (no_go_count != 0);
-  }
-  else if (make_fast == BEST) {
-    while (!(no_go_count == 0 && point > max_point - 18)) {
-      point = 0;
-
-      no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &point);
-    }
-  }
-  else {
-    return 1;
-  }
+  /* Sammensætter og evaluerer stævneplaner, indtil der findes en der er acceptabel */
+  generateTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams);
 
   /* Printer den færdige stævneplan, enten til en fil eller til terminalen */
   printingMenu(tournament, starting_time, number_of_rounds, number_of_fields);
@@ -79,6 +57,31 @@ int createNewTournament(void) {
   fclose(fp);
 
   return 0;
+}
+
+void generateTournament(const int number_of_teams, const int number_of_matches, const int number_of_fields, const int number_of_rounds, match *tournament, team *all_teams) {
+  int points = 0;
+  int max_points = 0;
+  int make_fast = 0;
+  int no_go_count = 0;
+
+  max_points = number_of_matches * 6;
+
+  make_fast = createMenu();
+
+  if (make_fast == FAST) {
+    do {
+      no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &points);
+    }
+    while (no_go_count != 0);
+  }
+  else if (make_fast == BEST) {
+    while (!(no_go_count == 0 && points > max_points - 18)) {
+      points = 0;
+
+      no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &points);
+    }
+  }
 }
 
 /*  */
