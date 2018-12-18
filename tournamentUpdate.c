@@ -14,6 +14,7 @@ int updateTournament(FILE *fp) {
   int starting_time = 0;
   int no_go_count = 0;
   int point = 0;
+  int max_points = 0;
   team *all_teams = NULL;
   match *tournament = NULL;
 
@@ -31,6 +32,8 @@ int updateTournament(FILE *fp) {
   number_of_fields = getNumberOfFields(fp);
   number_of_rounds = getNumberOfRounds(number_of_matches, number_of_fields);
 
+  max_points = number_of_matches * 6;
+
   make_fast = createMenu();
 
   if (make_fast == FAST) {
@@ -40,7 +43,7 @@ int updateTournament(FILE *fp) {
     while (no_go_count != 0);
   }
   else if (make_fast == BEST) {
-    while (!(no_go_count == 0 && point > MAX_POINTS)) {
+    while (!(no_go_count == 0 && point > max_points - 18)) {
       point = 0;
 
       no_go_count = checkTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, tournament, all_teams, &point);
