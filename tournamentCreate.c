@@ -70,8 +70,9 @@ void generateTournament(const int number_of_teams, const int number_of_matches, 
   int no_go_count = 0;
 
   /* Udregner det maksimale antal point en stævneplan kan få,
-     med de forudsætninger brugeren har stillet */
-  max_points = number_of_matches * 6;
+     med de forudsætninger brugeren har stillet. 
+     Sætter derudover en fejlmargen på 5% */
+  max_points = number_of_matches * 6 * 0.95;
 
   /* Prompter brugeren for at vælge mellem den hurtige metode, eller finde den bedste stævneplan */
   make_fast = createMenu();
@@ -84,10 +85,13 @@ void generateTournament(const int number_of_teams, const int number_of_matches, 
   }
 
   else if (make_fast == BEST) {
-    while (!(no_go_count == 0 && points > max_points - 18)) {
+    while (!(no_go_count == 0 && points > max_points)) {
+
       points = 0;
 
       no_go_count = createTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, all_teams, tournament, &points);
+                  printf("%d\n", points);
+
     }
   }
 }
@@ -366,7 +370,7 @@ int isDifferentTeam(const match compare_team, const char *current_team) {
     return 0;
   }
   else {
-    return 5;
+    return 1;
   }
 }
 
