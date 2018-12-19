@@ -12,6 +12,7 @@
 # define MAX_LINE_LEN 200
 # define CHECK_NUM 100000
 # define FIRST 0
+# define MAX_FIELDS 9
 
 # define LOWERCASE "abcdefghijklmnopqrstuvwxzyæøå"
 # define UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXZYÆØÅ"

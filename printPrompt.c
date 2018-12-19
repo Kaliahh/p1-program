@@ -79,6 +79,11 @@ int promptForFields(void) {
   int number_of_fields = 0;
   printf("Indtast antal baner\n>> ");
   scanf(" %d", &number_of_fields);
+
+  while (number_of_fields > MAX_FIELDS) {
+    printf("For mange baner, skal være under 10\n>> ");
+    scanf(" %d", &number_of_fields);
+  }
   return number_of_fields;
 }
 
