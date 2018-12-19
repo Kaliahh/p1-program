@@ -65,7 +65,6 @@ void showMainMenu(void) {
   printf("#####################  HOVEDMENU  #####################\n\n");
   printf("[1] Lav en ny staevneplan\n"
          "[2] Rediger en eksisterende staevneplan\n"
-         "[3] Lav skabelon til liste af holdnavne (!)\n"
          "[0] Afslut\n>> ");
 }
 
