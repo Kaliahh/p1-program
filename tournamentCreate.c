@@ -345,13 +345,15 @@ int playedInARow(const match *tournament, const char *current_team, const int fi
   int field_multiplier = 1;
   int point_temp = 1;
 
-  while (!isDifferentTeam(tournament[field_index - number_of_fields], current_team)) {
+  /* Kører så længe holdet der sammenlignes med er i den forrige runde. */
+  while (isDifferentTeam(tournament[field_index - number_of_fields], current_team) == 0) {
     field_multiplier++;
     point_temp--;
 
     number_of_fields *= field_multiplier;
   }
 
+  /* Køres hvis holdet har spillet mere end to runder i træk */
   if (point_temp < 0) {
     return 1;
   }
@@ -372,7 +374,7 @@ int isDifferentTeam(const match compare_team, const char *current_team) {
   }
 }
 
-/* Sammenligner kampe. */
+/* Sammenligner kampe, og giver point hvis de ikke er ens. */
 int isDifferentMatch(const match compare_team, const match current_team) {
   if (isDifferentTeam(compare_team, current_team.team_a.team) == 0 &&
       isDifferentTeam(compare_team, current_team.team_b.team) == 0) {
