@@ -127,6 +127,8 @@ int createTournament(const int number_of_teams, const int number_of_matches, con
 
     /* Tjekker om runden blev lavet */
     if (end_of_round == -1) {
+      free(team_a);
+      free(team_b);
       return 1;
     }
 
