@@ -191,7 +191,7 @@ int createRound(const int start_of_next_round, const int start_of_round, const i
   /* Gennemgår de kampe der skal være i runden, og finder to hold der passer ind */
   for (tournament_index = start_of_round; tournament_index < start_of_next_round; tournament_index++) {
     team_index = findFirstTeam(tournament_index, number_of_fields, number_of_teams, all_teams, tournament);
-    /* printf("%d\n", team_index); */
+
     /* Tjekker om et hold blev fundet */
     if (team_index == -1) {
       /* Returnerer -1 hvis der ikke blev fundet et hold */
