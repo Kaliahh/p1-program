@@ -3,10 +3,6 @@
 
 /* Printer stævneplanen. Ud fra brugerens valg ved kaldet af funktionen,
    printes stævneplanen enten til "staevneplan.txt" eller til skærmen, stdout */
-   /*
-   Parameterne er en fil-pointer, enten filen der skal skrives til, eller stdout hvis der skal printes til terminalen,
-   en turnering i form af en pointer til array af matches, en int med starttidspunkt for turneringen
-   en int med antallet af runder, og en int med antallet af baner  */
 int printProgram(FILE *fp, const match *tournament, const int starting_time, const int number_of_rounds, const int number_of_fields) {
   int round_index = 0;
   int match_index = 0;

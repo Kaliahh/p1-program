@@ -36,7 +36,7 @@ void createNewTournament(void) {
   number_of_rounds = getNumberOfRounds(number_of_matches, number_of_fields);
 
   /* Allokerer plads til et array af alle hold */
-  all_teams = calloc(number_of_teams, sizeof(team));
+  all_teams = allocateMemoryTeams(number_of_teams);
 
   /* Finder holdnavne og niveau i den åbne fil,
      og lægger dem over i all_teams */
@@ -70,7 +70,7 @@ void generateTournament(const int number_of_teams, const int number_of_matches, 
   int no_go_count = 0;
 
   /* Udregner det maksimale antal point en stævneplan kan få,
-     med de forudsætninger brugeren har stillet. 
+     med de forudsætninger brugeren har stillet.
      Sætter derudover en fejlmargen på 5% */
   max_points = number_of_matches * 6 * 0.95;
 
