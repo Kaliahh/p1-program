@@ -1,6 +1,6 @@
 # p1-program
 P1 projekt
-Dette program er lavet i forbindelse med p1 forløbet på første semester, på softwareuddannelsen på Aaalborg universitet.
+Dette program er lavet i forbindelse med p1 forløbet på første semester 2018, på softwareuddannelsen på Aaalborg universitet.
 Forfatterne er:  
 Ane Jørgensen  
 Jakob Kristensen  
@@ -34,3 +34,5 @@ holdnavne.txt er et eksempel på en fil med holdnavne og niveauer, som programme
 turneringsplan.txt er et eksempel på en stævneplan, der er lavet som resultatet af holdene fra holdnavne.txt og tre baner.
 
 Formålet med programmet, er at lave og redigere stævneplaner, til kidzliga floorballstævner. 
+
+Yderligere information kan finde i den rapport der blev udarbejdet i forbindelse med dette projekt.
