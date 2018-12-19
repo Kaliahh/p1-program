@@ -1,21 +1,21 @@
-Team noget, A
-De andre er daarlige, A
-Floorball 1, A
-Floorball 2, A
-Floorball 4, A
-Floorball 3, A
-Kort navn, A
-Vi er de bedste, A
-Test 1, A
-Test 2, A
-Ny Niveau1, B
-Ny Niveau2, B
-Ny Niveau3, B
-Ny Niveau4, B
-Ny Niveau5, B
-Ny Niveau6, B
-Ny Niveau7, B
-Ny Niveau8, B
-Ny Niveau9, B
-Ny Niveau, B
+Hold 1, A
+Hold 2, A
+Hold 3, A
+Hold 4, A
+Hold 5, A
+Hold 6, A
+Hold 7, A
+Hold 8, A
+Hold 9, A
+Hold 10, A
 
+Hold 11, B
+Hold 12, B
+Hold 13, B
+Hold 14, B
+Hold 15, B
+Hold 16, B
+Hold 17, B
+Hold 18, B
+Hold 19, B
+Hold 20, B
