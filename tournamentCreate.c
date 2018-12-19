@@ -90,8 +90,6 @@ void generateTournament(const int number_of_teams, const int number_of_matches, 
       points = 0;
 
       no_go_count = createTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, all_teams, tournament, &points);
-                  printf("%d\n", points);
-
     }
   }
 }
