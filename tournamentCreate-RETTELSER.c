@@ -69,13 +69,6 @@ void generateTournament(const int number_of_teams, const int number_of_matches, 
   int max_points = 0;
   int make_fast = 0;
   int no_go_count = 0;
-  FILE *fp = NULL;
-
-
-
-  if (fp == NULL) {
-    perror("Hey! ");
-  }
 
   /* Udregner det maksimale antal point en stævneplan kan få,
      med de forudsætninger brugeren har stillet.
@@ -85,32 +78,21 @@ void generateTournament(const int number_of_teams, const int number_of_matches, 
   /* Prompter brugeren for at vælge mellem den hurtige metode, eller finde den bedste stævneplan */
   make_fast = createMenu();
 
-  for (int timer = 0; timer < 100; timer++) {
-    points = 0;
-    fp = fopen("tider-RETTET.txt", "a");
-    clock_t begin = clock();
-    /* Baseret på brugerens svar fra ovenstående funktion, vælges metoden til generering af stævneplanen */
-    if (make_fast == FAST) {
-      do {
-        no_go_count = createTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, all_teams, tournament, &points);
-      } while (no_go_count != 0);
-    }
-
-    else if (make_fast == BEST) {
-      while (!(no_go_count == 0 && points > max_points)) {
-
-        points = 0;
-
-        no_go_count = createTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, all_teams, tournament, &points);
-      }
-    }
-    clock_t end = clock();
-    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("%3d | Tid: %lf\n", timer, time_spent);
-    fprintf(fp, "%lf\n", time_spent);
-    fclose(fp);
+  /* Baseret på brugerens svar fra ovenstående funktion, vælges metoden til generering af stævneplanen */
+  if (make_fast == FAST) {
+    do {
+      no_go_count = createTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, all_teams, tournament, &points);
+    } while (no_go_count != 0);
   }
 
+  else if (make_fast == BEST) {
+    while (!(no_go_count == 0 && points > max_points)) {
+
+      points = 0;
+
+      no_go_count = createTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, all_teams, tournament, &points);
+    }
+  }
 }
 
 /* Sammensætter en stævneplan, og returnerer antallet af gange planen bryder med floorball reglerne. */
