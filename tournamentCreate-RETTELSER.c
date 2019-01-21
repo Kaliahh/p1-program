@@ -3,7 +3,6 @@
 # include "../p1-program/h-files/printPrompt.h"
 # include "../p1-program/h-files/tournament.h"
 # include "../p1-program/h-files/menus.h"
-# include <time.h>
 
 /* Sammensætter og printer en ny stævneplan fra bunden */
 void createNewTournament(void) {
