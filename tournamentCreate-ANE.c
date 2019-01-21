@@ -3,6 +3,7 @@
 # include "../p1-program/h-files/printPrompt.h"
 # include "../p1-program/h-files/tournament.h"
 # include "../p1-program/h-files/menus.h"
+# include <time.h>
 
 /* Sammensætter og printer en ny stævneplan fra bunden */
 void createNewTournament(void) {
@@ -68,30 +69,46 @@ void generateTournament(const int number_of_teams, const int number_of_matches, 
   int max_points = 0;
   int make_fast = 0;
   int no_go_count = 0;
+  FILE *fp = NULL;
+
+  fp = fopen("tider.txt", "w");
+
+  if (fp == NULL) {
+    perror("Hey! ");
+  }
 
   /* Udregner det maksimale antal point en stævneplan kan få,
      med de forudsætninger brugeren har stillet.
      Sætter derudover en fejlmargen på 5% */
-  max_points = number_of_matches * 6 * 0.95;
+  max_points = (number_of_matches * (number_of_fields + 3)) * 0.95;
 
   /* Prompter brugeren for at vælge mellem den hurtige metode, eller finde den bedste stævneplan */
   make_fast = createMenu();
 
-  /* Baseret på brugerens svar fra ovenstående funktion, vælges metoden til generering af stævneplanen */
-  if (make_fast == FAST) {
-    do {
-      no_go_count = createTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, all_teams, tournament, &points);
-    } while (no_go_count != 0);
-  }
-
-  else if (make_fast == BEST) {
-    while (!(no_go_count == 0 && points > max_points)) {
-
-      points = 0;
-
-      no_go_count = createTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, all_teams, tournament, &points);
+  for (int timer = 0; timer < 100; timer++) {
+    clock_t begin = clock();
+    /* Baseret på brugerens svar fra ovenstående funktion, vælges metoden til generering af stævneplanen */
+    if (make_fast == FAST) {
+      do {
+        no_go_count = createTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, all_teams, tournament, &points);
+      } while (no_go_count != 0);
     }
+
+    else if (make_fast == BEST) {
+      while (!(no_go_count == 0 && points > max_points)) {
+
+        points = 0;
+
+        no_go_count = createTournament(number_of_teams, number_of_matches, number_of_fields, number_of_rounds, all_teams, tournament, &points);
+      }
+    }
+    clock_t end = clock();
+    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("%d | Tid: %lf\n", timer, time_spent);
+    fprintf(fp, "%lf\n", time_spent);
+
   }
+  fclose(fp);
 }
 
 /* Sammensætter en stævneplan, og returnerer antallet af gange planen bryder med floorball reglerne. */
@@ -262,22 +279,35 @@ int evaluateRound(const match *tournament, const int end_of_round, const int num
   for (field_index = end_of_round - number_of_fields; field_index < end_of_round; field_index++) {
     /* Kører hvis kampen allerede er i samme runde. */
     if (isAlreadyInRound(tournament, field_index, number_of_fields) == 1) {
-      no_go_count++;
+      return 1;
     }
     /* Kører hvis det ikke er den første runde. */
     if (round_count != 0) {
-      no_go_count += isInPreviousRound(tournament, field_index, number_of_fields, temp_point);
+      no_go_count = isInPreviousRound(tournament, field_index, number_of_fields, temp_point);
+
+      if (no_go_count > 0) {
+        return 1;
+      }
 
       /* Tjekker hvor mange gange hvert hold har spillet i træk */
-      no_go_count += playedInARow(tournament, tournament[field_index].team_a.team, field_index, number_of_fields, temp_point);
-      no_go_count += playedInARow(tournament, tournament[field_index].team_b.team, field_index, number_of_fields, temp_point);
+      no_go_count = playedInARow(tournament, tournament[field_index].team_a.team, field_index, number_of_fields, temp_point);
+
+      if (no_go_count > 0) {
+        return 1;
+      }
+
+      no_go_count = playedInARow(tournament, tournament[field_index].team_b.team, field_index, number_of_fields, temp_point);
+
+      if (no_go_count > 0) {
+        return 1;
+      }
 
       /* Giver point for at kampen der blev spillet i sidste runde er forskellig */
       *temp_point += isDifferentMatch(tournament[field_index - number_of_fields], tournament[field_index]);
     }
   }
 
-  return no_go_count;
+  return 0;
 }
 
 /* Tjekker om et af holdene i en kamp allerede skal spille i runden. */
@@ -342,15 +372,14 @@ int compareTeams(const match *a, const match *b) {
 
 /* Tæller antallet af gang et hold spiller i træk, og giver point derudfra. */
 int playedInARow(const match *tournament, const char *current_team, const int field_index, int number_of_fields, int *points) {
-  int field_multiplier = 1;
+  int rewind_count = number_of_fields;
   int point_temp = 1;
 
   /* Kører så længe holdet der sammenlignes med er i den forrige runde. */
-  while (isDifferentTeam(tournament[field_index - number_of_fields], current_team) == 0) {
-    field_multiplier++;
+  while (isDifferentTeam(tournament[field_index - rewind_count], current_team) == 0 && field_index - rewind_count > 0) {
     point_temp--;
 
-    number_of_fields *= field_multiplier;
+    rewind_count += number_of_fields;
   }
 
   /* Køres hvis holdet har spillet mere end to runder i træk */
