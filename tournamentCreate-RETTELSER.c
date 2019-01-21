@@ -71,7 +71,7 @@ void generateTournament(const int number_of_teams, const int number_of_matches, 
   int no_go_count = 0;
   FILE *fp = NULL;
 
-  fp = fopen("tider.txt", "w");
+
 
   if (fp == NULL) {
     perror("Hey! ");
@@ -86,6 +86,8 @@ void generateTournament(const int number_of_teams, const int number_of_matches, 
   make_fast = createMenu();
 
   for (int timer = 0; timer < 100; timer++) {
+    points = 0;
+    fp = fopen("tider-RETTET.txt", "a");
     clock_t begin = clock();
     /* Baseret på brugerens svar fra ovenstående funktion, vælges metoden til generering af stævneplanen */
     if (make_fast == FAST) {
@@ -104,11 +106,11 @@ void generateTournament(const int number_of_teams, const int number_of_matches, 
     }
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("%d | Tid: %lf\n", timer, time_spent);
+    printf("%3d | Tid: %lf\n", timer, time_spent);
     fprintf(fp, "%lf\n", time_spent);
-
+    fclose(fp);
   }
-  fclose(fp);
+
 }
 
 /* Sammensætter en stævneplan, og returnerer antallet af gange planen bryder med floorball reglerne. */
